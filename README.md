@@ -2,6 +2,10 @@
 
 Este projeto extrai entidades e relações de relatos clínicos e transforma os resultados em grafos de conhecimento interativos. A implementação utiliza léxicos, gatilhos, expressões regulares e regras linguísticas; não é necessário treinar um modelo.
 
+## Slides
+
+Link para visualização dos slides apresentados: [Slides](assets/apresentacao-projeto1.pptx.pdf)
+
 ## Como executar o projeto
 
 Os comandos abaixo devem ser executados no PowerShell, a partir da raiz do repositório. É necessário ter Python 3.10 ou superior. O projeto utiliza somente a biblioteca padrão do Python, portanto não há dependências para instalar.
