@@ -22,9 +22,9 @@ Esse comando lê `cases.csv` e `metadata.csv`, associa cada caso ao artigo corre
 
 | Arquivo | Conteúdo |
 |---|---|
-| `data/prepared/development.csv` | 45 casos usados para desenvolver a primeira versão |
-| `data/prepared/evaluation.csv` | 11 casos inicialmente reservados para avaliação |
-| `data/prepared/all_cases.csv` | Todos os 56 casos, com a coluna `split` |
+| `data/processed/development.csv` | 45 casos usados para desenvolver a primeira versão |
+| `data/processed/evaluation.csv` | 11 casos inicialmente reservados para avaliação |
+| `data/processed/all_cases.csv` | Todos os 56 casos, com a coluna `split` |
 
 Os comandos seguintes usam `all_cases.csv`, pois o objetivo é gerar o grafo completo com os 56 casos.
 
@@ -33,7 +33,7 @@ Os comandos seguintes usam `all_cases.csv`, pois o objetivo é gerar o grafo com
 A V1 utiliza o léxico e os gatilhos construídos apenas com os casos de desenvolvimento:
 
 ```powershell
-python -m src.build_graph --input data/prepared/all_cases.csv --lexicon resources/v1/lexicon.csv --triggers resources/v1/triggers.csv --nodes outputs/full/v1/nodes.csv --edges outputs/full/v1/edges.csv
+python -m src.build_graph --input data/processed/all_cases.csv --lexicon resources/v1/lexicon.csv --triggers resources/v1/triggers.csv --nodes outputs/full/v1/nodes.csv --edges outputs/full/v1/edges.csv
 ```
 
 O comando cria:
@@ -48,7 +48,7 @@ Se esses arquivos já existirem, eles serão sobrescritos com uma nova execuçã
 A V2 utiliza o léxico e os gatilhos ampliados após a análise dos resultados da V1:
 
 ```powershell
-python -m src.build_graph --input data/prepared/all_cases.csv --lexicon resources/v2/lexicon.csv --triggers resources/v2/triggers.csv --nodes outputs/full/v2/nodes.csv --edges outputs/full/v2/edges.csv
+python -m src.build_graph --input data/processed/all_cases.csv --lexicon resources/v2/lexicon.csv --triggers resources/v2/triggers.csv --nodes outputs/full/v2/nodes.csv --edges outputs/full/v2/edges.csv
 ```
 
 O comando cria:

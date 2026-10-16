@@ -8,8 +8,8 @@ Esta pasta contém o código-fonte responsável pelo pipeline de extração de e
 
 | Arquivo | Função Principal | Entradas Principais | Saídas Principais |
 |---|---|---|---|
-| [`prepare_data.py`](prepare_data.py) | Associa os casos aos artigos de origem e realiza a separação dos conjuntos de desenvolvimento e avaliação. | `Projeto 1/sample/cases.csv`<br>`Projeto 1/sample/metadata.csv` | `data/prepared/development.csv`<br>`data/prepared/evaluation.csv`<br>`data/prepared/all_cases.csv` |
-| [`build_graph.py`](build_graph.py) | Extrai entidades clínicas, atributos e relações (estruturais, clínicas e temporais) via regras e léxicos, gerando o grafo. | `data/prepared/all_cases.csv`<br>`resources/v2/lexicon.csv`<br>`resources/v2/triggers.csv` | `outputs/full/v2/nodes.csv`<br>`outputs/full/v2/edges.csv` |
+| [`prepare_data.py`](prepare_data.py) | Associa os casos aos artigos de origem e realiza a separação dos conjuntos de desenvolvimento e avaliação. | `data/external/cases.csv`<br>`data/external/metadata.csv` | `data/processed/development.csv`<br>`data/processed/evaluation.csv`<br>`data/processed/all_cases.csv` |
+| [`build_graph.py`](build_graph.py) | Extrai entidades clínicas, atributos e relações (estruturais, clínicas e temporais) via regras e léxicos, gerando o grafo. | `data/processed/all_cases.csv`<br>`resources/v2/lexicon.csv`<br>`resources/v2/triggers.csv` | `outputs/full/v2/nodes.csv`<br>`outputs/full/v2/edges.csv` |
 | [`visualize_graph.py`](visualize_graph.py) | Converte os nós e arestas em um aplicativo HTML/SVG interativo e autocontido com visualização em grafo, linha do tempo e tabela de relações. | `outputs/full/v2/nodes.csv`<br>`outputs/full/v2/edges.csv` | `outputs/full/v2/graph.html` |
 
 ---
@@ -46,7 +46,7 @@ python src/prepare_data.py
 ```
 *(ou `python -m src.prepare_data`)*
 
-Saídas geradas em `data/prepared/`:
+Saídas geradas em `data/processed/`:
 - `development.csv`: Casos destinados ao desenvolvimento das regras e léxicos (45 casos).
 - `evaluation.csv`: Casos reservados para avaliação (11 casos).
 - `all_cases.csv`: Base consolidada com todos os 56 casos e a identificação do split.
@@ -65,7 +65,7 @@ python -m src.build_graph
 #### Execução da Versão 1 (V1):
 ```powershell
 python -m src.build_graph `
-  --input data/prepared/all_cases.csv `
+  --input data/processed/all_cases.csv `
   --lexicon resources/v1/lexicon.csv `
   --triggers resources/v1/triggers.csv `
   --nodes outputs/full/v1/nodes.csv `
@@ -73,7 +73,7 @@ python -m src.build_graph `
 ```
 
 #### Argumentos de Linha de Comando de `build_graph.py`:
-- `--input`: Caminho para o CSV de casos (padrão: `data/prepared/all_cases.csv`).
+- `--input`: Caminho para o CSV de casos (padrão: `data/processed/all_cases.csv`).
 - `--nodes`: Caminho de destino de `nodes.csv` (padrão: `outputs/full/v2/nodes.csv`).
 - `--edges`: Caminho de destino de `edges.csv` (padrão: `outputs/full/v2/edges.csv`).
 - `--lexicon`: Caminho do CSV de termos/léxicos (padrão: `resources/v2/lexicon.csv`).

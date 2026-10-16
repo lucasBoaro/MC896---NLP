@@ -6,8 +6,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-INPUT_DIR = ROOT / "Projeto 1" / "sample"
-OUTPUT_DIR = ROOT / "data" / "prepared"
+INPUT_DIR = ROOT / "data" / "external"
+OUTPUT_DIR = ROOT / "data" / "processed"
 EVALUATION_FRACTION = 0.20
 SEED = 42
 

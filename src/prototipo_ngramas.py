@@ -4,36 +4,56 @@ classifica o tipo com Regressão Logística treinada por supervisão fraca
 à mão na V2 (source=evaluation_v2).
 
 Uso (a partir da raiz do repositório):
-    python prototipo_ngramas.py <raiz_do_repo>
+    python src/prototipo_ngramas.py
+Saída: data/interim/ngram_candidates/candidatos_v3.csv
 """
-import csv, math, re, sys
+import csv
+import math
+import re
+import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
 import numpy as np
-from scipy.sparse import hstack, csr_matrix
+from scipy.sparse import hstack
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import StratifiedKFold
 
-ROOT = Path(sys.argv[1] if len(sys.argv) > 1 else ".")
-STOP = set("""a an the of and or in on at to for with without by from as is was were be been
-being has had have he she his her it its this that these those which who whom there their they
-we our patient patients after before during than then also but not no into upon about over under
-other any all some one two three four five six seven eight nine ten while because due revealed
-showed shown demonstrated found noted performed presented admitted started given received
-underwent diagnosed treated day days week weeks month months year years old history time
-left right normal case report hospital follow up within further later initial initially
-previous previously additional significant may did does do via per approximately both each
-such well however years-old year-old female male woman man girl boy""".split())
+ROOT = Path(sys.argv[1]) if len(sys.argv) > 1 else Path(__file__).resolve().parents[1]
+OUT_DIR = ROOT / "data" / "interim" / "ngram_candidates"
+STOP = {
+    "a", "an", "the", "of", "and", "or", "in", "on", "at", "to", "for", "with",
+    "without", "by", "from", "as", "is", "was", "were", "be", "been", "being",
+    "has", "had", "have", "he", "she", "his", "her", "it", "its", "this", "that",
+    "these", "those", "which", "who", "whom", "there", "their", "they", "we", "our",
+    "patient", "patients", "after", "before", "during", "than", "then", "also",
+    "but", "not", "no", "into", "upon", "about", "over", "under", "other", "any",
+    "all", "some", "one", "two", "three", "four", "five", "six", "seven", "eight",
+    "nine", "ten", "while", "because", "due", "revealed", "showed", "shown",
+    "demonstrated", "found", "noted", "performed", "presented", "admitted",
+    "started", "given", "received", "underwent", "diagnosed", "treated", "day",
+    "days", "week", "weeks", "month", "months", "year", "years", "old", "history",
+    "time", "left", "right", "normal", "case", "report", "hospital", "follow", "up",
+    "within", "further", "later", "initial", "initially", "previous", "previously",
+    "additional", "significant", "may", "did", "does", "do", "via", "per",
+    "approximately", "both", "each", "such", "well", "however", "years-old",
+    "year-old", "female", "male", "woman", "man", "girl", "boy",
+}
 TOKEN = re.compile(r"[A-Za-z][A-Za-z'\-]*[A-Za-z]|[A-Za-z]")
 
 def sentences(text):
     return [s for s in re.split(r"(?<=[.!?])\s+(?=[A-Z])|\n+", text) if s.strip()]
 
-cases = list(csv.DictReader(open(ROOT / "data/processed/all_cases.csv", encoding="utf-8-sig")))
-lex = lambda v: list(csv.DictReader(open(ROOT / f"resources/{v}/lexicon.csv", encoding="utf-8")))
+def read_csv(path, encoding="utf-8"):
+    with open(path, encoding=encoding) as f:
+        return list(csv.DictReader(f))
+
+def lex(v):
+    return read_csv(ROOT / f"resources/{v}/lexicon.csv")
+
+cases = read_csv(ROOT / "data/processed/all_cases.csv", encoding="utf-8-sig")
 v1 = {r["term"].lower(): r["type"] for r in lex("v1")}
 gold = {r["term"].lower(): r["type"] for r in lex("v2") if r["source"] == "evaluation_v2"}
 
@@ -114,9 +134,11 @@ lab = [i for i, t in enumerate(cands) if t in v1]
 acc = np.mean([pred[i] == y[i] for i in lab if score[i] > 0.5]) if lab else 0
 print(f"V1 (cross-fit): {sum(score[i]>0.5 for i in lab)}/{len(lab)} reconhecidos, tipo correto {acc:.2f}")
 
-out = Path(__file__).with_name("candidatos_v3.csv")
+out = OUT_DIR / "candidatos_v3.csv"
+out.parent.mkdir(parents=True, exist_ok=True)
 with open(out, "w", newline="", encoding="utf-8") as f:
     w = csv.writer(f); w.writerow(["term", "pred_type", "score", "freq", "pmi", "in_v2_gold"])
     for i in ranked[:300]:
         w.writerow([cands[i], pred[i], f"{score[i]:.3f}", freq[cands[i]], f"{pmi(cands[i]):.2f}", cands[i] in gold])
+print(f"Candidatos salvos em {out}")
 print("top 40:", [f"{cands[i]}:{pred[i][:4]}" for i in ranked[:40]])
