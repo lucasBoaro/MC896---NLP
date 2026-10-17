@@ -10,11 +10,11 @@ O diferencial escolhido foi representar parcialmente a evolução temporal do ca
 
 ## Dados
 
-Os dados originais ficam em `Projeto 1/sample`. `src/prepare_data.py` relaciona cada caso aos metadados do artigo pelo `article_id` e produz:
+Os dados originais ficam em `data/external`. `src/prepare_data.py` relaciona cada caso aos metadados do artigo pelo `article_id` e produz:
 
-- `data/prepared/development.csv`: 45 casos usados na construção da V1;
-- `data/prepared/evaluation.csv`: 11 casos inicialmente reservados para avaliação;
-- `data/prepared/all_cases.csv`: os 56 casos, com a coluna `split` indicando a origem.
+- `data/processed/development.csv`: 45 casos usados na construção da V1;
+- `data/processed/evaluation.csv`: 11 casos inicialmente reservados para avaliação;
+- `data/processed/all_cases.csv`: os 56 casos, com a coluna `split` indicando a origem.
 
 A separação é feita por artigo, usando semente 42. Assim, casos pertencentes ao mesmo artigo não aparecem nos dois grupos.
 
@@ -155,7 +155,7 @@ A suíte possui 19 testes, atualmente todos aprovados.
 ## Estrutura relevante
 
 ```text
-data/prepared/
+data/processed/
 ├── development.csv
 ├── evaluation.csv
 └── all_cases.csv

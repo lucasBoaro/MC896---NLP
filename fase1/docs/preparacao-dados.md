@@ -17,7 +17,7 @@ python src/prepare_data.py
 O resultado fica em:
 
 ```text
-data/prepared/
+data/processed/
 ├── development.csv
 ├── evaluation.csv
 └── all_cases.csv

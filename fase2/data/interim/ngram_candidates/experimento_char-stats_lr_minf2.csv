@@ -1,0 +1,301 @@
+term,pred_type,score,freq,pmi,in_v2_gold
+electrocardiogram ekg,Exam,0.990,2,12.41,False
+transabdominal ultrasonography,Exam,0.988,2,11.92,False
+esophagogastroduodenoscopy egd,Exam,0.983,3,11.18,False
+electrocardiogram ecg,Exam,0.983,2,10.41,False
+hypoxemia,Condition,0.976,2,0.00,False
+pa repair,Treatment,0.974,2,8.44,False
+oral prednisone,Treatment,0.973,2,7.94,False
+methylprednisolone dosage,Treatment,0.972,2,9.92,False
+coronary syndrome acs,Condition,0.972,2,21.89,False
+prednisone mg,Treatment,0.969,3,5.82,False
+shortness,Symptom,0.966,4,0.00,False
+laparoscopy,Exam,0.961,4,0.00,False
+consciousness,Symptom,0.960,3,0.00,False
+capsule endoscopy,Exam,0.959,2,10.82,False
+syndrome acs,Condition,0.957,2,10.34,False
+fish test,Exam,0.943,3,10.20,False
+headaches,Symptom,0.941,2,0.00,True
+blood transfusions,Treatment,0.937,2,7.77,False
+abdominal distention,Symptom,0.937,2,8.79,False
+tests,Exam,0.936,18,0.00,False
+examination,Exam,0.932,50,0.00,False
+once daily as pneumonia,Condition,0.930,2,27.16,False
+ttp,Exam,0.929,2,0.00,True
+acute coronary syndrome acs,Condition,0.929,2,32.30,False
+stent placement,Treatment,0.928,2,8.08,False
+methylprednisolone tablets,Treatment,0.928,3,11.73,False
+tightness,Symptom,0.928,3,0.00,False
+parastomal hernial sac,Condition,0.925,2,24.55,False
+serum hydroxychloroquine,Treatment,0.924,2,6.84,False
+test,Exam,0.923,23,0.00,False
+mrv or angiography,Exam,0.922,2,21.39,False
+ctv mrv or angiography,Exam,0.920,2,35.12,False
+angiography,Exam,0.918,4,0.00,False
+upper abdominal pain,Symptom,0.913,2,15.30,False
+m pneumoniae infection,Condition,0.908,3,22.13,False
+distress,Symptom,0.904,5,0.00,False
+endocarditis,Condition,0.903,2,0.00,False
+kidney injury,Condition,0.902,3,10.18,False
+pain,Symptom,0.902,37,0.00,False
+serum hydroxychloroquine level,Treatment,0.899,2,16.93,False
+fevers,Symptom,0.898,2,0.00,False
+chronic gastritis,Condition,0.898,2,10.03,False
+replacement therapy,Treatment,0.895,2,7.32,False
+anemia hemoglobin,Condition,0.893,2,7.97,False
+microscopic examination,Exam,0.889,2,8.50,False
+ultrasonography identified,Exam,0.886,2,9.01,False
+fev,Treatment,0.882,2,0.00,False
+daily as pneumonia,Condition,0.881,2,15.89,False
+dna,Exam,0.879,4,0.00,False
+examinations,Exam,0.879,5,0.00,False
+gastroesophageal reflux disease,Condition,0.877,2,23.41,False
+laboratory studies obtained,Exam,0.877,2,18.96,False
+tomography ct scan,Exam,0.875,5,17.94,False
+aspirin mg,Treatment,0.874,2,7.35,False
+loss and anemia,Condition,0.872,2,14.14,False
+swollen,Symptom,0.871,2,0.00,False
+endomyocardial biopsy,Exam,0.871,2,10.56,False
+function tests,Exam,0.868,4,8.39,False
+pulmonary hypertension,Condition,0.868,4,8.28,False
+ch-mi,Treatment,0.867,4,0.00,False
+skin biopsy,Exam,0.867,2,7.97,False
+pathological,Exam,0.867,2,0.00,False
+dysphasia,Symptom,0.866,2,0.00,False
+tomography,Exam,0.862,18,0.00,False
+laboratory investigations,Exam,0.859,3,8.52,False
+parastomal hernial,Condition,0.857,2,11.41,False
+adenocarcinoma,Condition,0.852,2,0.00,False
+weighed,Symptom,0.850,2,0.00,False
+leucocytosis,Condition,0.850,3,0.00,False
+coronary syndrome,Condition,0.848,2,8.75,False
+thorax,Condition,0.848,2,0.00,False
+nutrition,Treatment,0.845,4,0.00,False
+studies,Exam,0.843,6,0.00,False
+microscopy,Exam,0.842,3,0.00,True
+vasculitis,Condition,0.840,2,0.00,False
+ascitic fluid,Treatment,0.840,2,10.14,False
+veno-venous extracorporeal membrane oxygenator,Condition,0.836,2,41.19,False
+pneumoniae infection,Condition,0.836,3,10.41,False
+ischemia,Condition,0.830,2,0.00,True
+kidney biopsy,Exam,0.830,2,8.24,False
+ca,Exam,0.826,8,0.00,False
+abdominal pain in rif,Symptom,0.826,2,23.10,False
+tracheal intubation,Treatment,0.822,2,10.73,False
+angiogram,Exam,0.820,2,0.00,True
+delayed gastric,Condition,0.819,3,9.14,False
+tma,Condition,0.817,2,0.00,True
+pain in rif,Symptom,0.817,2,13.73,False
+laboratory tests indicated,Exam,0.813,2,17.38,False
+dj junction,Treatment,0.805,2,13.14,False
+gastric decompression,Condition,0.803,3,9.14,False
+immunoglobulin g,Treatment,0.802,2,6.91,False
+histopathology,Exam,0.801,3,0.00,True
+fluids,Treatment,0.800,3,0.00,False
+iv,Exam,0.798,8,0.00,False
+salpingectomy,Treatment,0.796,2,0.00,False
+bone repair,Treatment,0.796,2,7.82,False
+tomography ct,Exam,0.794,12,8.56,False
+neurological examination,Exam,0.791,2,7.76,False
+abdominis,Symptom,0.789,2,0.00,False
+palpation,Symptom,0.789,2,0.00,False
+laparoscopic appendectomy,Treatment,0.788,3,11.14,True
+liver function tests,Exam,0.786,2,18.53,False
+transfusion,Treatment,0.782,7,0.00,False
+triple-therapy,Treatment,0.780,2,0.00,True
+gonadotropin,Treatment,0.778,2,0.00,False
+preoperative computed tomography,Exam,0.778,2,18.96,False
+pa stenosis,Exam,0.777,4,9.33,False
+fusion,Treatment,0.777,2,0.00,False
+ast,Condition,0.776,2,0.00,False
+renal dialysis,Condition,0.775,2,11.41,False
+profound weight loss,Symptom,0.774,2,21.30,False
+packed red,Treatment,0.770,3,10.56,False
+alk rearrangement,Treatment,0.769,2,12.73,False
+cesarean,Treatment,0.768,4,0.00,False
+hydroxychloroquine level was ng,Treatment,0.763,2,22.92,False
+laboratory testing,Exam,0.763,3,7.02,False
+alp gamma-gp tbil,Condition,0.761,2,25.46,False
+celiac lymph node dissections,Condition,0.761,2,38.43,False
+histology,Exam,0.760,2,0.00,True
+gram gtt,Exam,0.755,2,11.08,False
+pod,Exam,0.754,11,0.00,False
+appetite,Symptom,0.753,2,0.00,False
+carbon,Treatment,0.749,2,0.00,False
+transabdominal,Symptom,0.748,2,0.00,False
+rif,Treatment,0.748,7,0.00,False
+colonic resections,Treatment,0.747,2,12.14,False
+le,Condition,0.747,4,0.00,False
+cardiology,Exam,0.746,2,0.00,False
+height,Symptom,0.746,3,0.00,False
+m pneumoniae,Condition,0.745,3,11.31,False
+autoimmune encephalitis,Condition,0.745,2,12.73,False
+extremity edema,Symptom,0.744,2,9.10,False
+caspr,Condition,0.741,5,0.00,False
+epigastric,Symptom,0.739,3,0.00,False
+paresis,Symptom,0.739,3,0.00,False
+hrct,Treatment,0.739,2,0.00,True
+packed,Treatment,0.737,3,0.00,False
+weight,Symptom,0.735,19,0.00,False
+pa,Exam,0.734,13,0.00,False
+tod,Exam,0.732,8,0.00,False
+hyperechoic,Condition,0.729,2,0.00,False
+fat,Symptom,0.728,2,0.00,False
+histopathological,Exam,0.728,2,0.00,False
+steroid therapy,Treatment,0.727,3,8.90,False
+diagnostic tests,Exam,0.725,2,7.75,False
+dosage of prednisone,Treatment,0.724,3,14.65,False
+pta,Treatment,0.722,3,0.00,False
+rr,Treatment,0.720,2,0.00,False
+laparoscopic sugarbaker,Treatment,0.718,3,10.73,False
+hormonal,Exam,0.718,2,0.00,False
+distention,Treatment,0.717,3,0.00,False
+tachycardia,Condition,0.716,3,0.00,False
+american diabetes association,Condition,0.715,2,24.87,False
+cd t cells,Treatment,0.715,2,17.00,False
+emla,Treatment,0.714,2,0.00,False
+breath,Symptom,0.713,5,0.00,False
+hypertrophy,Condition,0.712,3,0.00,False
+resections,Treatment,0.711,3,0.00,False
+gas analysis,Exam,0.708,3,9.67,False
+iqr,Treatment,0.707,2,0.00,False
+vdz,Treatment,0.707,2,0.00,True
+laparotomy,Treatment,0.706,3,0.00,False
+tsh,Exam,0.706,7,0.00,False
+preeclampsia with severe features,Condition,0.702,2,27.19,False
+duodenal,Condition,0.698,2,0.00,False
+icu,Exam,0.697,6,0.00,False
+heavy,Symptom,0.697,3,0.00,False
+nasogastric,Treatment,0.696,3,0.00,False
+kg weight,Symptom,0.696,3,7.31,False
+enteroscope,Exam,0.695,2,0.00,False
+radiograph,Exam,0.695,3,0.00,False
+child,Symptom,0.694,5,0.00,False
+hsd,Treatment,0.693,2,0.00,False
+vp shunt,Exam,0.692,5,11.73,False
+mg of diltiazem,Treatment,0.692,2,12.19,False
+cea,Exam,0.690,4,0.00,False
+bp,Exam,0.690,8,0.00,False
+septal,Condition,0.689,2,0.00,False
+tight,Symptom,0.688,3,0.00,False
+proton pump,Treatment,0.687,2,13.73,False
+molecular weight heparin lmwh,Exam,0.686,2,35.35,False
+phylogenetic analysis,Exam,0.686,2,10.41,False
+se,Treatment,0.686,3,0.00,False
+oh,Treatment,0.686,2,0.00,False
+av-b,Treatment,0.685,2,0.00,False
+diagnostic imaging ctv mrv,Exam,0.685,2,35.79,False
+ana,Exam,0.684,2,0.00,False
+acute coronary,Condition,0.683,2,8.24,False
+ifx-b,Treatment,0.682,4,0.00,True
+sugarbaker repair,Treatment,0.682,2,10.14,False
+mouth,Symptom,0.682,4,0.00,False
+resuscitation,Treatment,0.681,5,0.00,False
+od,Exam,0.678,4,0.00,False
+laparoscopic exploration,Treatment,0.677,3,10.41,True
+covid,Treatment,0.676,5,0.00,False
+pde,Treatment,0.676,2,0.00,False
+repaired,Treatment,0.675,2,0.00,False
+caspr antibodies,Exam,0.675,4,10.01,False
+euthyroid,Treatment,0.675,2,0.00,False
+cre balloon,Treatment,0.674,2,12.41,False
+wrist extension,Symptom,0.674,2,9.95,False
+dhea,Condition,0.674,2,0.00,False
+farnsworth munsell hue,Condition,0.673,2,27.46,False
+fish,Treatment,0.673,3,0.00,False
+tenderness,Symptom,0.672,8,0.00,False
+immunoglobulin,Treatment,0.672,9,0.00,False
+alp gamma-gp,Treatment,0.672,2,12.73,False
+urinalysis,Exam,0.672,2,0.00,False
+iv cannula,Exam,0.671,2,11.14,False
+csf,Treatment,0.671,5,0.00,False
+lumbar,Exam,0.670,2,0.00,False
+once daily and hydroxychloroquine,Treatment,0.662,2,23.27,False
+abdominal cavity,Symptom,0.661,2,7.05,False
+ventricular ejection fraction lvef,Condition,0.658,2,36.28,False
+oga,Treatment,0.658,4,0.00,False
+ldh,Exam,0.657,5,0.00,False
+hsd b,Treatment,0.656,2,9.56,False
+adamts activity,Condition,0.654,2,10.82,False
+intracardiac,Condition,0.653,2,0.00,False
+nr,Exam,0.653,8,0.00,False
+il united states,Exam,0.650,2,23.70,False
+st-t,Treatment,0.650,2,0.00,False
+esr,Exam,0.649,5,0.00,False
+sections,Treatment,0.649,2,0.00,False
+outlet obstruction,Condition,0.648,2,11.14,False
+se stents,Treatment,0.648,2,11.56,False
+never,Symptom,0.648,2,0.00,False
+intubated,Treatment,0.647,3,0.00,False
+gk,Treatment,0.646,2,0.00,False
+fvc,Treatment,0.646,2,0.00,False
+fc,Treatment,0.646,2,0.00,False
+vitamin k antagonists,Condition,0.646,2,25.46,False
+iii,Treatment,0.646,4,0.00,False
+ppv,Exam,0.644,4,0.00,False
+oral iron,Treatment,0.642,2,9.06,False
+mep,Treatment,0.641,3,0.00,False
+antiplatelet therapy,Treatment,0.641,2,9.06,False
+asa,Treatment,0.640,2,0.00,False
+puncture,Exam,0.640,2,0.00,False
+au,Treatment,0.639,4,0.00,False
+crp,Exam,0.638,7,0.00,False
+preeclampsia with severe,Condition,0.638,2,15.46,False
+indirect immunofluorescence assay,Exam,0.638,2,23.96,False
+iron deficiency,Condition,0.638,2,12.14,False
+hellp,Treatment,0.637,2,0.00,False
+hr,Exam,0.637,5,0.00,False
+gfap,Treatment,0.636,2,0.00,False
+lh,Treatment,0.634,2,0.00,False
+re,Treatment,0.632,4,0.00,False
+diseases,Condition,0.631,3,0.00,False
+vsd,Exam,0.628,5,0.00,False
+ptx see,Exam,0.626,2,11.56,False
+gcl,Treatment,0.626,2,0.00,False
+lmwh,Treatment,0.625,3,0.00,True
+methicillin-resistant staphylococcus aureus,Condition,0.625,2,27.46,False
+donath-landsteiner antibody,Exam,0.624,3,9.81,False
+loss,Symptom,0.623,10,0.00,False
+stents,Treatment,0.622,6,0.00,False
+diabetes association,Condition,0.621,2,11.73,False
+hpf,Treatment,0.620,2,0.00,False
+boston scientific natick ma,Condition,0.620,2,39.02,False
+active disease,Condition,0.619,2,8.27,False
+low molecular weight heparin,Exam,0.619,2,33.48,True
+abdominis muscle,Symptom,0.618,2,12.14,False
+transferrin saturation,Symptom,0.618,2,11.73,False
+vp,Exam,0.618,5,0.00,False
+cloth,Treatment,0.618,2,0.00,False
+first-line therapy,Treatment,0.618,2,9.64,False
+lad,Treatment,0.617,2,0.00,False
+inhibitors,Treatment,0.616,2,0.00,False
+aip,Treatment,0.616,2,0.00,False
+splenic,Treatment,0.615,2,0.00,False
+nicu,Treatment,0.615,2,0.00,False
+ii,Exam,0.614,5,0.00,False
+molecular weight,Symptom,0.612,2,9.48,False
+distension,Symptom,0.612,5,0.00,False
+cta,Treatment,0.611,3,0.00,True
+blood loss,Treatment,0.610,2,6.03,False
+mitosis,Condition,0.610,2,0.00,False
+cpr,Treatment,0.609,2,0.00,False
+weight loss and anemia,Condition,0.608,2,24.62,False
+thrombocytosis,Condition,0.608,2,0.00,True
+chose respiratory,Condition,0.607,2,8.95,False
+il,Treatment,0.605,3,0.00,False
+colitis,Condition,0.602,2,0.00,True
+investigation,Exam,0.600,2,0.00,False
+iaa,Treatment,0.600,3,0.00,False
+bronchoscopy,Exam,0.599,3,0.00,True
+intra-abdominal,Symptom,0.599,2,0.00,False
+chest ct,Symptom,0.597,3,5.20,False
+tac,Treatment,0.597,2,0.00,False
+er,Exam,0.596,5,0.00,False
+iu l,Exam,0.595,10,7.82,False
+au ml,Exam,0.594,4,9.27,False
+panel of laboratory testing,Exam,0.593,2,23.68,False
+study,Exam,0.593,15,0.00,False
+ifa,Treatment,0.592,2,0.00,False
+neonatal compartment syndrome,Condition,0.592,4,23.06,True
+rr min,Exam,0.589,2,10.48,False
+histological,Exam,0.589,6,0.00,False

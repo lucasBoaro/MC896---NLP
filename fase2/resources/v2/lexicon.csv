@@ -1,0 +1,377 @@
+term,type,canonical,source
+abdominal distension,Symptom,abdominal distension,case_text
+abdominal pain,Symptom,abdominal pain,case_text
+ascites,Symptom,ascites,case_text
+breathlessness,Symptom,dyspnea,case_text
+chest pain,Symptom,chest pain,case_text
+chills,Symptom,chills,case_text
+constipation,Symptom,constipation,case_text
+coughed,Symptom,cough,case_text
+diarrhea,Symptom,diarrhea,case_text
+dyspnea,Symptom,dyspnea,case_text
+edema,Symptom,edema,case_text
+emesis,Symptom,vomiting,case_text
+fatigue,Symptom,fatigue,case_text
+fever,Symptom,fever,case_text
+headache,Symptom,headache,case_text
+nausea,Symptom,nausea,case_text
+respiratory distress,Symptom,respiratory distress,case_text
+vomiting,Symptom,vomiting,case_text
+weight loss,Symptom,weight loss,case_text
+dysphagia,Symptom,dysphagia,case_text
+anorexia,Symptom,anorexia,case_text
+chest tightness,Symptom,chest tightness,case_text
+coughing,Symptom,cough,case_text
+decreased appetite,Symptom,decreased appetite,case_text
+decreased level of consciousness,Symptom,decreased level of consciousness,case_text
+diaphoresis,Symptom,diaphoresis,case_text
+dry eyes,Symptom,dry eyes,case_text
+dry mouth,Symptom,dry mouth,case_text
+heartburn,Symptom,heartburn,case_text
+jaundice,Symptom,jaundice,case_text
+palpitations,Symptom,palpitations,case_text
+pruritus,Symptom,pruritus,case_text
+rash,Symptom,rash,case_text
+swollen abdomen,Symptom,abdominal swelling,case_text
+weakness,Symptom,weakness,case_text
+wrist pain,Symptom,wrist pain,case_text
+epigastric pain,Symptom,epigastric pain,case_text
+muscular soreness,Symptom,muscle soreness,case_text
+shortness of breath,Symptom,dyspnea,case_text
+desaturation,Symptom,oxygen desaturation,case_text
+hematochezia,Symptom,hematochezia,case_text
+weight gain,Symptom,weight gain,case_text
+abdominal tenderness,Symptom,abdominal tenderness,case_text
+biopsy,Exam,biopsy,case_text
+blood tests,Exam,blood test,case_text
+computed tomography,Exam,computed tomography,case_text
+CT scan,Exam,computed tomography,case_text
+echocardiography,Exam,echocardiography,case_text
+electrocardiogram,Exam,electrocardiogram,case_text
+electroencephalogram,Exam,electroencephalogram,case_text
+EKG,Exam,electrocardiogram,case_text
+endoscopy,Exam,endoscopy,case_text
+esophagogastroduodenoscopy,Exam,esophagogastroduodenoscopy,case_text
+EUS-FNA,Exam,endoscopic ultrasound-guided fine-needle aspiration,case_text
+glucose tolerance test,Exam,glucose tolerance test,case_text
+GTT,Exam,glucose tolerance test,case_text
+laboratory studies,Exam,laboratory testing,case_text
+magnetic resonance imaging,Exam,magnetic resonance imaging,case_text
+MRI,Exam,magnetic resonance imaging,case_text
+OCT,Exam,optical coherence tomography,case_text
+transesophageal echocardiography,Exam,transesophageal echocardiography,case_text
+transvaginal ultrasonography,Exam,transvaginal ultrasonography,case_text
+ultrasonography,Exam,ultrasonography,case_text
+abdominal ultrasound,Exam,abdominal ultrasound,case_text
+CAG,Exam,coronary angiography,case_text
+chest X-ray,Exam,chest X-ray,case_text
+colonoscopy,Exam,colonoscopy,case_text
+coronary angiography,Exam,coronary angiography,case_text
+CT,Exam,computed tomography,case_text
+ECG,Exam,electrocardiogram,case_text
+EGD,Exam,esophagogastroduodenoscopy,case_text
+enteroscopy,Exam,enteroscopy,case_text
+laboratory examinations,Exam,laboratory testing,case_text
+laboratory tests,Exam,laboratory testing,case_text
+lumbar puncture,Exam,lumbar puncture,case_text
+MRA,Exam,magnetic resonance angiography,case_text
+rRT-PCR,Exam,reverse transcription polymerase chain reaction,case_text
+Schirmer test,Exam,Schirmer test,case_text
+TEE,Exam,transesophageal echocardiography,case_text
+transesophageal echocardiogram,Exam,transesophageal echocardiography,case_text
+transthoracic echocardiogram,Exam,transthoracic echocardiography,case_text
+UGI study,Exam,upper gastrointestinal contrast study,case_text
+ultrasound,Exam,ultrasound,case_text
+video capsule endoscopy,Exam,video capsule endoscopy,case_text
+X-ray,Exam,X-ray,case_text
+X-rays,Exam,X-ray,case_text
+physical examination,Exam,physical examination,case_text
+hormonal assay,Exam,hormonal assay,case_text
+hysterosalpingography,Exam,hysterosalpingography,case_text
+semen analysis,Exam,semen analysis,case_text
+diagnostic laparoscopy,Exam,diagnostic laparoscopy,case_text
+histological examination,Exam,histological examination,case_text
+immunohistochemical study,Exam,immunohistochemistry,case_text
+thyroid function tests,Exam,thyroid function testing,case_text
+serological investigations,Exam,serological testing,case_text
+TTE,Exam,transthoracic echocardiography,case_text
+echocardiogram,Exam,echocardiography,case_text
+acylcarnitine profile,Exam,acylcarnitine profile,case_text
+molecular studies,Exam,molecular testing,case_text
+FNA,Exam,fine-needle aspiration,case_text
+pathology,Exam,pathology examination,case_text
+Donath-Landsteiner test,Exam,Donath-Landsteiner test,case_text
+cellulitis,Condition,cellulitis,case_text
+chronic kidney disease,Condition,chronic kidney disease,case_text
+COVID-19,Condition,COVID-19,case_text
+diabetes mellitus,Condition,diabetes mellitus,case_text
+esophagobronchial fistula,Condition,esophagobronchial fistula,case_text
+gastric duplication cyst,Condition,gastric duplication cyst,case_text
+gastric outlet obstruction,Condition,gastric outlet obstruction,case_text
+heart failure,Condition,heart failure,case_text
+hypothyroidism,Condition,hypothyroidism,case_text
+infective endocarditis,Condition,infective endocarditis,case_text
+autoimmune hemolytic anemia,Condition,autoimmune hemolytic anemia,case_text
+parastomal hernia,Condition,parastomal hernia,case_text
+pneumothorax,Condition,pneumothorax,case_text
+pressure injury,Condition,pressure injury,case_text
+pulmonary adenocarcinoma,Condition,pulmonary adenocarcinoma,case_text
+SLE,Condition,systemic lupus erythematosus,case_text
+tuberculous splenic abscess,Condition,tuberculous splenic abscess,case_text
+ventricular septal defect,Condition,ventricular septal defect,case_text
+acute coronary syndrome,Condition,acute coronary syndrome,case_text
+ACS,Condition,acute coronary syndrome,case_text
+anemia,Condition,anemia,case_text
+angiosarcoma,Condition,angiosarcoma,case_text
+cardiac arrest,Condition,cardiac arrest,case_text
+CAS,Condition,coronary artery spasm,case_text
+complete AV-B,Condition,complete atrioventricular block,case_text
+delayed gastric emptying,Condition,gastroparesis,case_text
+disseminated intravascular coagulation,Condition,disseminated intravascular coagulation,case_text
+hypertension,Condition,hypertension,case_text
+influenza A,Condition,influenza A,case_text
+M. pneumoniae infection,Condition,Mycoplasma pneumoniae infection,case_text
+pneumonia,Condition,pneumonia,case_text
+respiratory failure,Condition,respiratory failure,case_text
+Sjogren's Syndrome,Condition,Sjogren's syndrome,case_text
+viral septicemia,Condition,viral septicemia,case_text
+mucinous pancreatic cystic neoplasm,Condition,mucinous pancreatic cystic neoplasm,case_text
+inability to conceive,Condition,infertility,case_text
+infertility,Condition,infertility,case_text
+ovarian steroid cell tumor NOS,Condition,ovarian steroid cell tumor NOS,case_text
+breast cancer,Condition,breast cancer,case_text
+ascending aortic aneurysm,Condition,ascending aortic aneurysm,case_text
+pseudomass,Condition,pseudomass,case_text
+LCHADD,Condition,long-chain 3-hydroxyacyl-CoA dehydrogenase deficiency,case_text
+NEC,Condition,necrotizing enterocolitis,case_text
+bradycardia,Condition,bradycardia,case_text
+ancient schwannoma,Condition,pancreatic schwannoma,case_text
+hyperthyroidism,Condition,hyperthyroidism,case_text
+GD,Condition,Graves disease,case_text
+acute kidney injury,Condition,acute kidney injury,case_text
+Buerger's disease,Condition,Buerger disease,case_text
+adrenal insufficiency,Condition,adrenal insufficiency,case_text
+ischemic colitis,Condition,ischemic colitis,case_text
+aspiration pneumonia,Condition,aspiration pneumonia,case_text
+obesity,Condition,obesity,case_text
+leukocytosis,Condition,leukocytosis,case_text
+hypoalbuminemia,Condition,hypoalbuminemia,case_text
+gastritis,Condition,gastritis,case_text
+duodenal ulceration,Condition,duodenal ulceration,case_text
+esophagitis,Condition,esophagitis,case_text
+hemolysis,Condition,hemolysis,case_text
+preeclampsia,Condition,preeclampsia,case_text
+HELLP syndrome,Condition,HELLP syndrome,case_text
+acyclovir,Treatment,acyclovir,case_text
+alectinib,Treatment,alectinib,case_text
+blood transfusion,Treatment,blood transfusion,case_text
+chemotherapy,Treatment,chemotherapy,case_text
+diltiazem,Treatment,diltiazem,case_text
+ethambutol,Treatment,ethambutol,case_text
+fluid resuscitation,Treatment,fluid resuscitation,case_text
+hydroxychloroquine,Treatment,hydroxychloroquine,case_text
+insulin,Treatment,insulin,case_text
+intubation,Treatment,intubation,case_text
+isoniazid,Treatment,isoniazid,case_text
+levothyroxine,Treatment,levothyroxine,case_text
+meropenem,Treatment,meropenem,case_text
+methylprednisolone,Treatment,methylprednisolone,case_text
+oral iron replacement,Treatment,oral iron replacement,case_text
+oxcarbazepine,Treatment,oxcarbazepine,case_text
+prednisone,Treatment,prednisone,case_text
+pyrazinamide,Treatment,pyrazinamide,case_text
+rifampin,Treatment,rifampin,case_text
+valproic acid,Treatment,valproic acid,case_text
+acarbose,Treatment,acarbose,case_text
+arbidol,Treatment,arbidol,case_text
+aspirin,Treatment,aspirin,case_text
+atorvastatin,Treatment,atorvastatin,case_text
+clopidogrel,Treatment,clopidogrel,case_text
+dupilumab,Treatment,dupilumab,case_text
+human immunoglobulin,Treatment,intravenous immunoglobulin,case_text
+intravenous immunoglobulin,Treatment,intravenous immunoglobulin,case_text
+IVIG,Treatment,intravenous immunoglobulin,case_text
+laparoscopic distal pancreatectomy,Treatment,distal pancreatectomy,case_text
+laparoscopic gastrojejunostomy,Treatment,gastrojejunostomy,case_text
+levofloxacin,Treatment,levofloxacin,case_text
+linezolid,Treatment,linezolid,case_text
+loxoprofen,Treatment,loxoprofen,case_text
+moxifloxacin,Treatment,moxifloxacin,case_text
+omeprazole,Treatment,omeprazole,case_text
+oseltamivir,Treatment,oseltamivir,case_text
+packed red blood cells,Treatment,packed red blood cells,case_text
+pantoprazole,Treatment,pantoprazole,case_text
+platelet transfusions,Treatment,platelet transfusion,case_text
+stent,Treatment,stent,case_text
+surgical resection,Treatment,surgical resection,case_text
+thymosin alpha-1,Treatment,thymosin alpha-1,case_text
+ovarian drilling,Treatment,ovarian drilling,case_text
+in vitro fertilization,Treatment,in vitro fertilization,case_text
+gonadotropin therapy,Treatment,gonadotropin therapy,case_text
+cesarean section,Treatment,cesarean section,case_text
+dextrose fluids,Treatment,dextrose fluids,case_text
+enteral nutrition,Treatment,enteral nutrition,case_text
+triheptanoin,Treatment,triheptanoin,case_text
+ampicillin-sulbactam,Treatment,ampicillin-sulbactam,case_text
+gentamicin,Treatment,gentamicin,case_text
+bowel rest,Treatment,bowel rest,case_text
+bowel decompression,Treatment,bowel decompression,case_text
+total parental nutrition,Treatment,total parenteral nutrition,case_text
+TPN,Treatment,total parenteral nutrition,case_text
+MCT oil,Treatment,medium-chain triglyceride oil,case_text
+splenectomy,Treatment,splenectomy,case_text
+carbimazole,Treatment,carbimazole,case_text
+CBZ,Treatment,carbimazole,case_text
+intravenous fluids,Treatment,intravenous fluids,case_text
+nasogastric decompression,Treatment,nasogastric decompression,case_text
+antibiotic therapy,Treatment,antibiotic therapy,case_text
+proton pump inhibitor,Treatment,proton pump inhibitor,case_text
+laparoscopic Sugarbaker repair,Treatment,Sugarbaker repair,case_text
+parastomal hernia repair,Treatment,parastomal hernia repair,case_text
+red cell transfusion,Treatment,blood transfusion,case_text
+P antigen-negative red cell transfusion,Treatment,P antigen-negative red cell transfusion,case_text
+rectal bleeding,Symptom,rectal bleeding,evaluation_v2
+lower GI bleeding,Symptom,rectal bleeding,evaluation_v2
+bloody diarrhea,Symptom,bloody diarrhea,evaluation_v2
+dizziness,Symptom,dizziness,evaluation_v2
+increased bowel movements,Symptom,increased bowel movements,evaluation_v2
+petechiae,Symptom,petechiae,evaluation_v2
+petechial rash,Symptom,petechiae,evaluation_v2
+malaise,Symptom,malaise,evaluation_v2
+headaches,Symptom,headache,evaluation_v2
+oral intolerance,Symptom,oral intolerance,evaluation_v2
+skin ulcers,Symptom,skin ulcers,evaluation_v2
+alopecia,Symptom,alopecia,evaluation_v2
+desquamation,Symptom,desquamation,evaluation_v2
+nasal obstruction,Symptom,nasal obstruction,evaluation_v2
+visual impairment,Symptom,visual impairment,evaluation_v2
+dysphonia,Symptom,dysphonia,evaluation_v2
+ulcerative colitis,Condition,ulcerative colitis,evaluation_v2
+UC,Condition,ulcerative colitis,evaluation_v2
+colitis,Condition,ulcerative colitis,evaluation_v2
+thrombocytosis,Condition,thrombocytosis,evaluation_v2
+abdominal abscess,Condition,abdominal abscess,evaluation_v2
+abscess,Condition,abscess,evaluation_v2
+pulmonary embolism,Condition,pulmonary embolism,evaluation_v2
+PE,Condition,pulmonary embolism,evaluation_v2
+Behçet's disease,Condition,Behçet disease,evaluation_v2
+Behcet's disease,Condition,Behçet disease,evaluation_v2
+BD,Condition,Behçet disease,evaluation_v2
+venous thrombosis,Condition,venous thrombosis,evaluation_v2
+thrombosis,Condition,thrombosis,evaluation_v2
+sinus tachycardia,Condition,sinus tachycardia,evaluation_v2
+acute appendicitis,Condition,acute appendicitis,evaluation_v2
+appendicitis,Condition,acute appendicitis,evaluation_v2
+phlegmonous appendicitis,Condition,acute appendicitis,evaluation_v2
+endometriosis,Condition,endometriosis,evaluation_v2
+appendiceal endometriosis,Condition,appendiceal endometriosis,evaluation_v2
+appendiceal phlegmon,Condition,appendiceal phlegmon,evaluation_v2
+peritonitis,Condition,peritonitis,evaluation_v2
+tracheoesophageal fistula,Condition,tracheoesophageal fistula,evaluation_v2
+TEF,Condition,tracheoesophageal fistula,evaluation_v2
+fistula,Condition,tracheoesophageal fistula,evaluation_v2
+hepatitis B,Condition,hepatitis B,evaluation_v2
+hepatitis C,Condition,hepatitis C,evaluation_v2
+spinal cord injury,Condition,spinal cord injury,evaluation_v2
+quadriplegic,Condition,quadriplegia,evaluation_v2
+quadriplegia,Condition,quadriplegia,evaluation_v2
+adenovirus infection,Condition,adenovirus infection,evaluation_v2
+HAdV-14 infection,Condition,adenovirus infection,evaluation_v2
+HAdV-14,Condition,adenovirus infection,evaluation_v2
+otitis media,Condition,otitis media,evaluation_v2
+craniofacial tumor,Condition,craniofacial tumor,evaluation_v2
+tumor,Condition,tumor,evaluation_v2
+obstructive sleep apnea,Condition,obstructive sleep apnea,evaluation_v2
+OSA,Condition,obstructive sleep apnea,evaluation_v2
+fibro-osseous lesion,Condition,fibro-osseous lesion,evaluation_v2
+desmoplastic fibroma,Condition,desmoplastic fibroma,evaluation_v2
+fibrous dysplasia,Condition,fibrous dysplasia,evaluation_v2
+neonatal compartment syndrome,Condition,neonatal compartment syndrome,evaluation_v2
+compartment syndrome,Condition,neonatal compartment syndrome,evaluation_v2
+ischemia,Condition,ischemia,evaluation_v2
+thrombotic thrombocytopenic purpura,Condition,thrombotic thrombocytopenic purpura,evaluation_v2
+TTP,Condition,thrombotic thrombocytopenic purpura,evaluation_v2
+osteoporosis,Condition,osteoporosis,evaluation_v2
+facial nerve palsy,Condition,facial nerve palsy,evaluation_v2
+deep vein thrombosis,Condition,deep vein thrombosis,evaluation_v2
+Helicobacter pylori infection,Condition,Helicobacter pylori infection,evaluation_v2
+H. pylori,Condition,Helicobacter pylori infection,evaluation_v2
+thrombocytopenia,Condition,thrombocytopenia,evaluation_v2
+postpartum cardiomyopathy,Condition,postpartum cardiomyopathy,evaluation_v2
+hydroxychloroquine-induced cardiomyopathy,Condition,hydroxychloroquine-induced cardiomyopathy,evaluation_v2
+cardiomyopathy,Condition,cardiomyopathy,evaluation_v2
+digital vasculitis,Condition,digital vasculitis,evaluation_v2
+thrombotic microangiopathy,Condition,thrombotic microangiopathy,evaluation_v2
+TMA,Condition,thrombotic microangiopathy,evaluation_v2
+sepsis,Condition,sepsis,evaluation_v2
+pericardial effusion,Condition,pericardial effusion,evaluation_v2
+laboratory results,Exam,laboratory testing,evaluation_v2
+laboratory findings,Exam,laboratory testing,evaluation_v2
+histopathology,Exam,histopathology,evaluation_v2
+histopathological examination,Exam,histopathology,evaluation_v2
+histology,Exam,histopathology,evaluation_v2
+CTA,Exam,computed tomography angiography,evaluation_v2
+computed tomography angiogram,Exam,computed tomography angiography,evaluation_v2
+angiogram,Exam,angiography,evaluation_v2
+chest radiograph,Exam,chest X-ray,evaluation_v2
+bronchoscopy,Exam,bronchoscopy,evaluation_v2
+viral cultures,Exam,viral culture,evaluation_v2
+immunofluorescence,Exam,immunofluorescence,evaluation_v2
+gene sequencing,Exam,gene sequencing,evaluation_v2
+microscopy,Exam,microscopy,evaluation_v2
+neurological evaluation,Exam,neurological examination,evaluation_v2
+blood smear,Exam,blood smear,evaluation_v2
+ADAMTS13 activity test,Exam,ADAMTS13 activity test,evaluation_v2
+PET CT,Exam,positron emission tomography,evaluation_v2
+gastroduodenoscopy,Exam,gastroduodenoscopy,evaluation_v2
+serologies,Exam,serological testing,evaluation_v2
+pulmonary function testing,Exam,pulmonary function testing,evaluation_v2
+HRCT,Exam,high-resolution computed tomography,evaluation_v2
+ventilation-perfusion scan,Exam,ventilation-perfusion scan,evaluation_v2
+V/Q scan,Exam,ventilation-perfusion scan,evaluation_v2
+cardiac magnetic resonance imaging,Exam,cardiac magnetic resonance imaging,evaluation_v2
+right heart catheterization,Exam,right heart catheterization,evaluation_v2
+electron microscopy,Exam,electron microscopy,evaluation_v2
+mesalamine,Treatment,mesalamine,evaluation_v2
+5-ASA,Treatment,mesalamine,evaluation_v2
+vedolizumab,Treatment,vedolizumab,evaluation_v2
+VDZ,Treatment,vedolizumab,evaluation_v2
+low molecular weight heparin,Treatment,low molecular weight heparin,evaluation_v2
+LMWH,Treatment,low molecular weight heparin,evaluation_v2
+corticosteroids,Treatment,corticosteroid therapy,evaluation_v2
+subtotal colectomy,Treatment,subtotal colectomy,evaluation_v2
+colectomy,Treatment,colectomy,evaluation_v2
+terminal ileostomy,Treatment,ileostomy,evaluation_v2
+ileostomy,Treatment,ileostomy,evaluation_v2
+infliximab,Treatment,infliximab,evaluation_v2
+IFX-B,Treatment,infliximab,evaluation_v2
+azathioprine,Treatment,azathioprine,evaluation_v2
+AZA,Treatment,azathioprine,evaluation_v2
+abscess drainage,Treatment,abscess drainage,evaluation_v2
+antibiotics,Treatment,antibiotic therapy,evaluation_v2
+anti-infective therapy,Treatment,anti-infective therapy,evaluation_v2
+cyclosporine,Treatment,cyclosporine,evaluation_v2
+warfarin,Treatment,warfarin,evaluation_v2
+laparoscopic appendectomy,Treatment,laparoscopic appendectomy,evaluation_v2
+appendectomy,Treatment,appendectomy,evaluation_v2
+laparoscopic exploration,Treatment,laparoscopic exploration,evaluation_v2
+tracheostomy,Treatment,tracheostomy,evaluation_v2
+hepatic repair,Treatment,hepatic repair,evaluation_v2
+chest tubes,Treatment,chest tube,evaluation_v2
+ketamine,Treatment,ketamine,evaluation_v2
+dexmedetomidine,Treatment,dexmedetomidine,evaluation_v2
+lidocaine,Treatment,lidocaine,evaluation_v2
+cranioplasty,Treatment,cranioplasty,evaluation_v2
+excision,Treatment,surgical excision,evaluation_v2
+plasmapheresis,Treatment,plasmapheresis,evaluation_v2
+steroid treatment,Treatment,corticosteroid therapy,evaluation_v2
+rituximab,Treatment,rituximab,evaluation_v2
+amoxicillin,Treatment,amoxicillin,evaluation_v2
+clarithromycin,Treatment,clarithromycin,evaluation_v2
+triple-therapy,Treatment,triple therapy,evaluation_v2
+mycophenolate mofetil,Treatment,mycophenolate mofetil,evaluation_v2
+MMF,Treatment,mycophenolate mofetil,evaluation_v2
+pericardiocentesis,Treatment,pericardiocentesis,evaluation_v2
+amputation,Treatment,amputation,evaluation_v2
+incision and drainage,Treatment,incision and drainage,evaluation_v2
+nitroglycerin,Treatment,nitroglycerin,evaluation_v2

@@ -1,0 +1,90 @@
+phrase,kind,value
+presented with,relation,HAS_SYMPTOM
+underwent,relation,UNDERWENT_EXAM
+diagnosed with,relation,DIAGNOSED_WITH
+diagnosed as,relation,DIAGNOSED_WITH
+treated with,relation,RECEIVED_TREATMENT
+treatment with,relation,RECEIVED_TREATMENT
+started on,relation,RECEIVED_TREATMENT
+revealed,relation,INDICATES
+showed,relation,INDICATES
+consistent with,relation,INDICATES
+demonstrated,relation,INDICATES
+indicated,relation,INDICATES
+diagnosed of,relation,DIAGNOSED_WITH
+diagnosis of,relation,DIAGNOSED_WITH
+confirming a diagnosis of,relation,DIAGNOSED_WITH
+complaints of,relation,HAS_SYMPTOM
+endorsed,relation,HAS_SYMPTOM
+exhibited,relation,HAS_SYMPTOM
+administered,relation,RECEIVED_TREATMENT
+prescribed,relation,RECEIVED_TREATMENT
+performed,relation,UNDERWENT_EXAM
+was performed,relation,UNDERWENT_EXAM
+completed,relation,UNDERWENT_EXAM
+was given,relation,RECEIVED_TREATMENT
+received,relation,RECEIVED_TREATMENT
+initiated,relation,RECEIVED_TREATMENT
+was initiated,relation,RECEIVED_TREATMENT
+managed with,relation,RECEIVED_TREATMENT
+diagnosis was made,relation,DIAGNOSED_WITH
+final diagnosis of,relation,DIAGNOSED_WITH
+was established,relation,DIAGNOSED_WITH
+consistent with a diagnosis of,relation,DIAGNOSED_WITH
+used to treat,treatment_target,TREATS
+given to treat,treatment_target,TREATS
+to treat,treatment_target,TREATS
+to deal with,treatment_target,TREATS
+to cover,treatment_target,TREATS
+to control,treatment_target,TREATS
+for treatment of,treatment_target,TREATS
+for management of,treatment_target,TREATS
+therapy for,treatment_target,TREATS
+treatment for,treatment_target,TREATS
+long-term treatment for,treatment_target,TREATS
+medical treatment in the form of,treatment_target,TREATS
+for worsening,treatment_target,TREATS
+denied,negation,NEGATED
+no evidence of,negation,NEGATED
+ruled out,negation,NEGATED
+without,negation,NEGATED
+no,negation,NEGATED
+negative for,negation,NEGATED
+did not,negation,NEGATED
+neither,negation,NEGATED
+nor,negation,NEGATED
+absence of,negation,NEGATED
+absent,negation,NEGATED
+excluded,negation,NEGATED
+suspected,uncertainty,SUSPECTED
+possible,uncertainty,SUSPECTED
+suggestive of,uncertainty,SUSPECTED
+cannot be excluded,uncertainty,SUSPECTED
+suspicion of,uncertainty,SUSPECTED
+highly suspected,uncertainty,SUSPECTED
+probable,uncertainty,SUSPECTED
+likely,uncertainty,SUSPECTED
+may be,uncertainty,SUSPECTED
+could be,uncertainty,SUSPECTED
+concern for,uncertainty,SUSPECTED
+resolution of,resolution,RESOLVED
+resolved,resolution,RESOLVED
+relieved,resolution,RESOLVED
+relief of,resolution,RESOLVED
+converted back,resolution,RESOLVED
+improved,resolution,RESOLVED
+symptom-free,resolution,RESOLVED
+no recurrence,resolution,RESOLVED
+without recurrence,resolution,RESOLVED
+no longer,resolution,RESOLVED
+refused,not_performed,NOT_PERFORMED
+was refused,not_performed,NOT_PERFORMED
+declined,not_performed,NOT_PERFORMED
+planned,not_performed,NOT_PERFORMED
+was planned,not_performed,NOT_PERFORMED
+proposed for,not_performed,NOT_PERFORMED
+was suggested,not_performed,NOT_PERFORMED
+on admission,temporal_anchor,admission
+at admission,temporal_anchor,admission
+postoperatively,temporal_anchor,postoperative
+preoperatively,temporal_anchor,preoperative

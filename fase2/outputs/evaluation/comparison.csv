@@ -1,0 +1,15 @@
+metric,v1,v2
+lexicon_terms,231,376
+triggers,89,118
+entity_mentions,95,247
+symptoms,21,36
+exams,46,75
+conditions,12,69
+treatments,16,67
+structural_edges,95,247
+treats,0,5
+indicates,2,12
+before,2,2
+entity_to_entity_edges,4,19
+total_edges,99,266
+cases_without_entities,1,0

@@ -1,0 +1,8 @@
+# Dependências de terceiros do projeto (testado com Python 3.12).
+# Os scripts da etapa 1 (src/prepare_data.py, src/build_graph.py,
+# src/visualize_graph.py) e os testes usam só a biblioteca padrão.
+# As bibliotecas abaixo são usadas pelo protótipo da etapa 2
+# (src/prototipo_ngramas.py: N-gramas + PMI + Regressão Logística).
+numpy==2.5.4
+scipy==1.18.1
+scikit-learn==1.9.1
