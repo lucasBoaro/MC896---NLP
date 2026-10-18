@@ -399,3 +399,341 @@ starr-edwards caged,Condition,0.663,2,11.44,0.85,False
 microiu l,Symptom,0.663,7,8.19,0.70,False
 gastric body,Symptom,0.661,2,7.52,0.56,False
 remained impacted,Condition,0.659,2,10.86,0.81,False
+total protein,Treatment,0.657,2,7.65,0.57,False
+clinical information,Condition,0.656,2,8.95,0.67,False
+mumol l,Symptom,0.656,10,8.19,0.74,False
+jejunal diverticulum,Condition,0.656,2,9.47,0.70,False
+full symptom,Exam,0.655,4,10.54,0.85,False
+preferential drainage,Condition,0.654,2,11.86,0.88,False
+blood pressure,Exam,0.652,10,7.16,0.64,False
+shoulder dystocia,Condition,0.651,6,10.33,0.87,False
+ptx see figure,Condition,0.651,2,19.39,0.72,False
+beats min,Symptom,0.650,4,9.95,0.80,False
+ruptured aneurysm,Exam,0.650,3,11.63,0.90,False
+bone repair,Condition,0.648,2,8.66,0.64,False
+differential diagnosis,Condition,0.646,2,9.86,0.73,False
+ctv mrv or angiography,Condition,0.646,2,34.71,0.86,False
+laboratory values,Exam,0.646,2,7.47,0.56,False
+mmhg heart rate,Condition,0.645,2,17.81,0.66,False
+parastomal hernial sac,Condition,0.644,2,23.98,0.89,False
+abscess through,Symptom,0.643,2,8.83,0.66,False
+only abnormality,Condition,0.641,2,9.27,0.69,False
+sugarbaker technique,Condition,0.640,2,11.86,0.88,False
+progressed to complete dilation,Condition,0.640,2,28.54,0.71,False
+total length,Exam,0.640,2,8.77,0.65,False
+estimated gestational age,Condition,0.636,2,20.68,0.77,False
+motor nerve,Condition,0.636,2,8.63,0.64,False
+oxygen saturation,Exam,0.635,5,10.96,0.90,False
+surgical treatment,Exam,0.634,3,6.41,0.50,False
+bilateral lower extremity,Treatment,0.632,2,18.88,0.70,False
+diagnosis of glucose,Exam,0.630,2,12.24,0.46,False
+bioprosthetic mitral valve replacement,Treatment,0.628,2,31.40,0.78,False
+tsh microiu,Exam,0.628,4,10.83,0.87,False
+stent insertion,Treatment,0.628,3,9.71,0.75,False
+small amount,Exam,0.627,2,8.26,0.61,False
+recurrent thrombosis n,Condition,0.626,2,19.02,0.71,False
+arterial blood gas,Exam,0.626,3,19.00,0.74,False
+red cell suspensions,Treatment,0.625,2,19.74,0.73,False
+sensory nerve conduction,Exam,0.625,2,20.95,0.78,False
+tumor cells,Exam,0.625,3,6.47,0.50,False
+standard panel,Exam,0.625,2,10.63,0.79,False
+coronary artery,Condition,0.624,3,10.41,0.81,False
+gradient of mmhg,Symptom,0.624,2,13.31,0.49,False
+rupture of membranes,Condition,0.623,2,17.28,0.64,False
+injected twice,Treatment,0.621,2,10.27,0.76,False
+mean arterial,Treatment,0.620,2,9.44,0.70,False
+surgical chest,Condition,0.616,3,5.88,0.46,False
+artificial rupture,Exam,0.615,2,12.44,0.93,False
+radiolucent lesion,Condition,0.614,2,9.74,0.72,False
+otherwise unremarkable,Treatment,0.614,2,9.66,0.72,False
+red cells are,Condition,0.614,2,16.54,0.62,False
+double-lumen tube,Exam,0.613,3,9.49,0.74,False
+jejunal lesion,Condition,0.612,2,7.57,0.56,False
+ventricular ejection fraction,Exam,0.610,2,23.84,0.89,False
+strongly positive,Treatment,0.609,2,9.80,0.73,False
+parietal pleura,Condition,0.608,2,13.44,1.00,False
+computed tomography ct scan,Exam,0.608,4,28.89,0.77,False
+largest measuring,Condition,0.607,2,10.54,0.78,False
+median duration,Exam,0.607,3,9.63,0.75,False
+complications occurred,Exam,0.606,3,9.38,0.73,False
+ascending aorta,Condition,0.606,3,10.71,0.83,False
+dj junction,Exam,0.602,2,12.86,0.96,False
+farnsworth munsell hue,Exam,0.602,2,26.88,1.00,False
+positive control,Condition,0.602,3,7.68,0.60,False
+patient's images,Exam,0.602,2,7.18,0.53,False
+complete blood,Exam,0.600,3,6.42,0.50,False
+initiated shortly,Condition,0.600,2,9.98,0.74,False
+temporal lobe,Condition,0.599,3,11.71,0.91,False
+valve area,Symptom,0.598,2,6.74,0.50,False
+impaired oxygenation,Condition,0.597,3,11.44,0.89,False
+jejunal limb,Exam,0.597,2,9.27,0.69,False
+rotational maneuvers,Exam,0.597,2,11.54,0.86,False
+single elevated value,Condition,0.596,2,22.76,0.85,False
+valve prosthesis,Symptom,0.596,2,7.57,0.56,False
+loss and anemia,Condition,0.594,2,14.23,0.53,False
+abdominal cavity,Exam,0.594,2,7.26,0.54,False
+induction of labor,Treatment,0.594,2,17.28,0.64,False
+administered intravenously,Treatment,0.592,2,9.63,0.72,False
+distal pancreatic mass,Condition,0.590,2,18.54,0.69,False
+deliver with gentle,Condition,0.590,2,19.26,0.72,False
+blood group,Treatment,0.590,2,5.21,0.39,False
+vaginal stump,Exam,0.589,2,12.12,0.90,False
+deciliter serum,Treatment,0.586,2,7.57,0.56,False
+p antigen,Condition,0.586,2,7.69,0.57,False
+institution's standard,Treatment,0.580,2,11.63,0.87,False
+starr-edwards caged ball,Condition,0.580,2,23.88,0.89,False
+motor nerve conduction,Condition,0.579,2,20.27,0.75,False
+diagnosis of glucose intolerance,Condition,0.578,2,25.10,0.62,False
+follow-up period,Condition,0.578,2,7.21,0.54,False
+arterial blood gas analysis,Exam,0.577,3,29.53,0.77,False
+symptom free,Symptom,0.576,4,9.31,0.75,False
+p-positive red,Treatment,0.575,3,9.54,0.74,False
+tsh microiu l,Condition,0.574,4,19.02,0.76,False
+anemia hemoglobin,Condition,0.570,2,7.86,0.58,False
+red cell,Symptom,0.570,4,7.88,0.63,False
+droplet of blood,Condition,0.567,2,13.13,0.49,False
+caged ball,Exam,0.567,4,12.44,1.00,False
+fresh serum,Exam,0.564,2,8.57,0.64,False
+deliver with gentle downward,Condition,0.564,2,32.70,0.81,False
+arterial blood,Treatment,0.563,5,7.61,0.63,False
+innervation area,Exam,0.562,2,10.44,0.78,False
+magnetic resonance,Exam,0.562,4,12.44,1.00,False
+cells stained,Treatment,0.561,3,8.27,0.64,False
+last follow-up,Exam,0.561,3,8.31,0.65,False
+successful in delivering,Exam,0.559,2,18.14,0.67,False
+mandibular canal,Condition,0.559,3,12.44,0.97,False
+initiated shortly thereafter,Condition,0.558,2,22.84,0.85,False
+complete blood count,Condition,0.557,3,16.69,0.65,False
+upper gastrointestinal,Exam,0.557,2,8.80,0.65,False
+esophagobronchial fistulae,Condition,0.556,7,10.44,0.90,False
+thereafter resulting,Treatment,0.555,2,10.69,0.80,False
+lower quadrant,Treatment,0.554,3,9.63,0.75,False
+one-hour two-hour and three-hour,Condition,0.554,2,30.08,0.75,False
+negative control,Exam,0.552,3,7.28,0.57,False
+recurrent thrombosis,Exam,0.551,5,9.22,0.76,False
+bioprosthetic mitral,Condition,0.549,3,11.12,0.86,False
+drop in hemoglobin,Condition,0.548,2,15.87,0.59,False
+body mass index,Exam,0.548,2,19.52,0.73,False
+tbil and dbil,Condition,0.548,2,16.64,0.62,False
+episodes of vomiting,Exam,0.548,2,14.96,0.56,False
+theranos story,Condition,0.544,2,8.12,0.60,False
+weight loss and anemia,Condition,0.544,2,24.86,0.62,False
+manufacturer's protocol,Condition,0.544,2,12.86,0.96,False
+anatomical fovea,Condition,0.543,3,11.71,0.91,False
+diabetes based on criteria,Condition,0.540,2,27.05,0.67,False
+t cells,Symptom,0.539,3,6.00,0.47,False
+management with spontaneous,Treatment,0.536,2,13.76,0.51,False
+mean arterial blood,Treatment,0.535,2,17.73,0.66,False
+skin lesions,Condition,0.534,4,9.57,0.77,False
+immune function,Condition,0.532,2,9.44,0.70,False
+shoulder remained,Condition,0.531,2,8.16,0.61,False
+gamma-gp tbil and dbil,Condition,0.529,2,30.08,0.75,False
+p to t,Condition,0.529,2,11.70,0.44,False
+maneuver with suprapubic,Exam,0.525,3,17.52,0.68,False
+microliter of blood,Condition,0.525,2,13.13,0.49,False
+aorta to avoid,Condition,0.524,2,16.56,0.62,False
+carried out,Symptom,0.523,3,10.74,0.84,False
+director of chemistry,Condition,0.521,2,18.28,0.68,False
+ct and mri,Exam,0.519,2,11.39,0.42,False
+american diabetes,Condition,0.518,2,11.44,0.85,False
+attempt to insert,Condition,0.517,2,17.82,0.66,False
+lower esophagus,Condition,0.514,2,7.88,0.59,False
+range ng,Treatment,0.513,3,8.47,0.66,False
+thoracic ct,Exam,0.511,5,7.71,0.64,False
+peripheral blood,Exam,0.509,3,6.71,0.52,False
+bilateral lower extremity edema,Condition,0.508,2,29.86,0.74,False
+general anesthesia,Exam,0.508,4,10.05,0.81,False
+heart rate,Treatment,0.506,5,8.86,0.73,False
+distal esophagus,Condition,0.504,2,8.69,0.65,False
+mumol l mumol,Treatment,0.504,2,16.99,0.63,False
+shortly thereafter resulting,Condition,0.504,2,23.13,0.86,False
+mean arterial blood pressure,Condition,0.502,2,27.72,0.69,False
+mixed in ratio,Condition,0.500,2,17.14,0.64,False
+main pa,Symptom,0.500,4,8.83,0.71,False
+pannus formation,Exam,0.498,2,11.86,0.88,False
+american diabetes association,Condition,0.498,2,24.88,0.93,False
+steroid therapy,Exam,0.498,3,9.12,0.71,False
+proximal colon,Exam,0.497,3,8.24,0.64,False
+non-inflammatory controls,Condition,0.493,3,12.44,0.97,False
+u l respectively,Treatment,0.491,2,15.01,0.56,False
+l and free,Treatment,0.490,2,10.17,0.38,False
+department of surgery,Exam,0.485,2,11.50,0.43,False
+evidence of recurrence,Exam,0.485,3,13.78,0.54,False
+tumor cells stained,Treatment,0.483,2,17.74,0.66,False
+white blood,Exam,0.483,5,8.03,0.66,False
+persisting or recurrent,Condition,0.482,3,18.18,0.71,False
+changes figure,Condition,0.481,3,7.12,0.55,False
+condition improved,Symptom,0.480,4,8.66,0.70,False
+nerve conduction,Exam,0.480,5,10.15,0.84,False
+respiratory rate,Exam,0.473,5,8.44,0.70,False
+stained positive,Treatment,0.472,3,8.80,0.68,False
+maneuver with suprapubic pressure,Condition,0.471,3,27.50,0.71,False
+abdominal wall,Symptom,0.470,3,6.58,0.51,False
+stricture site,Exam,0.469,2,9.95,0.74,False
+diagnosis of cas,Condition,0.468,3,14.70,0.57,False
+stained positive with synaptophysin,Condition,0.468,2,27.47,0.68,False
+artificial rupture of membranes,Condition,0.467,2,30.73,0.76,False
+c-reactive protein,Exam,0.466,3,10.74,0.84,False
+cd t cells,Condition,0.465,2,16.69,0.62,False
+chest and upper,Symptom,0.464,2,10.62,0.39,False
+p-positive red cells,Condition,0.464,3,18.81,0.73,False
+daily and hydroxychloroquine,Treatment,0.464,2,13.10,0.49,False
+chest wall,Symptom,0.461,3,6.16,0.48,False
+pancreatic mass,Condition,0.461,3,8.27,0.64,False
+able to secure,Condition,0.460,2,17.82,0.66,False
+mumol l mumol l,Symptom,0.459,2,25.19,0.62,False
+recurrent symptoms,Symptom,0.456,5,7.87,0.65,False
+subcutaneous abscess through,Condition,0.455,2,20.27,0.75,False
+b and c,Exam,0.453,2,10.24,0.38,False
+upper extremity,Exam,0.452,5,9.63,0.79,False
+postoperative course,Exam,0.452,6,8.66,0.73,False
+aortic arch,Condition,0.450,4,10.86,0.87,False
+l respectively,Symptom,0.450,6,6.61,0.56,False
+anterior shoulder,Condition,0.450,3,8.63,0.67,False
+nerve conduction block,Treatment,0.450,2,20.27,0.75,False
+studies obtained,Treatment,0.449,2,9.27,0.69,False
+shoulder remained impacted,Condition,0.448,2,21.60,0.80,False
+subcutaneous abscess,Condition,0.448,3,10.22,0.79,False
+laboratory data,Exam,0.441,3,8.63,0.67,False
+l mumol l,Symptom,0.440,6,15.65,0.66,False
+serum levels,Exam,0.436,2,6.83,0.51,False
+motor deficits,Treatment,0.436,3,10.03,0.78,False
+patient's condition improved,Condition,0.433,2,17.02,0.63,False
+proximal part,Exam,0.433,2,7.65,0.57,False
+treatment group group n,Condition,0.432,2,28.08,0.70,False
+t ng,Exam,0.432,4,7.19,0.58,False
+p-negative red,Treatment,0.431,3,10.27,0.80,False
+anticoagulation therapy,Treatment,0.430,5,8.69,0.72,False
+three-hour values,Symptom,0.429,2,10.27,0.76,False
+family members,Exam,0.425,3,10.12,0.79,False
+blood cell,Exam,0.425,5,6.22,0.51,False
+microiu l free t,Condition,0.421,2,26.61,0.66,False
+ii and wood's,Condition,0.419,2,15.90,0.59,False
+volume of cell,Condition,0.415,2,13.08,0.49,False
+mcroberts maneuver with suprapubic,Condition,0.411,3,29.96,0.78,False
+descending aorta,Condition,0.410,3,10.22,0.79,False
+echogenic mass,Exam,0.410,2,9.86,0.73,False
+patient's symptoms,Exam,0.410,2,5.55,0.41,False
+free t,Symptom,0.408,8,8.78,0.77,False
+ulnar nerve,Treatment,0.402,3,9.90,0.77,False
+one-lung ventilation,Treatment,0.395,5,11.12,0.92,False
+ventricular side,Exam,0.395,2,8.40,0.62,False
+liver function,Symptom,0.393,4,9.12,0.73,False
+white blood cell,Condition,0.391,5,18.08,0.75,False
+diagnostic criteria,Condition,0.390,3,8.87,0.69,False
+conduction block,Treatment,0.388,3,10.22,0.79,False
+cyst wall,Condition,0.388,3,7.98,0.62,False
+full symptom resolution,Condition,0.387,4,22.17,0.89,False
+dermatology department,Condition,0.381,3,10.98,0.85,False
+mumol l respectively,Symptom,0.381,4,17.14,0.69,False
+sedimentation rate,Symptom,0.381,4,10.12,0.81,False
+human herpesvirus,Treatment,0.380,5,10.63,0.88,False
+discharged home,Exam,0.379,4,9.77,0.79,False
+management with spontaneous respiration,Condition,0.378,2,24.21,0.60,False
+truncal valve,Exam,0.376,5,9.48,0.78,False
+patient's family,Exam,0.374,2,6.03,0.45,False
+ethics committee,Condition,0.373,2,12.27,0.91,False
+igg and igm,Exam,0.373,2,15.23,0.57,False
+thrombosis,Symptom,0.372,11,0.00,0.00,True
+bioprosthetic mitral valve,Condition,0.368,3,20.86,0.81,False
+commitment to excellence,Condition,0.358,2,17.82,0.66,False
+rrt-pcr of sars-cov,Exam,0.357,3,16.55,0.64,False
+ii and wood's screw,Condition,0.356,2,28.35,0.70,False
+medical records images,Condition,0.356,2,19.54,0.73,False
+ascending aorta to avoid,Condition,0.355,2,28.68,0.71,False
+panel of laboratory,Treatment,0.349,2,13.48,0.50,False
+motor nerve conduction block,Condition,0.347,2,31.71,0.79,False
+are mixed in ratio,Condition,0.347,2,27.58,0.68,False
+leading to full,Exam,0.346,4,16.56,0.67,False
+respiratory management with spontaneous,Condition,0.346,2,24.21,0.60,False
+proximal jejunum,Condition,0.344,3,9.35,0.73,False
+surgical procedure,Condition,0.340,3,7.85,0.61,False
+area reduction,Exam,0.334,3,9.22,0.72,False
+volume of cell suspension,Condition,0.333,2,25.94,0.64,False
+u l mumol l,Symptom,0.333,4,25.05,0.67,False
+erythrocyte sedimentation rate,Condition,0.325,3,22.15,0.86,False
+medical records,Condition,0.321,3,8.86,0.69,False
+persisting or recurrent symptoms,Condition,0.321,3,27.82,0.72,False
+surgical chest tube,Condition,0.320,3,15.37,0.60,False
+volumes of c,Treatment,0.314,3,14.00,0.54,False
+emergency room,Condition,0.313,2,9.31,0.69,False
+small bowel,Condition,0.303,4,7.78,0.63,False
+distal part,Exam,0.303,2,8.16,0.61,False
+mmhg and valve area,Condition,0.295,2,21.80,0.54,False
+median and ulnar,Condition,0.295,2,14.10,0.52,False
+rubin ii and wood's,Condition,0.291,2,29.35,0.73,False
+based on criteria developed,Condition,0.281,2,25.59,0.63,False
+operating room,Condition,0.279,3,10.71,0.83,False
+patient's condition,Exam,0.275,3,7.62,0.59,False
+set of laboratory,Exam,0.270,2,13.48,0.50,False
+leading to full symptom,Exam,0.269,4,27.68,0.74,False
+iu l,Exam,0.267,7,7.54,0.65,False
+fetal head,Condition,0.266,4,9.69,0.78,False
+efferent limb,Exam,0.263,4,11.44,0.92,False
+chest and upper abdomen,Condition,0.263,2,20.81,0.52,False
+pao of mmhg,Treatment,0.258,3,15.11,0.59,False
+declaration of helsinki,Condition,0.256,2,18.28,0.68,False
+standard panel of laboratory,Condition,0.254,2,25.11,0.62,False
+pleural effusion,Condition,0.250,7,11.08,0.95,False
+set of laboratory results,Condition,0.244,2,24.01,0.60,False
+thoracic cavity,Condition,0.242,5,9.63,0.79,False
+opportunity to work,Condition,0.241,2,16.75,0.62,False
+p-negative red cells,Condition,0.236,3,19.54,0.76,False
+value of diagnostic,Condition,0.236,2,14.26,0.53,False
+care unit,Exam,0.228,6,9.63,0.81,False
+emergency department,Condition,0.226,3,9.76,0.76,False
+augmentation and artificial rupture,Condition,0.223,2,29.67,0.74,False
+median nerve,Condition,0.218,4,8.83,0.71,False
+stenosis,Exam,0.215,13,0.00,0.00,False
+lower chest and upper,Condition,0.214,2,20.67,0.51,False
+sinus rhythm,Exam,0.213,6,11.44,0.96,False
+volumes of c separated,Condition,0.206,3,26.85,0.70,False
+cell count,Symptom,0.203,6,8.47,0.71,False
+initiated shortly thereafter resulting,Condition,0.202,2,34.11,0.85,False
+l and mumol,Exam,0.196,4,11.66,0.47,False
+institution's standard panel,Condition,0.194,2,24.08,0.90,False
+free t ng,Treatment,0.194,4,17.83,0.72,False
+tricuspid valve,Condition,0.192,4,9.16,0.74,False
+laboratory studies obtained,Condition,0.188,2,18.91,0.70,False
+lower chest,Symptom,0.178,5,7.09,0.58,False
+anterior wall,Exam,0.172,3,7.74,0.60,False
+red cells,Exam,0.170,8,8.10,0.71,False
+posterior wall,Exam,0.163,4,8.40,0.67,False
+panel of laboratory testing,Condition,0.161,2,24.11,0.60,False
+tissue around,Condition,0.159,3,9.54,0.74,False
+intensive care,Condition,0.156,5,10.63,0.88,False
+once daily and hydroxychloroquine,Treatment,0.151,2,24.22,0.60,False
+past medical,Symptom,0.150,8,8.95,0.78,False
+gestational age,Exam,0.146,12,9.83,0.91,False
+twice daily,Exam,0.141,6,8.63,0.73,False
+labor and delivery,Condition,0.129,2,14.90,0.55,False
+see figure,Exam,0.128,5,7.86,0.65,False
+elevated to u,Treatment,0.128,3,13.46,0.52,False
+l free t ng,Condition,0.119,2,25.02,0.62,False
+vp shunt,Exam,0.117,5,11.44,0.94,False
+elevated to u l,Condition,0.115,2,21.07,0.52,False
+mumol l and mumol,Condition,0.112,4,22.78,0.61,False
+lower chest wall,Condition,0.112,3,16.21,0.63,False
+microiu l and free,Condition,0.104,2,21.81,0.54,False
+stoma,Symptom,0.101,15,0.00,0.00,False
+mitral valve,Condition,0.099,7,9.23,0.79,False
+median and ulnar nerve,Condition,0.092,2,24.73,0.61,False
+l and free t,Condition,0.090,2,19.76,0.49,False
+labor and delivery unit,Condition,0.089,2,25.76,0.64,False
+spontaneous respiration,Condition,0.084,15,10.03,0.95,False
+white blood cell count,Condition,0.083,5,28.35,0.78,False
+l u,Exam,0.081,11,7.19,0.66,False
+l u l mumol,Treatment,0.076,4,25.05,0.67,False
+two-hour and three-hour values,Exam,0.063,2,28.50,0.71,False
+u l,Symptom,0.060,18,7.90,0.77,False
+l and mumol l,Treatment,0.059,4,19.85,0.53,False
+main bronchus,Condition,0.057,10,10.54,0.95,False
+chest tube,Exam,0.056,6,6.79,0.57,False
+u l u,Exam,0.055,11,17.18,0.78,False
+intensive care unit,Condition,0.037,5,21.49,0.89,False
+l u l u,Condition,0.034,7,24.72,0.71,False
+once daily,Treatment,0.033,10,9.63,0.87,False
+l u l,Exam,0.029,11,15.39,0.70,False
+patient's serum,Condition,0.024,13,7.77,0.72,False
+u l u l,Exam,0.020,11,25.37,0.77,False
+diagnosis,Exam,0.002,24,0.00,0.00,False

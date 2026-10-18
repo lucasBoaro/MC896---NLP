@@ -10,6 +10,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 KS = (50, 100, 200, 400)
+THRESHOLDS = (0.3, 0.4, 0.5, 0.6, 0.65, 0.7, 0.8, 0.9)
 
 
 def read(path):
@@ -56,6 +57,22 @@ def main():
             (f"top{k}_correct_type", len(right)),
             (f"top{k}_recall_vs_gold", round(len(hits) / len(gold), 4)),
         ]
+
+    # Curva precisão x recall variando o limiar de score (candidatos novos, contra o gabarito V2)
+    curve = []
+    for threshold in THRESHOLDS:
+        selected = [c for c in candidates if float(c["score"]) >= threshold]
+        hits = [c for c in selected if c["in_v2_gold"] == "True"]
+        precision = len(hits) / len(selected) if selected else 0.0
+        curve.append((threshold, len(selected), len(hits), round(precision, 4),
+                      round(len(hits) / len(gold), 4)))
+    curve_out = ROOT / "outputs/evaluation/lexicon_pr_curve.csv"
+    with open(curve_out, "w", encoding="utf-8", newline="") as f:
+        writer = csv.writer(f, lineterminator="\n")
+        writer.writerow(["threshold", "selected", "gold_hits", "precision_vs_gold", "recall_vs_gold"])
+        writer.writerows(curve)
+    for row in curve:
+        print("limiar {:.2f}: {} candidatos, {} acertos, precisão {}, recall {}".format(*row))
 
     out = ROOT / "outputs/evaluation/lexicon_recall.csv"
     with open(out, "w", encoding="utf-8", newline="") as f:

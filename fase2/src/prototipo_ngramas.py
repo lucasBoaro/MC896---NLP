@@ -598,7 +598,7 @@ with open(out, "w", newline="", encoding="utf-8") as f:
   w.writerow(
       ["term", "pred_type", "score", "freq", "pmi", "npmi", "in_v2_gold"]
   )
-  for i in ranked[:400]:
+  for i in ranked:  # todos os candidatos novos, para a curva precisão x recall
     base_t, _ = split_acronym(cands[i])
     in_gold = (cands[i] in gold) or (base_t in gold)
     w.writerow([
