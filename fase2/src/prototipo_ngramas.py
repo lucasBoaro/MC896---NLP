@@ -42,6 +42,9 @@ OUT_DIR = ROOT / "data" / "interim" / "ngram_candidates"
 EXTRA_CASES = os.environ.get("NGRAM_EXTRA_CASES")
 TAG = os.environ.get("NGRAM_TAG", "v3")
 TOP_K_V3 = int(os.environ.get("NGRAM_TOP_K", "250"))
+# Com NGRAM_SUFFIX_TYPES=1 o tipo de termos com sufixo clínico vem do sufixo, e
+# unigramas com sufixo entram mesmo com score baixo (ver SUFFIX_TYPE).
+SUFFIX_TYPES = os.environ.get("NGRAM_SUFFIX_TYPES") == "1"
 
 # 1) Stopwords expandidas (bordas e interior dos n-gramas)
 STOP = {
@@ -236,6 +239,24 @@ CLINICAL_SUFFIXES = (
     "scopy", "ectomy", "ostomy", "otomy", "plasty", "graphy", "gram",
     "rrhagia", "rrhea", "megaly", "asthma",
 )
+# O classificador erra o tipo de termos que o sufixo resolve (tracheostomy como
+# Symptom, cardiomyopathy como Treatment, thrombosis como Symptom).
+SUFFIX_TYPE = [
+    (("scopy", "graphy", "gram"), "Exam"),
+    (("ectomy", "ostomy", "otomy", "plasty"), "Treatment"),
+    (("itis", "osis", "oma", "pathy", "emia", "aemia", "penia", "megaly",
+      "rrhagia", "rrhea", "uria"), "Condition"),
+]
+
+
+def suffix_type(term):
+  last = term.split()[-1]
+  for suffixes, kind in SUFFIX_TYPE:
+    if last.endswith(suffixes) and len(last) > max(map(len, suffixes)) + 2:
+      return kind
+  return None
+
+
 MIN_FREQ_UNIGRAM = 3  # unigramas fora da V1 precisam aparecer ao menos 3 vezes
 # Preposições/conjunções permitidas no meio de termos médicos
 ALLOWED_INNER_STOP = {"of", "in", "on", "to", "with", "and", "or"}
@@ -689,11 +710,13 @@ if __name__ == "__main__":
 
   added_count = 0
   for i in ranked:
-    if added_count >= TOP_K_V3 or score[i] < MIN_SCORE_V3:
-      break
     raw_term = cands[i]
     base_term, acr = split_acronym(raw_term)
-    ptype = pred[i]
+    by_suffix = suffix_type(base_term) if SUFFIX_TYPES else None
+    unigram_by_suffix = by_suffix and len(base_term.split()) == 1
+    if not unigram_by_suffix and (added_count >= TOP_K_V3 or score[i] < MIN_SCORE_V3):
+      continue
+    ptype = by_suffix or pred[i]
 
     if base_term not in seen_terms:
       row = {"term": base_term, "type": ptype, "canonical": base_term}

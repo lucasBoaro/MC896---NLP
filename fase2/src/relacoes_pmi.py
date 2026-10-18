@@ -106,7 +106,7 @@ def read_csv(path):
 def write_csv(path, rows, fields):
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8-sig", newline="") as file:
-        writer = csv.DictWriter(file, fieldnames=fields)
+        writer = csv.DictWriter(file, fieldnames=fields, extrasaction="ignore")
         writer.writeheader()
         writer.writerows(rows)
 
@@ -197,6 +197,8 @@ def build_pairs(cases, lexicon, triggers):
                     f"{key[0]}|{key[1]}|{source['start']}|{target['start']}"
                 ),
                 "case_id": key[0],
+                "source_id": source["node_id"],
+                "target_id": target["node_id"],
                 "split": split[key[0]],
                 "relation": relation,
                 "source": source["mention_text"],

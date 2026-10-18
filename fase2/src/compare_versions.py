@@ -5,7 +5,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CLINICAL_RELATIONS = {"BEFORE", "INDICATES", "TREATS"}
-TRIGGERS = {"v1": "v1", "v2": "v2", "v3": "v1", "v3_mais_dados": "v3_mais_dados"}
+TRIGGERS = {"v1": "v1", "v2": "v2", "v3": "v1", "v3_mais_dados": "v1"}
 
 
 def read(path):

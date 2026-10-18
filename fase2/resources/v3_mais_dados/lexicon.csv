@@ -237,7 +237,7 @@ tuberculosis,Condition,tuberculosis,learned_v3
 computed tomography ct scan,Exam,computed tomography ct scan,learned_v3
 necrosis,Symptom,necrosis,learned_v3
 laparotomy,Treatment,laparotomy,learned_v3
-lymphadenopathy,Symptom,lymphadenopathy,learned_v3
+lymphadenopathy,Condition,lymphadenopathy,learned_v3
 dry cough,Symptom,dry cough,learned_v3
 mycophenolate mofetil,Treatment,mycophenolate mofetil,learned_v3
 tomography,Exam,tomography,learned_v3
@@ -270,8 +270,8 @@ gms,Condition,grocott's methenamine silver,learned_v3_acronym
 smp's outreach efforts,Condition,smp's outreach efforts,learned_v3
 asahi intecc nagoya japan,Condition,asahi intecc nagoya japan,learned_v3
 atrial fibrillation,Condition,atrial fibrillation,learned_v3
-pars plana vitrectomy,Condition,pars plana vitrectomy,learned_v3
-ppv,Condition,pars plana vitrectomy,learned_v3_acronym
+pars plana vitrectomy,Treatment,pars plana vitrectomy,learned_v3
+ppv,Treatment,pars plana vitrectomy,learned_v3_acronym
 septic shock,Condition,septic shock,learned_v3
 pet scan,Exam,pet scan,learned_v3
 intravenous ceftriaxone,Treatment,intravenous ceftriaxone,learned_v3
@@ -284,13 +284,13 @@ bph,Condition,benign prostatic hyperplasia,learned_v3_acronym
 hypogammaglobulinemia,Condition,hypogammaglobulinemia,learned_v3
 neurological examination,Exam,neurological examination,learned_v3
 ddbj ena genbank accession,Condition,ddbj ena genbank accession,learned_v3
-thrombocytopenia,Symptom,thrombocytopenia,learned_v3
+thrombocytopenia,Condition,thrombocytopenia,learned_v3
 octreotide lar,Treatment,octreotide lar,learned_v3
 oral prednisone,Treatment,oral prednisone,learned_v3
-xanthogranulomatous pyelonephritis,Treatment,xanthogranulomatous pyelonephritis,learned_v3
-xgpn,Treatment,xanthogranulomatous pyelonephritis,learned_v3_acronym
-endoscopic retrograde cholangio-pancreatography,Condition,endoscopic retrograde cholangio-pancreatography,learned_v3
-ercp,Condition,endoscopic retrograde cholangio-pancreatography,learned_v3_acronym
+xanthogranulomatous pyelonephritis,Condition,xanthogranulomatous pyelonephritis,learned_v3
+xgpn,Condition,xanthogranulomatous pyelonephritis,learned_v3_acronym
+endoscopic retrograde cholangio-pancreatography,Exam,endoscopic retrograde cholangio-pancreatography,learned_v3
+ercp,Exam,endoscopic retrograde cholangio-pancreatography,learned_v3_acronym
 talimogene laherparepvec,Treatment,talimogene laherparepvec,learned_v3
 glucosidorum tripterygll totorum,Treatment,glucosidorum tripterygll totorum,learned_v3
 ulcerative colitis,Condition,ulcerative colitis,learned_v3
@@ -320,7 +320,7 @@ vep,Condition,visually evoked potentials,learned_v3_acronym
 urinary tract infection,Condition,urinary tract infection,learned_v3
 percutaneous transluminal coronary angioplasty,Treatment,percutaneous transluminal coronary angioplasty,learned_v3
 liposomal amphotericin b,Treatment,liposomal amphotericin b,learned_v3
-neutropenia,Symptom,neutropenia,learned_v3
+neutropenia,Condition,neutropenia,learned_v3
 teledyne water pik fort,Condition,teledyne water pik fort,learned_v3
 fasting one-hour two-hour,Condition,fasting one-hour two-hour,learned_v3
 alcon laboratories inc fort,Condition,alcon laboratories inc fort,learned_v3
@@ -373,13 +373,13 @@ princess marina,Condition,princess marina,learned_v3
 dentsply-maillefer ballaiges switzerland,Condition,dentsply-maillefer ballaiges switzerland,learned_v3
 folic acid,Treatment,folic acid,learned_v3
 apple green birefringence,Condition,apple green birefringence,learned_v3
-endoscopic retrograde cholangiopancreatography,Treatment,endoscopic retrograde cholangiopancreatography,learned_v3
+endoscopic retrograde cholangiopancreatography,Exam,endoscopic retrograde cholangiopancreatography,learned_v3
 electrocardiography,Exam,electrocardiography,learned_v3
 intrathecal baclofen pump therapy,Treatment,intrathecal baclofen pump therapy,learned_v3
 plexiform neurofibroma,Condition,plexiform neurofibroma,learned_v3
 intensity-modulated radiation therapy,Treatment,intensity-modulated radiation therapy,learned_v3
-splenomegaly,Symptom,splenomegaly,learned_v3
-vivo laser confocal microscopy,Condition,vivo laser confocal microscopy,learned_v3
+splenomegaly,Condition,splenomegaly,learned_v3
+vivo laser confocal microscopy,Exam,vivo laser confocal microscopy,learned_v3
 proton pump inhibitors,Treatment,proton pump inhibitors,learned_v3
 attention deficit hyperactivity disorder,Condition,attention deficit hyperactivity disorder,learned_v3
 methicillin-resistant staphylococcus aureus,Treatment,methicillin-resistant staphylococcus aureus,learned_v3
@@ -428,13 +428,13 @@ bid oxycodone acetaminophen,Treatment,bid oxycodone acetaminophen,learned_v3
 vacuolated or coffee bean,Condition,vacuolated or coffee bean,learned_v3
 radical cystectomy,Treatment,radical cystectomy,learned_v3
 beta-human chorionic gonadotropin beta-hcg,Treatment,beta-human chorionic gonadotropin beta-hcg,learned_v3
-anti-gad ab encephalitis,Treatment,anti-gad ab encephalitis,learned_v3
+anti-gad ab encephalitis,Condition,anti-gad ab encephalitis,learned_v3
 disseminated hp,Condition,disseminated hp,learned_v3
 hysterectomy,Treatment,hysterectomy,learned_v3
 paroxysmal atrial fibrillation,Condition,paroxysmal atrial fibrillation,learned_v3
 glucose intolerance,Condition,glucose intolerance,learned_v3
 whole-brain radiotherapy,Treatment,whole-brain radiotherapy,learned_v3
-gastrograffin esophagram,Treatment,gastrograffin esophagram,learned_v3
+gastrograffin esophagram,Exam,gastrograffin esophagram,learned_v3
 qiaamp viral rna mini,Condition,qiaamp viral rna mini,learned_v3
 video-assisted thoracoscopic surgery,Condition,video-assisted thoracoscopic surgery,learned_v3
 vats,Condition,video-assisted thoracoscopic surgery,learned_v3_acronym
@@ -461,8 +461,8 @@ ena,Condition,extractable nuclear antigens,learned_v3_acronym
 transnasal transsphenoidal surgery,Treatment,transnasal transsphenoidal surgery,learned_v3
 amoxicillin clavulanic acid,Treatment,amoxicillin clavulanic acid,learned_v3
 patent processus vaginalis,Condition,patent processus vaginalis,learned_v3
-digital subtraction angiography,Condition,digital subtraction angiography,learned_v3
-dsa,Condition,digital subtraction angiography,learned_v3_acronym
+digital subtraction angiography,Exam,digital subtraction angiography,learned_v3
+dsa,Exam,digital subtraction angiography,learned_v3_acronym
 farnsworth munsell hue,Exam,farnsworth munsell hue,learned_v3
 hematuria,Symptom,hematuria,learned_v3
 exercise-stress thallium imaging,Condition,exercise-stress thallium imaging,learned_v3
@@ -540,7 +540,7 @@ nm chr,Condition,nm chr,learned_v3
 lymphangioma,Condition,lymphangioma,learned_v3
 esophagobronchial fistulae,Condition,esophagobronchial fistulae,learned_v3
 loop ileostomy,Treatment,loop ileostomy,learned_v3
-flexible sigmoidoscopy,Treatment,flexible sigmoidoscopy,learned_v3
+flexible sigmoidoscopy,Exam,flexible sigmoidoscopy,learned_v3
 intravenous methylprednisolone,Treatment,intravenous methylprednisolone,learned_v3
 video-assisted thoracoscopic wedge resection,Condition,video-assisted thoracoscopic wedge resection,learned_v3
 tab propranolol,Treatment,tab propranolol,learned_v3
@@ -558,7 +558,7 @@ metastatic adenocarcinoma,Condition,metastatic adenocarcinoma,learned_v3
 subependymal giant cell astrocytoma,Condition,subependymal giant cell astrocytoma,learned_v3
 extensive tissutal involvement,Condition,extensive tissutal involvement,learned_v3
 nocardia farcinica,Condition,nocardia farcinica,learned_v3
-serous retinopathy,Treatment,serous retinopathy,learned_v3
+serous retinopathy,Condition,serous retinopathy,learned_v3
 precocious puberty,Condition,precocious puberty,learned_v3
 pmma cement,Condition,pmma cement,learned_v3
 pulmonary tuberculosis,Condition,pulmonary tuberculosis,learned_v3
@@ -578,7 +578,7 @@ natriuretic peptide bnp,Condition,natriuretic peptide bnp,learned_v3
 gynecologic oncology,Treatment,gynecologic oncology,learned_v3
 sexually transmitted,Condition,sexually transmitted,learned_v3
 multiplex polymerase chain reaction,Condition,multiplex polymerase chain reaction,learned_v3
-waters view radiography,Treatment,waters view radiography,learned_v3
+waters view radiography,Exam,waters view radiography,learned_v3
 external ventricular drain,Condition,external ventricular drain,learned_v3
 evd,Condition,external ventricular drain,learned_v3_acronym
 hhv reactivation,Condition,hhv reactivation,learned_v3
@@ -591,12 +591,12 @@ hookah shisha smoking,Condition,hookah shisha smoking,learned_v3
 spectral-domain optical coherence,Treatment,spectral-domain optical coherence,learned_v3
 mug ethinyl estradiol,Treatment,mug ethinyl estradiol,learned_v3
 using matrix-assisted laser desorption,Treatment,using matrix-assisted laser desorption,learned_v3
-mucormycosis,Treatment,mucormycosis,learned_v3
+mucormycosis,Condition,mucormycosis,learned_v3
 esophagram,Exam,esophagram,learned_v3
 patent ductus arteriosus,Condition,patent ductus arteriosus,learned_v3
 anti-cyclic citrullinated peptide,Condition,anti-cyclic citrullinated peptide,learned_v3
-magnetic resonance venography,Treatment,magnetic resonance venography,learned_v3
-mrv,Treatment,magnetic resonance venography,learned_v3_acronym
+magnetic resonance venography,Exam,magnetic resonance venography,learned_v3
+mrv,Exam,magnetic resonance venography,learned_v3_acronym
 non-hodgkin's lymphoma,Condition,non-hodgkin's lymphoma,learned_v3
 ventriculo-peritoneal shunt,Treatment,ventriculo-peritoneal shunt,learned_v3
 injured svbd,Condition,injured svbd,learned_v3
@@ -635,7 +635,7 @@ john cunningham,Treatment,john cunningham,learned_v3
 wood's screw maneuver,Condition,wood's screw maneuver,learned_v3
 gauze pad,Treatment,gauze pad,learned_v3
 microcytic hypochromic anemia,Condition,microcytic hypochromic anemia,learned_v3
-exploratory laparotomy,Exam,exploratory laparotomy,learned_v3
+exploratory laparotomy,Treatment,exploratory laparotomy,learned_v3
 jiu-jitsu practitioners,Treatment,jiu-jitsu practitioners,learned_v3
 ena genbank accession number,Condition,ena genbank accession number,learned_v3
 pseudomonas aeruginosa,Condition,pseudomonas aeruginosa,learned_v3
@@ -661,7 +661,7 @@ elongated rete ridges,Treatment,elongated rete ridges,learned_v3
 new chemotherapy regimen,Treatment,new chemotherapy regimen,learned_v3
 tab divalproate,Treatment,tab divalproate,learned_v3
 biliopancreatic loop adhesions,Condition,biliopancreatic loop adhesions,learned_v3
-central serous retinopathy,Treatment,central serous retinopathy,learned_v3
+central serous retinopathy,Condition,central serous retinopathy,learned_v3
 conservative management,Treatment,conservative management,learned_v3
 airway pressure bipap,Condition,airway pressure bipap,learned_v3
 explorative laparotomy,Treatment,explorative laparotomy,learned_v3
@@ -698,7 +698,7 @@ neural placode,Condition,neural placode,learned_v3
 radical nephrectomy,Treatment,radical nephrectomy,learned_v3
 keratocystic odontogenic,Condition,keratocystic odontogenic,learned_v3
 septicemia,Condition,septicemia,learned_v3
-spectral-domain optical coherence tomography,Condition,spectral-domain optical coherence tomography,learned_v3
+spectral-domain optical coherence tomography,Exam,spectral-domain optical coherence tomography,learned_v3
 tranexamic acid,Treatment,tranexamic acid,learned_v3
 pulmonary alveolar microlithiasis,Condition,pulmonary alveolar microlithiasis,learned_v3
 hertel exophthalmometer,Condition,hertel exophthalmometer,learned_v3
@@ -738,7 +738,7 @@ qtc prolongation,Condition,qtc prolongation,learned_v3
 suppl material see www,Condition,suppl material see www,learned_v3
 laparoscopy,Exam,laparoscopy,learned_v3
 decreased vision,Symptom,decreased vision,learned_v3
-tracheostomy,Symptom,tracheostomy,learned_v3
+tracheostomy,Treatment,tracheostomy,learned_v3
 major depressive episode,Condition,major depressive episode,learned_v3
 degrees celsius,Treatment,degrees celsius,learned_v3
 high-dose methylprednisolone,Treatment,high-dose methylprednisolone,learned_v3
@@ -763,3 +763,181 @@ rpr,Condition,rapid plasma reagin,learned_v3_acronym
 hashimoto's thyroiditis,Condition,hashimoto's thyroiditis,learned_v3
 chronic active silicosis,Condition,chronic active silicosis,learned_v3
 deep venous thrombosis,Condition,deep venous thrombosis,learned_v3
+leukopenia,Condition,leukopenia,learned_v3
+endocarditis,Condition,endocarditis,learned_v3
+meningioma,Condition,meningioma,learned_v3
+plasmacytoma,Condition,plasmacytoma,learned_v3
+amenorrhea,Condition,amenorrhea,learned_v3
+retinopathy,Condition,retinopathy,learned_v3
+peritonitis,Condition,peritonitis,learned_v3
+cystectomy,Treatment,cystectomy,learned_v3
+hyperprolactinemia,Condition,hyperprolactinemia,learned_v3
+quadrantectomy,Treatment,quadrantectomy,learned_v3
+rhinorrhea,Condition,rhinorrhea,learned_v3
+scintigraphy,Exam,scintigraphy,learned_v3
+gastrojejunostomy,Treatment,gastrojejunostomy,learned_v3
+choriocarcinoma,Condition,choriocarcinoma,learned_v3
+tonsillectomy,Treatment,tonsillectomy,learned_v3
+colostomy,Treatment,colostomy,learned_v3
+thrombosis,Condition,thrombosis,learned_v3
+spondylitis,Condition,spondylitis,learned_v3
+hyperkalemia,Condition,hyperkalemia,learned_v3
+coagulopathy,Condition,coagulopathy,learned_v3
+roentgenogram,Exam,roentgenogram,learned_v3
+endometriosis,Condition,endometriosis,learned_v3
+ureteroscopy,Exam,ureteroscopy,learned_v3
+mammogram,Exam,mammogram,learned_v3
+angioplasty,Treatment,angioplasty,learned_v3
+cholecystectomy,Treatment,cholecystectomy,learned_v3
+hypocalcemia,Condition,hypocalcemia,learned_v3
+menorrhagia,Condition,menorrhagia,learned_v3
+pneumonitis,Condition,pneumonitis,learned_v3
+microscopy,Exam,microscopy,learned_v3
+amyloidosis,Condition,amyloidosis,learned_v3
+craniopharyngioma,Condition,craniopharyngioma,learned_v3
+neurofibroma,Condition,neurofibroma,learned_v3
+biomicroscopy,Exam,biomicroscopy,learned_v3
+ventriculostomy,Treatment,ventriculostomy,learned_v3
+hypercalcaemia,Condition,hypercalcaemia,learned_v3
+salpingo-oophorectomy,Treatment,salpingo-oophorectomy,learned_v3
+maculopathy,Condition,maculopathy,learned_v3
+papillomatosis,Condition,papillomatosis,learned_v3
+vitrectomy,Treatment,vitrectomy,learned_v3
+chondrosarcoma,Condition,chondrosarcoma,learned_v3
+capsulectomy,Treatment,capsulectomy,learned_v3
+segmentectomy,Treatment,segmentectomy,learned_v3
+cholecystitis,Condition,cholecystitis,learned_v3
+pericarditis,Condition,pericarditis,learned_v3
+pharyngitis,Condition,pharyngitis,learned_v3
+cardiomyopathy,Condition,cardiomyopathy,learned_v3
+nephrostomy,Treatment,nephrostomy,learned_v3
+fibroadenoma,Condition,fibroadenoma,learned_v3
+sphincterotomy,Treatment,sphincterotomy,learned_v3
+glomerulonephritis,Condition,glomerulonephritis,learned_v3
+phlebotomy,Treatment,phlebotomy,learned_v3
+conjunctivitis,Condition,conjunctivitis,learned_v3
+hypermenorrhea,Condition,hypermenorrhea,learned_v3
+vasculitis,Condition,vasculitis,learned_v3
+myocarditis,Condition,myocarditis,learned_v3
+hyponatremia,Condition,hyponatremia,learned_v3
+myelopathy,Condition,myelopathy,learned_v3
+osteopenia,Condition,osteopenia,learned_v3
+orchiectomy,Treatment,orchiectomy,learned_v3
+rhinoscopy,Exam,rhinoscopy,learned_v3
+polyarthritis,Condition,polyarthritis,learned_v3
+thyroidectomy,Treatment,thyroidectomy,learned_v3
+thoracoscopy,Exam,thoracoscopy,learned_v3
+hemilaminectomy,Treatment,hemilaminectomy,learned_v3
+hyperphosphatemia,Condition,hyperphosphatemia,learned_v3
+diverticulitis,Condition,diverticulitis,learned_v3
+carcinomatosis,Condition,carcinomatosis,learned_v3
+hypokalemia,Condition,hypokalemia,learned_v3
+lymphadenectomy,Treatment,lymphadenectomy,learned_v3
+erythrocytosis,Condition,erythrocytosis,learned_v3
+nephropathy,Condition,nephropathy,learned_v3
+meningitis,Condition,meningitis,learned_v3
+adenocarcinoma,Condition,adenocarcinoma,learned_v3
+myomectomy,Treatment,myomectomy,learned_v3
+acanthosis,Condition,acanthosis,learned_v3
+bronchitis,Condition,bronchitis,learned_v3
+hyperglycemia,Condition,hyperglycemia,learned_v3
+ventriculomegaly,Condition,ventriculomegaly,learned_v3
+cholangiogram,Exam,cholangiogram,learned_v3
+pancreatitis,Condition,pancreatitis,learned_v3
+salpingectomy,Treatment,salpingectomy,learned_v3
+pseudoarthrosis,Condition,pseudoarthrosis,learned_v3
+tendinopathy,Condition,tendinopathy,learned_v3
+electroencephalography,Exam,electroencephalography,learned_v3
+arteriotomy,Treatment,arteriotomy,learned_v3
+adenopathy,Condition,adenopathy,learned_v3
+mediastinitis,Condition,mediastinitis,learned_v3
+thalassaemia,Condition,thalassaemia,learned_v3
+transaminitis,Condition,transaminitis,learned_v3
+dermatosis,Condition,dermatosis,learned_v3
+oophorectomy,Treatment,oophorectomy,learned_v3
+pyelonephritis,Condition,pyelonephritis,learned_v3
+ketoacidosis,Condition,ketoacidosis,learned_v3
+gammopathy,Condition,gammopathy,learned_v3
+hepatosplenomegaly,Condition,hepatosplenomegaly,learned_v3
+haematuria,Condition,haematuria,learned_v3
+synostosis,Condition,synostosis,learned_v3
+gastrectomy,Treatment,gastrectomy,learned_v3
+stomatitis,Condition,stomatitis,learned_v3
+hyperkalaemia,Condition,hyperkalaemia,learned_v3
+enterotomy,Treatment,enterotomy,learned_v3
+nephroureterectomy,Treatment,nephroureterectomy,learned_v3
+retinoblastoma,Condition,retinoblastoma,learned_v3
+ecchymosis,Condition,ecchymosis,learned_v3
+toxoplasmosis,Condition,toxoplasmosis,learned_v3
+calcinosis,Condition,calcinosis,learned_v3
+fluoroscopy,Exam,fluoroscopy,learned_v3
+radiography,Exam,radiography,learned_v3
+histiocytosis,Condition,histiocytosis,learned_v3
+thrombectomy,Treatment,thrombectomy,learned_v3
+pancytopenia,Condition,pancytopenia,learned_v3
+pleocytosis,Condition,pleocytosis,learned_v3
+osteosarcoma,Condition,osteosarcoma,learned_v3
+ultrasonogram,Exam,ultrasonogram,learned_v3
+mesothelioma,Condition,mesothelioma,learned_v3
+cardiomegaly,Condition,cardiomegaly,learned_v3
+aspergillosis,Condition,aspergillosis,learned_v3
+panniculitis,Condition,panniculitis,learned_v3
+neuropathy,Condition,neuropathy,learned_v3
+atherosclerosis,Condition,atherosclerosis,learned_v3
+insulinoma,Condition,insulinoma,learned_v3
+hyperostosis,Condition,hyperostosis,learned_v3
+venography,Exam,venography,learned_v3
+hypercalcemia,Condition,hypercalcemia,learned_v3
+gastrostomy,Treatment,gastrostomy,learned_v3
+rhabdomyosarcoma,Condition,rhabdomyosarcoma,learned_v3
+appendicitis,Condition,appendicitis,learned_v3
+spectroscopy,Exam,spectroscopy,learned_v3
+hepatomegaly,Condition,hepatomegaly,learned_v3
+radiculopathy,Condition,radiculopathy,learned_v3
+hepaticojejunostomy,Treatment,hepaticojejunostomy,learned_v3
+laryngoscopy,Exam,laryngoscopy,learned_v3
+hydronephrosis,Condition,hydronephrosis,learned_v3
+lymphadenitis,Condition,lymphadenitis,learned_v3
+antibiogram,Exam,antibiogram,learned_v3
+polypectomy,Treatment,polypectomy,learned_v3
+thyroiditis,Condition,thyroiditis,learned_v3
+dermoscopy,Exam,dermoscopy,learned_v3
+parakeratosis,Condition,parakeratosis,learned_v3
+osteoarthritis,Condition,osteoarthritis,learned_v3
+lymphocytosis,Condition,lymphocytosis,learned_v3
+arthroplasty,Treatment,arthroplasty,learned_v3
+electromyography,Exam,electromyography,learned_v3
+osteomyelitis,Condition,osteomyelitis,learned_v3
+endarterectomy,Treatment,endarterectomy,learned_v3
+bacteremia,Condition,bacteremia,learned_v3
+lymphopenia,Condition,lymphopenia,learned_v3
+thalassemia,Condition,thalassemia,learned_v3
+organomegaly,Condition,organomegaly,learned_v3
+mammography,Exam,mammography,learned_v3
+mastectomy,Treatment,mastectomy,learned_v3
+schwannoma,Condition,schwannoma,learned_v3
+pneumonectomy,Treatment,pneumonectomy,learned_v3
+encephalopathy,Condition,encephalopathy,learned_v3
+angiomyolipoma,Condition,angiomyolipoma,learned_v3
+ameloblastoma,Condition,ameloblastoma,learned_v3
+liposarcoma,Condition,liposarcoma,learned_v3
+colectomy,Treatment,colectomy,learned_v3
+nephrectomy,Treatment,nephrectomy,learned_v3
+hemicolectomy,Treatment,hemicolectomy,learned_v3
+craniotomy,Treatment,craniotomy,learned_v3
+laminectomy,Treatment,laminectomy,learned_v3
+chorioretinitis,Condition,chorioretinitis,learned_v3
+hernioplasty,Treatment,hernioplasty,learned_v3
+usg,Exam,ultrasonography,learned_v3_acronym
+thoracostomy,Treatment,thoracostomy,learned_v3
+hyperkeratosis,Condition,hyperkeratosis,learned_v3
+encephalitis,Condition,encephalitis,learned_v3
+cholangiopancreatography,Exam,cholangiopancreatography,learned_v3
+osteotomy,Treatment,osteotomy,learned_v3
+hepatectomy,Treatment,hepatectomy,learned_v3
+thoracotomy,Treatment,thoracotomy,learned_v3
+anastomosis,Condition,anastomosis,learned_v3
+dermatitis,Condition,dermatitis,learned_v3
+leucocytosis,Condition,leucocytosis,learned_v3
+lobectomy,Treatment,lobectomy,learned_v3
+sternotomy,Treatment,sternotomy,learned_v3

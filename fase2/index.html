@@ -535,11 +535,11 @@
             <span class="arrow" aria-hidden="true">↗</span>
           </div>
           <h3>Aprendida · +1000 casos</h3>
-          <p>Mesmo método da V3, com léxico e gatilhos aprendidos de 1000 casos adicionais do MultiCaRe (1045 no total).</p>
+          <p>Léxico aprendido de 1000 casos adicionais do MultiCaRe; TREATS e INDICATES decididos pelo Naive Bayes, além das regras.</p>
           <div class="metrics">
-            <div class="metric"><strong>125</strong><span>entidades</span></div>
-            <div class="metric"><strong>130</strong><span>arestas</span></div>
-            <div class="metric"><strong>5</strong><span>relações entre entidades</span></div>
+            <div class="metric"><strong>143</strong><span>entidades</span></div>
+            <div class="metric"><strong>156</strong><span>arestas</span></div>
+            <div class="metric"><strong>13</strong><span>relações entre entidades</span></div>
           </div>
         </a>
 
@@ -556,8 +556,8 @@
       <aside class="note" aria-label="Nota metodológica">
         <span class="note-icon" aria-hidden="true">i</span>
         <div>
-          <strong>Por que a V3+ não ganha relações?</strong>
-          <p>Mais dados ampliam o léxico (de 483 para 764 termos) e as entidades. Os gatilhos aprendidos por autotreinamento (<em>suggestive</em>, <em>confirmed</em>, <em>treated</em>) não aparecem nos 11 casos de avaliação, então TREATS e INDICATES não crescem ali. Nos 56 casos, TREATS vai de 12 para 14.</p>
+          <strong>O que muda na V3+</strong>
+          <p>Antes, o Naive Bayes só era avaliado e nunca criava arestas: o grafo dependia de gatilhos escritos à mão. Agora ele decide as relações entre as entidades da mesma frase, e o tipo dos termos com sufixo clínico (-itis, -ectomy, -scopy) vem do sufixo. Nos 11 casos, as relações entre entidades vão de 5 para 13.</p>
         </div>
       </aside>
     </section>

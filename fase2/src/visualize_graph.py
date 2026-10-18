@@ -27,7 +27,7 @@ VERSION_META = {
     "v1": {"label": "V1 · escrita à mão", "desc": "Léxico e gatilhos escritos à mão a partir dos casos de desenvolvimento."},
     "v2": {"label": "V2 · ampliada à mão", "desc": "V1 ampliada à mão depois de ler os casos de avaliação; serve de referência aproximada."},
     "v3": {"label": "V3 · aprendida (45 casos)", "desc": "V1 mais termos aprendidos por n-gramas, PMI e regressão logística nos 45 casos de desenvolvimento. Termos aprendidos têm borda tracejada."},
-    "v3_mais_dados": {"label": "V3 · aprendida (+1000 casos)", "desc": "Mesmo método da V3, mas com léxico e gatilhos de TREATS/INDICATES aprendidos de 1000 casos adicionais do MultiCaRe, sem usar os casos de avaliação."},
+    "v3_mais_dados": {"label": "V3 · aprendida (+1000 casos)", "desc": "Léxico aprendido com 1000 casos adicionais do MultiCaRe (tipo pelo sufixo clínico quando há um) e TREATS/INDICATES decididos pelo Naive Bayes, além das regras. Nenhum caso de avaliação entra no treino."},
 }
 
 

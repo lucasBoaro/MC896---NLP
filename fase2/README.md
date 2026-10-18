@@ -96,31 +96,43 @@ O pipeline de aprendizado usa Python 3.12 com `numpy`, `scipy` e `scikit-learn` 
 
 ## Resultados
 
-### V3+: o mesmo método com mais dados
+### V3+: mais dados e relações decididas pelo Naive Bayes
 
-A V3+ repete a V3 com 1000 casos adicionais do MultiCaRe (`data/external/cases_extra.csv`, 1045 casos na mineração). Os casos vêm de `src/sample_multicare.py`: um caso por artigo, só relatos humanos, sem nenhum artigo que já esteja em `cases.csv`, o que mantém os 11 casos de avaliação fora da mineração. O extrator é o mesmo; mudam o léxico (`resources/v3_mais_dados/lexicon.csv`, com até 500 termos novos) e os gatilhos (`resources/v3_mais_dados/triggers.csv`, V1 mais quatro aprendidos por `src/gatilhos_mais_dados.py`).
+A V3+ usa 1000 casos adicionais do MultiCaRe (`data/external/cases_extra.csv`, 1045 casos na mineração), sorteados por `src/sample_multicare.py`: um caso por artigo, só relatos humanos, sem nenhum artigo que já esteja em `cases.csv`. Os 11 casos de avaliação ficam fora da mineração e do treino.
+
+Por que o grafo da V3 tinha tão poucas relações:
+
+1. O Naive Bayes e o PMI de `src/relacoes_pmi.py` só eram avaliados e nunca criavam arestas. `TREATS` e `INDICATES` vinham apenas de gatilhos escritos à mão, que acertam muito e encontram pouco (revocação de 0,31 e 0,57 nos pares rotulados dos 11 casos).
+2. Sem condições e tratamentos reconhecidos não há par a ligar. O classificador de tipo errava termos que o sufixo resolve (`tracheostomy` como sintoma, `thrombosis` e `endometriosis` como sintoma, `cardiomyopathy` como tratamento), e unigramas com score baixo, como `appendicitis`, ficavam fora do léxico. Com o léxico da V3, os 11 casos tinham só 7 pares candidatos.
+3. A tentativa anterior de aprender gatilhos por autotreinamento falhou: o Naive Bayes, treinado em 49 pares, rotulava quase todo par como positivo (173 positivos para 7 negativos), e o PMI com o rótulo passava a escolher qualquer palavra, como `mass` e `mild`. Ela foi removida.
+
+Correções:
+
+- `prototipo_ngramas.py` com `NGRAM_SUFFIX_TYPES=1`: o tipo de um termo com sufixo clínico vem do sufixo (`-scopy` exame, `-ectomy` tratamento, `-itis` condição), e unigramas com esse sufixo entram no léxico mesmo com score baixo.
+- `src/relacoes_classificador.py`: roda o extrator com os gatilhos da V1 e, para cada par tratamento–condição ou exame–condição da mesma frase, cria a aresta quando a regra já a criou ou quando o Naive Bayes dá probabilidade acima do limiar. O modelo é treinado só nos pares rotulados dos casos de desenvolvimento, e o limiar de cada relação sai da validação cruzada nesses pares (0,50 para `INDICATES` e 0,60 para `TREATS`). A aresta guarda `method: naive_bayes` e o score.
 
 ```bash
 python src/sample_multicare.py CAMINHO/cases.parquet --n 1000
-NGRAM_EXTRA_CASES=data/external/cases_extra.csv NGRAM_TAG=v3_mais_dados NGRAM_TOP_K=500 python src/prototipo_ngramas.py
-python src/gatilhos_mais_dados.py
-python -m src.build_graph --input data/processed/all_cases.csv --lexicon resources/v3_mais_dados/lexicon.csv --triggers resources/v3_mais_dados/triggers.csv --nodes outputs/full/v3_mais_dados/nodes.csv --edges outputs/full/v3_mais_dados/edges.csv
+NGRAM_SUFFIX_TYPES=1 NGRAM_EXTRA_CASES=data/external/cases_extra.csv NGRAM_TAG=v3_mais_dados NGRAM_TOP_K=500 python src/prototipo_ngramas.py
+python src/relacoes_classificador.py --input data/processed/all_cases.csv --lexicon resources/v3_mais_dados/lexicon.csv --nodes outputs/full/v3_mais_dados/nodes.csv --edges outputs/full/v3_mais_dados/edges.csv
+python src/relacoes_classificador.py --input data/processed/evaluation.csv --lexicon resources/v3_mais_dados/lexicon.csv --nodes outputs/evaluation/v3_mais_dados/nodes.csv --edges outputs/evaluation/v3_mais_dados/edges.csv
 ```
 
 Nos 11 casos de avaliação (`outputs/evaluation/comparison.csv`):
 
 | Resultado | V3 | V3+ |
 |---|---:|---:|
-| Termos no léxico | 483 | 764 |
-| Entidades extraídas | 111 | 125 |
-| Sintomas | 22 | 29 |
-| Tratamentos | 17 | 23 |
-| Arestas | 116 | 130 |
-| Relações entre entidades | 5 | 5 |
+| Termos no léxico | 483 | 942 |
+| Entidades extraídas | 111 | 143 |
+| Condições | 20 | 34 |
+| Tratamentos | 17 | 33 |
+| `TREATS` | 0 | 2 |
+| `INDICATES` | 3 | 9 |
+| Relações entre entidades | 5 | 13 |
 
-Os gatilhos são aprendidos por autotreinamento: um Naive Bayes treinado nos 49 pares rotulados à mão dos casos de desenvolvimento dá pseudo-rótulos aos 508 pares tratamento–condição e exame–condição dos 1045 casos, e o PMI entre as palavras do trecho entre as entidades e o rótulo positivo escolhe os gatilhos. Só entram verbos, particípios e adjetivos de ligação (`suggestive`, `confirmed`, `suggesting`, `treated`). Sem esse filtro de forma, o PMI escolhe substantivos como `mass` e `mild`, que só acompanham os nomes das condições.
+Nos 56 casos, `TREATS` vai de 12 para 29 e `INDICATES` de 19 para 49.
 
-Resultado: mais dados ampliam as entidades, mas as relações dos 11 casos não crescem, porque os quatro gatilhos aprendidos não aparecem neles. Nos 56 casos, `TREATS` sobe de 12 para 14 e `INDICATES` cai de 19 para 15, já que o léxico novo muda quais pares existem. Os pseudo-rótulos vêm de um modelo treinado em 49 pares, então o autotreinamento reforça o que as regras da V1 já encontram. O léxico maior também traz ruído, como nomes de fabricantes (`bd biosciences san jose`), que o filtro atual não remove.
+Nos pares rotulados à mão dos 11 casos (que o modelo não viu), o Naive Bayes treinado só no desenvolvimento tem, nos limiares escolhidos, F1 de 0,75 em `TREATS` e 0,89 em `INDICATES`, contra 0,44 e 0,73 das regras. Ele ganha em revocação e perde em precisão: com tão poucos pares de treino, aproxima-se de ligar todo par da mesma frase. Das 11 relações `TREATS` e `INDICATES` da V3+ nesses casos, 8 estão corretas numa revisão manual; os erros são `biopsy → kidney injury`, em que a lesão é o motivo da biópsia, e `hydroxychloroquine → cardiomyopathy` e `→ systemic lupus erythematosus`, em frases sobre o nível sérico e sobre a cardiomiopatia causada pelo remédio. O léxico maior também traz ruído, como nomes de fabricantes (`bd biosciences san jose`).
 
 ### Termos aprendidos
 
