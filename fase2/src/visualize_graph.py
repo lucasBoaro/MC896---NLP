@@ -27,7 +27,7 @@ def safe_json(value):
     return json.dumps(value, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
 
 
-def build_html(nodes, edges):
+def build_html(nodes, edges, scores=None, versions=None):
     template = r'''<!doctype html>
 <html lang="pt-BR">
 <head>
@@ -99,6 +99,7 @@ def build_html(nodes, edges):
     .edge-label.treats{fill:var(--relation-treats)}.edge-label.indicates{fill:var(--relation-indicates)}.edge-label.before{fill:var(--relation-before)}
     .node rect,.node circle{stroke:color-mix(in srgb,var(--node-color) 48%,var(--surface));stroke-width:1.2;fill:color-mix(in srgb,var(--node-color) 13%,var(--surface));filter:drop-shadow(0 5px 7px rgba(20,32,51,.10));transition:filter .15s,stroke-width .15s}
     .node:hover rect,.node:hover circle,.node.selected rect,.node.selected circle{stroke-width:3;filter:drop-shadow(0 8px 11px rgba(20,32,51,.18))}
+    .node.learned rect{stroke-dasharray:5 3;stroke-width:1.8}.node .badge{font-size:8px;font-weight:800;fill:var(--primary);pointer-events:none}.learned-pill{display:inline-flex;align-items:center;border-radius:999px;padding:5px 9px;background:var(--primary-soft);color:var(--primary);font-size:11px;font-weight:750;margin-left:6px}.toolbar:has(#version-field:not([hidden])){grid-template-columns:minmax(220px,1.1fr) minmax(170px,.8fr) minmax(150px,.6fr) auto}
     .node{cursor:pointer}.node .label{font-size:11px;font-weight:700;fill:var(--text);pointer-events:none}.node .meta{font-size:9px;fill:var(--muted);pointer-events:none}
     .detail{padding:20px;min-height:650px}.detail-kicker{text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-size:11px;font-weight:750}.detail h2{font-size:23px;line-height:1.15;margin:7px 0 8px;letter-spacing:-.025em}.detail-type{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 9px;background:var(--surface-2);font-size:11px;font-weight:750}.detail-section{border-top:1px solid var(--line);padding-top:14px;margin-top:16px}.detail-section h3{font-size:12px;margin:0 0 9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}.detail p{font-size:13px;line-height:1.55;margin:0;word-break:break-word}.kv{display:grid;grid-template-columns:92px 1fr;gap:8px 10px;font-size:12px}.kv dt{color:var(--muted)}.kv dd{margin:0;font-weight:650}.empty{color:var(--muted);display:grid;place-items:center;text-align:center;height:540px;padding:25px}.empty-mark{font-size:38px;margin-bottom:10px}
     .timeline-wrap,.relations-wrap{padding:20px}.timeline-tools,.relation-tools{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}.timeline-title{font-size:18px;font-weight:750}.check{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px}.check input{accent-color:var(--primary)}
@@ -126,6 +127,7 @@ def build_html(nodes, edges):
     <section class="toolbar" aria-label="Controles do grafo">
       <div class="field"><label for="case-select">Caso clínico</label><select id="case-select"></select></div>
       <div class="field"><label for="search-input">Buscar entidade</label><input id="search-input" type="search" placeholder="Ex.: pneumonia, CT, aspirin"></div>
+      <div class="field" id="version-field" hidden><label for="version-select">Versão do léxico</label><select id="version-select"></select></div>
       <div class="toolbar-actions"><button class="button" id="reset-button" type="button">Redefinir visualização</button></div>
     </section>
     <section class="stats" aria-live="polite">
@@ -168,24 +170,44 @@ def build_html(nodes, edges):
   </main>
 </div>
 <script>
-const RAW_NODES=__NODES_JSON__;
-const RAW_EDGES=__EDGES_JSON__;
+let RAW_NODES=__NODES_JSON__;
+let RAW_EDGES=__EDGES_JSON__;
 const COLORS={Case:'var(--case)',Symptom:'var(--symptom)',Exam:'var(--exam)',Condition:'var(--condition)',Treatment:'var(--treatment)'};
 const TYPE_LABEL={Case:'Caso',Symptom:'Sintoma',Exam:'Exame',Condition:'Condição',Treatment:'Tratamento'};
 const SPECIAL=new Set(['TREATS','INDICATES','BEFORE']);
 const state={caseId:'',query:'',relationMode:'entity',scale:1,tx:0,ty:0,selected:null};
-const byId=new Map(RAW_NODES.map(n=>[n.node_id,n]));
-const caseIds=[...new Set(RAW_NODES.filter(n=>n.type==='Case').map(n=>n.case_id))].sort();
+const SCORES=__SCORES_JSON__;
+const VERSIONS=__VERSIONS_JSON__;
+const isLearned=node=>String((node.attributes||{}).source||'').startsWith('learned');
+let byId=new Map(RAW_NODES.map(n=>[n.node_id,n]));
+let caseIds=[...new Set(RAW_NODES.filter(n=>n.type==='Case').map(n=>n.case_id))].sort();
 const el=id=>document.getElementById(id);
 const escapeHtml=value=>String(value??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const truncate=(value,size=24)=>value.length>size?value.slice(0,size-1)+'…':value;
 
+function setVersion(version){
+  const data=VERSIONS[version];RAW_NODES=data.nodes;RAW_EDGES=data.edges;
+  byId=new Map(RAW_NODES.map(n=>[n.node_id,n]));
+  caseIds=[...new Set(RAW_NODES.filter(n=>n.type==='Case').map(n=>n.case_id))].sort();
+  if(!caseIds.includes(state.caseId))state.caseId=caseIds[0]||'';
+  el('case-select').innerHTML=caseIds.map(id=>`<option value="${escapeHtml(id)}"${id===state.caseId?' selected':''}>${escapeHtml(id)}</option>`).join('');
+  const relations=[...new Set(RAW_EDGES.map(e=>e.relation))].sort();
+  el('relation-filter').innerHTML='<option value="">Todas</option>'+relations.map(r=>`<option value="${r}">${r}</option>`).join('');
+  state.selected=null;resetView();renderAll();
+}
 function init(){
   el('case-select').innerHTML=caseIds.map(id=>`<option value="${escapeHtml(id)}">${escapeHtml(id)}</option>`).join('');
   state.caseId=caseIds[0]||'';
   const relations=[...new Set(RAW_EDGES.map(e=>e.relation))].sort();
   el('relation-filter').innerHTML+=""+relations.map(r=>`<option value="${r}">${r}</option>`).join('');
-  el('legend').innerHTML=['Symptom','Exam','Condition','Treatment'].map(type=>`<span class="legend-item"><span class="dot" style="--dot:${COLORS[type]}"></span>${TYPE_LABEL[type]}</span>`).join('');
+  el('legend').innerHTML=['Symptom','Exam','Condition','Treatment'].map(type=>`<span class="legend-item"><span class="dot" style="--dot:${COLORS[type]}"></span>${TYPE_LABEL[type]}</span>`).join('')+'<span class="legend-item">┅ tracejado: termo aprendido (V3)</span>';
+  if(VERSIONS){
+    const names=Object.keys(VERSIONS);
+    el('version-field').hidden=false;
+    el('version-select').innerHTML=names.map(v=>`<option value="${v}">${v.toUpperCase()}</option>`).join('');
+    el('version-select').value=names[names.length-1];
+    el('version-select').addEventListener('change',e=>setVersion(e.target.value));
+  }
   el('case-select').addEventListener('change',e=>{state.caseId=e.target.value;state.selected=null;resetView();renderAll()});
   el('search-input').addEventListener('input',e=>{state.query=e.target.value.trim().toLowerCase();renderGraph()});
   el('graph-relation-filter').addEventListener('change',e=>{state.relationMode=e.target.value;state.selected=null;resetView();renderGraph();renderCaseDetail()});
@@ -269,7 +291,7 @@ function renderGraph(){
   const edgeLayer=svgEl('g'),nodeLayer=svgEl('g');viewport.append(edgeLayer,nodeLayer);
   data.edges.forEach(edge=>{const a=positions.get(edge.source),b=positions.get(edge.target);if(!a||!b)return;const style=relationStyle(edge.relation),line=svgEl('path',{d:edgePath(a,b),class:`edge ${style}`,'marker-end':`url(#arrow-${style})`});line.addEventListener('click',()=>showEdge(edge,data));edgeLayer.append(line);if(SPECIAL.has(edge.relation)){const text=svgEl('text',{x:(a.x+b.x)/2,y:(a.y+b.y)/2-7,class:`edge-label ${style}`,'text-anchor':'middle'});text.textContent=edge.relation+(edge.count>1?` ×${edge.count}`:'');text.addEventListener('click',()=>showEdge(edge,data));edgeLayer.append(text)}});
   if(!data.edges.length){const message=svgEl('text',{x:600,y:350,class:'edge-label','text-anchor':'middle'});message.textContent='Nenhuma relação deste grupo neste caso';viewport.append(message)}
-  data.nodes.forEach(node=>{const p=positions.get(node.id);if(!p)return;const g=svgEl('g',{class:`node ${state.selected===node.id?'selected':''}`,style:`--node-color:${COLORS[node.type]}`});g.dataset.id=node.id;const shape=node.type==='Case'?svgEl('circle',{cx:p.x,cy:p.y,r:58}):svgEl('rect',{x:p.x-p.w/2,y:p.y-p.h/2,width:p.w,height:p.h,rx:11});g.append(shape);const label=svgEl('text',{x:p.x,y:p.y+(node.type==='Case'?0:1),class:'label','text-anchor':'middle','dominant-baseline':'middle'});const queryMatch=state.query&&`${node.label} ${node.mention_text}`.toLowerCase().includes(state.query);label.textContent=truncate(node.type==='Case'?'CASO':node.label,node.type==='Case'?12:19);if(state.query&&!queryMatch&&node.type!=='Case')g.style.opacity='.18';g.append(label);if(node.count>1){const meta=svgEl('text',{x:p.x,y:p.y+(node.type==='Case'?23:25),class:'meta','text-anchor':'middle'});meta.textContent=`${node.count} menções`;g.append(meta)}g.addEventListener('click',()=>{state.selected=node.id;renderGraph();showNode(node)});nodeLayer.append(g)});
+  data.nodes.forEach(node=>{const p=positions.get(node.id);if(!p)return;const g=svgEl('g',{class:`node ${state.selected===node.id?'selected':''} ${node.occurrences.some(isLearned)?'learned':''}`,style:`--node-color:${COLORS[node.type]}`});g.dataset.id=node.id;const shape=node.type==='Case'?svgEl('circle',{cx:p.x,cy:p.y,r:58}):svgEl('rect',{x:p.x-p.w/2,y:p.y-p.h/2,width:p.w,height:p.h,rx:11});g.append(shape);const label=svgEl('text',{x:p.x,y:p.y+(node.type==='Case'?0:1),class:'label','text-anchor':'middle','dominant-baseline':'middle'});const queryMatch=state.query&&`${node.label} ${node.mention_text}`.toLowerCase().includes(state.query);label.textContent=truncate(node.type==='Case'?'CASO':node.label,node.type==='Case'?12:19);if(state.query&&!queryMatch&&node.type!=='Case')g.style.opacity='.18';g.append(label);if(node.occurrences.some(isLearned)){const badge=svgEl('text',{x:p.x+p.w/2-6,y:p.y-p.h/2+10,class:'badge','text-anchor':'end'});badge.textContent='aprendido';g.append(badge)}if(node.count>1){const meta=svgEl('text',{x:p.x,y:p.y+(node.type==='Case'?23:25),class:'meta','text-anchor':'middle'});meta.textContent=`${node.count} menções`;g.append(meta)}g.addEventListener('click',()=>{state.selected=node.id;renderGraph();showNode(node)});nodeLayer.append(g)});
   applyTransform();
 }
 
@@ -288,7 +310,9 @@ function showNode(node){
   const attrs=node.attributesList||[node.attributes||{}],merged={};attrs.forEach(item=>Object.entries(item).forEach(([k,v])=>{if(v!==''&&v!=null)merged[k]=v}));
   const evidence=[...new Set(node.occurrences.map(n=>n.evidence).filter(Boolean))].slice(0,3);
   const attrRows=Object.entries(merged).filter(([key])=>!['source'].includes(key)).map(([key,value])=>`<dt>${escapeHtml(key)}</dt><dd>${escapeHtml(Array.isArray(value)?value.join(', '):value)}</dd>`).join('');
-  el('detail').innerHTML=`<div class="detail-kicker">Entidade selecionada</div><h2>${escapeHtml(node.label)}</h2><span class="detail-type"><span class="dot" style="--dot:${COLORS[node.type]}"></span>${TYPE_LABEL[node.type]}</span><div class="detail-section"><h3>Ocorrências</h3><dl class="kv"><dt>Menções</dt><dd>${node.count}</dd><dt>Texto</dt><dd>${escapeHtml(node.occurrences.map(n=>n.mention_text).filter((v,i,a)=>a.indexOf(v)===i).join(', '))}</dd>${attrRows}</dl></div><div class="detail-section"><h3>Evidência</h3>${evidence.map(text=>`<p>“${escapeHtml(text)}”</p>`).join('<br>')}</div>`;
+  const learned=node.occurrences.some(isLearned),score=SCORES?SCORES[node.label.toLowerCase()]:undefined;
+  const origin=[...new Set(node.occurrences.map(n=>(n.attributes||{}).source).filter(Boolean))].join(', ');
+  el('detail').innerHTML=`<div class="detail-kicker">Entidade selecionada</div><h2>${escapeHtml(node.label)}</h2><span class="detail-type"><span class="dot" style="--dot:${COLORS[node.type]}"></span>${TYPE_LABEL[node.type]}</span>${learned?'<span class="learned-pill">termo aprendido</span>':''}<div class="detail-section"><h3>Ocorrências</h3><dl class="kv"><dt>Menções</dt><dd>${node.count}</dd>${origin?`<dt>Origem</dt><dd>${escapeHtml(origin)}</dd>`:''}${score!==undefined?`<dt>Score</dt><dd>${escapeHtml(score)}</dd>`:''}<dt>Texto</dt><dd>${escapeHtml(node.occurrences.map(n=>n.mention_text).filter((v,i,a)=>a.indexOf(v)===i).join(', '))}</dd>${attrRows}</dl></div><div class="detail-section"><h3>Evidência</h3>${evidence.map(text=>`<p>“${escapeHtml(text)}”</p>`).join('<br>')}</div>`;
 }
 function showEdge(edge,data){const source=data.nodes.find(n=>n.id===edge.source),target=data.nodes.find(n=>n.id===edge.target);el('detail').innerHTML=`<div class="detail-kicker">Relação selecionada</div><h2>${escapeHtml(edge.relation)}</h2><div class="detail-section"><h3>Conexão</h3><p><strong>${escapeHtml(source?.label||edge.source)}</strong><br>↓ ${escapeHtml(edge.relation)}<br><strong>${escapeHtml(target?.label||edge.target)}</strong></p></div><div class="detail-section"><h3>Evidência</h3>${edge.evidenceList.slice(0,3).map(text=>`<p>“${escapeHtml(text)}”</p>`).join('<br>')}</div>`}
 
@@ -330,7 +354,24 @@ init();
 </script>
 </body>
 </html>'''
-    return template.replace("__NODES_JSON__", safe_json(nodes)).replace("__EDGES_JSON__", safe_json(edges))
+    return (
+        template.replace("__NODES_JSON__", safe_json(nodes))
+        .replace("__EDGES_JSON__", safe_json(edges))
+        .replace("__SCORES_JSON__", safe_json(scores) if scores else "null")
+        .replace("__VERSIONS_JSON__", safe_json(versions) if versions else "null")
+    )
+
+
+def read_scores(path):
+    """Mapa termo -> score do classificador, a partir de candidatos_v3.csv."""
+    with path.open(encoding="utf-8-sig", newline="") as file:
+        rows = list(csv.DictReader(file))
+    scores = {row["term"].lower(): row["score"] for row in rows}
+    for row in rows:  # 'termo sigla' também vale para o termo sem a sigla final
+        words = row["term"].lower().split()
+        if len(words) >= 2 and len(words[-1]) >= 3:
+            scores.setdefault(" ".join(words[:-1]), row["score"])
+    return scores
 
 
 def parse_args(argv=None):
@@ -338,15 +379,35 @@ def parse_args(argv=None):
     parser.add_argument("--nodes", type=Path, default=DEFAULT_NODES)
     parser.add_argument("--edges", type=Path, default=DEFAULT_EDGES)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument(
+        "--scores", type=Path, default=None,
+        help="candidatos_v3.csv: mostra o score do classificador nos termos aprendidos",
+    )
+    parser.add_argument(
+        "--versions-dir", type=Path, default=None,
+        help="pasta com v1/, v2/ e v3/ (nodes.csv e edges.csv): gera uma página que alterna as versões",
+    )
     return parser.parse_args(argv)
 
 
 def main(argv=None):
     args = parse_args(argv)
-    nodes = read_records(args.nodes)
-    edges = read_records(args.edges)
+    scores = read_scores(args.scores) if args.scores else None
+    versions = None
+    if args.versions_dir:
+        versions = {
+            name: {
+                "nodes": read_records(args.versions_dir / name / "nodes.csv"),
+                "edges": read_records(args.versions_dir / name / "edges.csv"),
+            }
+            for name in ("v1", "v2", "v3")
+        }
+        nodes, edges = versions["v3"]["nodes"], versions["v3"]["edges"]
+    else:
+        nodes = read_records(args.nodes)
+        edges = read_records(args.edges)
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(build_html(nodes, edges), encoding="utf-8")
+    args.output.write_text(build_html(nodes, edges, scores, versions), encoding="utf-8")
     print(f"Nós carregados: {len(nodes)}")
     print(f"Arestas carregadas: {len(edges)}")
     print(f"Visualização: {args.output}")

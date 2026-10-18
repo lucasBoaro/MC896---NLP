@@ -1,52 +1,39 @@
-# Comparação das configurações do experimentos.py
+# Comparação das configurações do classificador
 
-Dados: as 7 rodadas de 16/10 e os CSVs em `data/interim/ngram_candidates/`. A combinação completa (char+ctx+stats com MORESTOP e META) foi rodada à parte. "@k" é o número de termos do gold V2 entre os k primeiros candidatos novos.
+Os resultados abaixo vêm de `python src/experimentos.py`, que repete cada variação do classificador 10 vezes. A cada repetição, a divisão da validação cruzada em 5 partes é sorteada de novo (e, no MLP, também os pesos iniciais). A tabela mostra média e desvio padrão. O corpus são os 45 casos de desenvolvimento, e os 11 casos de avaliação não são usados. Os valores completos estão em `outputs/evaluation/experimentos.csv`.
 
-| Configuração | Teto | @50 | @100 | @200 | @400 | Tipo certo @400 | V1 reconhecidos / tipo | Score > 0,5 nos 300 |
-|---|---:|---:|---:|---:|---:|---|---|---:|
-| Base (char+ctx+stats) | 53 | 5 | 8 | 13 | 25 | 19/25 | 133 / 0,77 | 84 |
-| Sem contexto (char+stats) | 53 | 2 | 7 | 14 | 27 | 20/27 | 133 / 0,76 | 300 |
-| Sem caracteres (ctx+stats) | 53 | 5 | 11 | 14 | 19 | 12/19 | 141 / 0,70 | 113 |
-| Naive Bayes | 53 | 2 | 2 | 5 | 8 | 6/8 | 14 / 0,93 | 86 |
-| MORESTOP | 53 | 5 | **12** | 16 | 26 | 22/26 | **141 / 0,77** | 77 |
-| META | **60** | 5 | 8 | **18** | 24 | 18/24 | 123 / 0,76 | 98 |
-| char+stats + MORESTOP + META | **60** | 2 | 6 | 15 | **34** | **29/34** | 126 / 0,80 | 300 |
-| char+ctx+stats + MORESTOP + META | 60 | **6** | 9 | 16 | 27 | 21/27 | 120 / 0,78 | não medido |
+## Métricas
 
-## Conclusão principal
+- AUC termo da V1 contra NONE: probabilidade de o modelo dar score maior a um termo do léxico V1 do que a um candidato claramente não clínico (0,5 equivale ao acaso), medida fora da amostra por validação cruzada;
+- V1 reconhecidos: fração dos termos da V1 com score maior que 0,5;
+- tipo correto: entre os termos da V1 reconhecidos, fração cujo tipo previsto é igual ao do léxico;
+- gabarito no top-400: quantos dos termos acrescentados pela V2 aparecem entre os 400 melhores candidatos novos.
 
-Nenhuma configuração ganha em tudo. Há uma troca entre a **qualidade do topo da lista** (top-50/100) e o **alcance em profundidade** (top-400). Na ablação, cada componente tem um papel:
+## Resultado
 
-- **n-gramas de caracteres = forma do termo e tipo.** Sem eles, o top-400 cai de 25 para 19 e o tipo certo de 19/25 para 12/19. São eles que reconhecem sufixos como *-itis*, *-scopy*, *-emia*, *-mab*.
-- **Contexto = calibração e precisão no topo.** Sem contexto, o modelo dá score > 0,5 aos 300 candidatos (com contexto, só 77 a 113 passam) e o topo enche de fragmentos com dose: *prednisone mg*, *methylprednisolone dosage*, *coronary syndrome acs*. O contexto penaliza o que aparece em posição de não-termo.
-- **MORESTOP = limpeza.** Melhora quase tudo (top-100 de 8 para 12, V1 de 133 para 141) sem custo. Deve virar padrão.
-- **META = cobertura.** Sobe o teto de 53 para 60 e dá o melhor top-200, mas 37 a 49 dos 300 candidatos aparecem uma vez só no texto e vêm só dos metadados. Traz bons termos (*acute appendicitis*, *pulmonary embolism*) e alguns ruídos.
-- **Naive Bayes = baseline negativo.** O topo é cheio de palavras soltas sem sentido clínico (*figure*, *just*, *would*, *illumina*, *millipore*); só 8 dos 300 têm mais de uma palavra. O 0,93 de tipo na V1 engana, porque ele reconhece só 14 de 223.
+| Variação | AUC | V1 reconhecidos | Tipo correto | Gabarito no top-400 |
+|---|---:|---:|---:|---:|
+| Base: caracteres, contexto e estatísticas | 0,935 ± 0,010 | 0,98 | 0,72 ± 0,021 | 1,6 |
+| Só caracteres | 0,922 ± 0,018 | 0,99 | 0,71 ± 0,016 | 1,0 |
+| Sem contexto (caracteres e estatísticas) | 0,953 ± 0,008 | 0,97 | 0,64 ± 0,013 | 1,1 |
+| Sem caracteres (contexto e estatísticas) | 0,916 ± 0,010 | 0,98 | 0,65 ± 0,016 | 2,0 |
+| Só estatísticas | 0,914 ± 0,003 | 0,96 | 0,33 ± 0,024 | 2,0 |
+| Naive Bayes | 0,867 ± 0,014 | 0,98 | 0,70 ± 0,014 | 2,1 |
+| MLP pequeno (uma camada de 32 neurônios) | 0,927 ± 0,022 | 0,99 | 0,80 ± 0,015 | 1,0 |
+| Candidatos de até 2 palavras | 0,927 ± 0,010 | 0,98 | 0,69 ± 0,025 | 2,0 |
+| Candidatos de até 3 palavras | 0,925 ± 0,010 | 0,98 | 0,71 ± 0,021 | 2,0 |
+| Só unigramas | não avaliável | | | |
 
-## As listas são diferentes, não só a ordem
+## Análise
 
-Termos em comum no top-100 em relação à base:
+O tipo da entidade vem da forma do termo e do contexto. Só com estatísticas (frequência, PMI e NPMI), o tipo correto cai de 0,72 para 0,33. Os n-gramas de caracteres, como os sufixos *-itis* e *-scopy*, e as palavras vizinhas, como *treated with* e *underwent*, é que distinguem `Symptom`, `Exam`, `Condition` e `Treatment`.
 
-| Comparação | Em comum (de 100) |
-|---|---:|
-| Base × sem caracteres | 83 |
-| Base × MORESTOP | 67 |
-| Base × META | 60 |
-| Base × sem contexto | 27 |
-| Base × char+stats+MORESTOP+META | 20 |
-| Base × Naive Bayes | 4 |
+O contexto ajuda a tipar, mas não a separar termo de não termo: sem ele o AUC sobe para 0,953, e o tipo correto cai para 0,64. O MLP pequeno acerta mais o tipo (0,80), com desvio um pouco maior entre as repetições. O Naive Bayes é o pior em separar termo de não termo (AUC de 0,867). A ordem máxima dos n-gramas quase não muda o resultado (0,925 a 0,935), e diferenças menores que um desvio padrão são ruído.
 
-Com e sem contexto produzem listas quase disjuntas no topo. Para a revisão manual, a **união do top-100 de "MORESTOP" com o top-100 de "char+stats+MORESTOP+META"** cobre os dois tipos de acerto.
+## Limitações
 
-## Erros que aparecem em todas as configurações com Regressão Logística
+O AUC é em parte circular. Os rótulos `NONE` são definidos por palavras narrativas e pelo NPMI, e o NPMI também é uma característica do modelo, por isso até o modelo que usa só estatísticas tem AUC alto (0,914). O tipo correto é a métrica mais confiável.
 
-- Palavras genéricas: *examination*, *tests*, *studies*, *imaging*, *weight*.
-- Termo colado com a sigla e pedaços dele: *electrocardiogram ecg*, *electrocardiogram ekg*, *acute coronary syndrome acs*, *coronary syndrome acs*, *syndrome acs*.
-- Tipo trocado: *endocarditis* como Symptom, *repeat egd* como Treatment.
+A variação com apenas unigramas não pode ser avaliada: os unigramas narrativos já são removidos antes da classificação, e não sobra nenhum exemplo da classe `NONE` para treinar.
 
-## O que fazer a seguir
-
-1. Tornar MORESTOP padrão e acrescentar stopwords de dose e via (*mg*, *daily*, *tablets*, *orally*, *dosage*).
-2. Separar "termo + sigla" com regex (vira sinônimo no `canonical`) e remover sub-n-gramas contidos num candidato melhor (é o que o C-value faz).
-3. Revisar à mão a união dos dois top-100 para obter a precisão real.
-4. No relatório, mostrar esta ablação como está e lembrar que diferenças de ±2 acertos estão dentro do ruído de uma semente só.
+Diferenças de 1 a 2 termos no top-400 do gabarito não significam nada, pois apenas 38 dos 145 termos da V2 aparecem no texto usado na mineração.
