@@ -463,12 +463,13 @@ if auc_pos and auc_neg:
       f"AUC (V1 multipalavra={len(auc_pos)} x narrativos={len(auc_neg)}): "
       + ", ".join(f"{n}={a:.3f}" for n, a in auc_rows)
   )
-  auc_out = ROOT / "outputs" / "evaluation" / "association_auc.csv"
-  with open(auc_out, "w", newline="", encoding="utf-8") as f:
-    aw = csv.writer(f, lineterminator="\n")
-    aw.writerow(["measure", "auc", "positives_v1_multiword", "negatives_narrative"])
-    for name, a in auc_rows:
-      aw.writerow([name, a, len(auc_pos), len(auc_neg)])
+  if __name__ == "__main__":
+    auc_out = ROOT / "outputs" / "evaluation" / "association_auc.csv"
+    with open(auc_out, "w", newline="", encoding="utf-8") as f:
+      aw = csv.writer(f, lineterminator="\n")
+      aw.writerow(["measure", "auc", "positives_v1_multiword", "negatives_narrative"])
+      for name, a in auc_rows:
+        aw.writerow([name, a, len(auc_pos), len(auc_neg)])
 
 # 5) Features: n-gramas de caracteres + contexto + estatísticas
 chars = TfidfVectorizer(
@@ -612,70 +613,72 @@ print(
     f" reconhecidos, tipo correto {acc:.2f}"
 )
 
-# 9) Salva candidatos intermediários para inspeção manual
-out = OUT_DIR / "candidatos_v3.csv"
-out.parent.mkdir(parents=True, exist_ok=True)
-with open(out, "w", newline="", encoding="utf-8") as f:
-  w = csv.writer(f)
-  w.writerow(
-      ["term", "pred_type", "score", "freq", "pmi", "npmi", "in_v2_gold"]
+# Os passos 9 e 10 gravam arquivos; ficam sob o guard para que experimentos.py possa importar este módulo.
+if __name__ == "__main__":
+  # 9) Salva candidatos intermediários para inspeção manual
+  out = OUT_DIR / "candidatos_v3.csv"
+  out.parent.mkdir(parents=True, exist_ok=True)
+  with open(out, "w", newline="", encoding="utf-8") as f:
+    w = csv.writer(f)
+    w.writerow(
+        ["term", "pred_type", "score", "freq", "pmi", "npmi", "in_v2_gold"]
+    )
+    for i in ranked:  # todos os candidatos novos, para a curva precisão x recall
+      base_t, _ = split_acronym(cands[i])
+      in_gold = (cands[i] in gold) or (base_t in gold)
+      w.writerow([
+          cands[i],
+          pred[i],
+          f"{score[i]:.3f}",
+          freq[cands[i]],
+          f"{pmi(cands[i]):.2f}",
+          f"{npmi(cands[i]):.2f}",
+          in_gold,
+      ])
+  print(f"Candidatos intermediários salvos em {out}")
+
+  # 10) Exporta o léxico final V3 (resources/v3/lexicon.csv) compatível com src/build_graph.py
+  v3_dir = ROOT / "resources" / "v3"
+  v3_dir.mkdir(parents=True, exist_ok=True)
+  v3_lex_path = v3_dir / "lexicon.csv"
+
+  fieldnames = list(v1_rows[0].keys()) if v1_rows else ["term", "type", "canonical"]
+  v3_rows = list(v1_rows)
+  seen_terms = {r["term"].lower() for r in v1_rows}
+
+  TOP_K_V3 = 250  # Quantidade máxima de novos conceitos aprendidos para compor a V3
+  MIN_SCORE_V3 = 0.65  # Limiar mínimo de confiança do classificador
+
+  added_count = 0
+  for i in ranked:
+    if added_count >= TOP_K_V3 or score[i] < MIN_SCORE_V3:
+      break
+    raw_term = cands[i]
+    base_term, acr = split_acronym(raw_term)
+    ptype = pred[i]
+
+    if base_term not in seen_terms:
+      row = {"term": base_term, "type": ptype, "canonical": base_term}
+      if "source" in fieldnames:
+        row["source"] = "learned_v3"
+      v3_rows.append(row)
+      seen_terms.add(base_term)
+      added_count += 1
+
+    if acr and acr not in seen_terms:
+      row_acr = {"term": acr, "type": ptype, "canonical": base_term}
+      if "source" in fieldnames:
+        row_acr["source"] = "learned_v3_acronym"
+      v3_rows.append(row_acr)
+      seen_terms.add(acr)
+
+  with open(v3_lex_path, "w", newline="", encoding="utf-8") as f:
+    writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
+    writer.writeheader()
+    writer.writerows(v3_rows)
+
+  print(
+      f"Léxico V3 salvo em {v3_lex_path} ({len(v1_rows)} termos V1 +"
+      f" {len(v3_rows) - len(v1_rows)} novos = {len(v3_rows)} total)"
   )
-  for i in ranked:  # todos os candidatos novos, para a curva precisão x recall
-    base_t, _ = split_acronym(cands[i])
-    in_gold = (cands[i] in gold) or (base_t in gold)
-    w.writerow([
-        cands[i],
-        pred[i],
-        f"{score[i]:.3f}",
-        freq[cands[i]],
-        f"{pmi(cands[i]):.2f}",
-        f"{npmi(cands[i]):.2f}",
-        in_gold,
-    ])
-print(f"Candidatos intermediários salvos em {out}")
-
-# 10) Exporta o léxico final V3 (resources/v3/lexicon.csv) compatível com src/build_graph.py
-v3_dir = ROOT / "resources" / "v3"
-v3_dir.mkdir(parents=True, exist_ok=True)
-v3_lex_path = v3_dir / "lexicon.csv"
-
-fieldnames = list(v1_rows[0].keys()) if v1_rows else ["term", "type", "canonical"]
-v3_rows = list(v1_rows)
-seen_terms = {r["term"].lower() for r in v1_rows}
-
-TOP_K_V3 = 250  # Quantidade máxima de novos conceitos aprendidos para compor a V3
-MIN_SCORE_V3 = 0.65  # Limiar mínimo de confiança do classificador
-
-added_count = 0
-for i in ranked:
-  if added_count >= TOP_K_V3 or score[i] < MIN_SCORE_V3:
-    break
-  raw_term = cands[i]
-  base_term, acr = split_acronym(raw_term)
-  ptype = pred[i]
-
-  if base_term not in seen_terms:
-    row = {"term": base_term, "type": ptype, "canonical": base_term}
-    if "source" in fieldnames:
-      row["source"] = "learned_v3"
-    v3_rows.append(row)
-    seen_terms.add(base_term)
-    added_count += 1
-
-  if acr and acr not in seen_terms:
-    row_acr = {"term": acr, "type": ptype, "canonical": base_term}
-    if "source" in fieldnames:
-      row_acr["source"] = "learned_v3_acronym"
-    v3_rows.append(row_acr)
-    seen_terms.add(acr)
-
-with open(v3_lex_path, "w", newline="", encoding="utf-8") as f:
-  writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
-  writer.writeheader()
-  writer.writerows(v3_rows)
-
-print(
-    f"Léxico V3 salvo em {v3_lex_path} ({len(v1_rows)} termos V1 +"
-    f" {len(v3_rows) - len(v1_rows)} novos = {len(v3_rows)} total)"
-)
-print("Top 40 novos:", [f"{cands[i]}:{pred[i][:4]}" for i in ranked[:40]])
+  print("Top 40 novos:", [f"{cands[i]}:{pred[i][:4]}" for i in ranked[:40]])
