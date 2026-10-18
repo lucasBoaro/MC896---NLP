@@ -13,9 +13,9 @@ top50_recall_vs_gold,0.0
 top100_gold_hits,0
 top100_correct_type,0
 top100_recall_vs_gold,0.0
-top200_gold_hits,0
+top200_gold_hits,1
 top200_correct_type,0
-top200_recall_vs_gold,0.0
-top400_gold_hits,2
+top200_recall_vs_gold,0.0069
+top400_gold_hits,1
 top400_correct_type,0
-top400_recall_vs_gold,0.0138
+top400_recall_vs_gold,0.0069

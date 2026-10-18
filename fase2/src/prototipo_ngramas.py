@@ -207,7 +207,32 @@ STOP = {
     "severe",
     "mild",
     "moderate",
+    # Dose e via de administração (ajustadas olhando só os 45 casos de desenvolvimento)
+    "dose",
+    "doses",
+    "dosage",
+    "tablet",
+    "tablets",
+    "orally",
+    "interest",
+    "individual",
 }
+
+# Unigramas genéricos ou fragmentos de termos compostos que aparecem no topo da lista
+# (ex: "breath" de "shortness of breath"). Ajustado olhando só os casos de desenvolvimento.
+UNIGRAM_BLOCK = {
+    "dry",
+    "breath",
+    "packed",
+    "smooth",
+    "axial",
+    "bacterial",
+    "gaze",
+    "chemistry",
+    "membranes",
+    "pain",
+}
+MIN_FREQ_UNIGRAM = 3  # unigramas fora da V1 precisam aparecer ao menos 3 vezes
 
 # Preposições/conjunções permitidas APENAS no meio de termos médicos (ex: shortness of breath)
 ALLOWED_INNER_STOP = {"of", "in", "on", "to", "with", "and", "or"}
@@ -335,12 +360,14 @@ gold = {
 # 3) Extração de N-gramas (1..4) por frase, bloqueando stopwords nas bordas e verbos no interior
 freq, ctx, docs = Counter(), defaultdict(Counter), defaultdict(set)
 uni = Counter()
+ACRONYMS = set()  # siglas (2 a 6 letras maiúsculas) vistas no corpus de mineração
 
 for case in cases:
   for sent in sentences(case["case_text"]):
     toks = TOKEN.findall(sent)
     low = [t.lower() for t in toks]
     uni.update(low)
+    ACRONYMS.update(t.lower() for t in toks if t.isupper() and 2 <= len(t) <= 6)
     for n in range(1, 5):
       for i in range(len(low) - n + 1):
         g = low[i : i + n]
@@ -403,6 +430,18 @@ cands = [
     if freq[t] >= 2
     or t in v1
     or (len(t.split()) == 1 and "ACRONYM" in ctx[t] and freq[t] >= 2)
+]
+# Unigramas fora da V1: frequência mínima maior e sem palavras genéricas
+cands = [
+    t
+    for t in cands
+    if t in v1
+    or len(t.split()) > 1
+    or (
+        freq[t] >= MIN_FREQ_UNIGRAM
+        and t not in UNIGRAM_BLOCK
+        and t not in NON_CLINICAL_WORDS
+    )
 ]
 cands = [
     t
@@ -493,6 +532,13 @@ def split_acronym(term):
     initials = "".join(w[0] for w in ws[:-1])
     if ws[-1] == initials:
       return " ".join(ws[:-1]), ws[-1]
+  # Sigla escrita em maiúsculas no texto, com as letras na ordem do termo
+  # (ex: 'esophagogastroduodenoscopy egd'); exige 3+ letras para não separar 'chest ct'
+  if len(ws) >= 2 and ws[-1] in ACRONYMS and len(ws[-1]) >= 3:
+    base = " ".join(ws[:-1])
+    letters = iter(base.replace(" ", ""))
+    if base[0] == ws[-1][0] and all(c in letters for c in ws[-1]):
+      return base, ws[-1]
   return term, None
 
 
