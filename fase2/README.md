@@ -159,6 +159,46 @@ Dois cuidados com o PMI aparecem aqui. Primeiro, como 71 dos 97 pares são posit
 
 Os gatilhos aprendidos ficam em `resources/v3/triggers_aprendidos.csv`. Há termos plausíveis (`consistent`, `suggestive`, `evidence`, `findings`, `presence`) e ruído (`chronic`, `vascular`, `appendix`, e `no`/`but`, que vêm do padrão "showed no X but Y"), por isso a lista precisa de revisão antes de entrar em um `triggers.csv`. Com 97 pares, diferenças de poucos centésimos entre métodos não são confiáveis.
 
+### Linha do tempo: fases aprendidas
+
+Na etapa 1, as regras só posicionavam um evento quando havia uma expressão de tempo explícita perto dele: 15% dos eventos da V3 tinham posição, e havia 12 arestas `BEFORE` nos 56 casos. O script `src/fases_temporais.py` aplica a mesma receita da V3 à linha do tempo. Cada evento recebe uma de quatro fases do relato (antecedentes, apresentação, investigação e tratamento, seguimento), no estilo do DocTimeRel do corpus THYME:
+
+1. Funções de rotulagem com expressões seguras (`history of`, `years ago`, `a 3-day history`, `on admission`, `POD 3`, `follow-up`, `discharged`...) rotulam parte dos eventos. A expressão de tempo explícita vence verbos típicos de fase, e entre expressões sobrepostas vale a mais longa.
+2. Essas expressões são mascaradas no texto, para o classificador não decorar as regras.
+3. Uma regressão logística usa as palavras ao redor da entidade e da frase anterior, o tipo e o termo da entidade, a posição da frase no relato e a fase das regras nos eventos vizinhos. Como na V3, os casos de avaliação não entram no treino: os de desenvolvimento são pontuados por validação cruzada agrupada por caso, e os de avaliação por um modelo treinado só com os de desenvolvimento.
+4. Eventos sem regra recebem a fase prevista quando o score é pelo menos 0,5. Na visualização, aparecem com a marca "fase aprendida" e o score.
+
+| Versão | Eventos | Com tempo (etapa 1) | Fase pela regra | Fase pelo modelo | Com fase |
+|---|---|---|---|---|---|
+| V1 | 612 | 18% | 44% | 33% | 77% |
+| V2 | 828 | 15% | 40% | 36% | 76% |
+| V3 | 957 | 15% | 39% | 36% | 75% |
+
+Acurácia contra os rótulos das regras, nos casos de desenvolvimento (V3, 331 eventos):
+
+| Método | Acurácia | F1 macro |
+|---|---|---|
+| Classe majoritária | 0,489 | 0,164 |
+| Copiar a fase do evento vizinho | 0,695 | 0,646 |
+| Regressão logística: só posição | 0,468 | 0,417 |
+| Regressão logística: só contexto | 0,562 | 0,357 |
+| Regressão logística: só vizinhos | 0,640 | 0,618 |
+| Regressão logística: sem vizinhos | 0,607 | 0,442 |
+| Regressão logística: modelo completo | 0,734 | 0,642 |
+
+O modelo completo é o mais acurado, mas tem F1 macro parecido com o de simplesmente copiar a fase do vizinho, e nas V1 e V2 fica abaixo dele (0,54 e 0,51 contra 0,61), porque tende a puxar eventos para a fase mais comum (investigação e tratamento). A fase dos vizinhos é a característica mais forte: o relato costuma andar em ordem de fases. O NPMI entre as palavras do contexto mascarado e cada fase (`outputs/evaluation/fases/v3/gatilhos_aprendidos.csv`) mostra pistas que não estavam nas regras, como *initially*, *had* e *significant* para antecedentes, *mild*, *intermittent* e *tenderness* para apresentação, e *mg*, *twice*, *daily* e *intravenously* para tratamento.
+
+Essas acurácias medem quanto o modelo reproduz as regras sem ver as expressões delas, e não a acurácia real. Para medi-la, a coluna `gold` de `data/interim/fases/v3/rotulagem_fases.csv` foi preenchida para os 111 eventos dos 11 casos de avaliação, lendo o relato inteiro e sem olhar as colunas das regras e do modelo. A anotação foi feita pelo Claude (assistente de IA usado no projeto), e não por uma pessoa, então é uma referência preliminar que o grupo deve revisar. O critério foi: a fase de apresentação é o atendimento descrito na primeira frase do relato; o que veio antes é antecedente; exames e tratamentos desse atendimento são curso (exames laboratoriais e de imagem iniciais incluídos); o que vem depois da alta ou em readmissões posteriores é seguimento. Três menções que não descrevem um evento do paciente (pneumonia em outros pacientes e uma frase genérica sobre o SLE) ficaram em branco. Uma segunda anotação, também feita pelo Claude mas vendo as colunas das regras e do modelo, concordou com esta em 99 de 107 eventos (kappa de Cohen 0,90). Quase todas as diferenças são exames laboratoriais e ECG da chegada, que a segunda anotação pôs em apresentação. O gold mantido é o da anotação cega.
+
+| Contra a anotação (108 eventos) | Cobertura | Acurácia |
+|---|---|---|
+| Regras | 38% | 0,805 |
+| Modelo, só nos eventos sem regra | 36% (39 eventos) | 0,744 |
+| Regras + modelo | 74% | 0,775 |
+| Referência: tudo em "investigação e tratamento" | 100% | 0,426 |
+
+O modelo praticamente dobra a cobertura e acerta 29 dos 39 eventos que as regras deixavam sem fase, com acurácia um pouco abaixo da das regras. A maior parte dos erros do modelo e das regras confunde apresentação com curso ou seguimento: uma readmissão posterior ("presented", "admitted") parece a apresentação inicial, e exames da chegada ficam entre as duas fases. Com 11 casos e um único anotador, as diferenças de poucos pontos não são confiáveis.
+
 ### Conclusão
 
 Com 45 casos de mineração, o método aprende a forma dos termos clínicos, mas acrescenta pouca cobertura real: a V3 tem a mesma revocação da V1 (0,38) e perde precisão (0,99 para 0,85). O gargalo está no corpus, e não no classificador. O próximo experimento é minerar em mais texto, mantendo os casos de avaliação separados. Nas relações, um classificador simples sobre as palavras entre as entidades recupera relações que os gatilhos manuais perdem, com alguma perda de precisão.
@@ -203,7 +243,17 @@ python -m src.build_graph --input data/processed/all_cases.csv --lexicon resourc
 
 O primeiro comando processa os 11 casos de avaliação e o segundo, os 56 casos.
 
-### 3. Gerar o HTML da V3 e a página de comparação
+### 3. Classificar a fase dos eventos da linha do tempo
+
+Depois do `build_graph.py` e antes da visualização:
+
+```powershell
+python src/fases_temporais.py --version v3
+```
+
+O comando acrescenta `phase`, `phase_source` (`regra` ou `modelo`), `phase_score` e `phase_cue` aos atributos de `outputs/full/v3/nodes.csv` e de `outputs/evaluation/v3/nodes.csv`, grava `outputs/evaluation/fases/v3/metricas.csv` e `gatilhos_aprendidos.csv` e cria a planilha `data/interim/fases/v3/rotulagem_fases.csv`. Troque `v3` por `v1` ou `v2` para as outras versões. Se o `build_graph.py` for executado de novo, rode este comando outra vez.
+
+### 4. Gerar o HTML da V3 e a página de comparação
 
 ```powershell
 python -m src.visualize_graph --nodes outputs/evaluation/v3/nodes.csv --edges outputs/evaluation/v3/edges.csv --scores data/interim/ngram_candidates/candidatos_v3.csv --output outputs/evaluation/v3/graph.html
@@ -215,7 +265,7 @@ python -m src.visualize_graph --versions-dir outputs/evaluation --scores data/in
 
 O primeiro comando gera o grafo da V3. O segundo gera a página que alterna entre V1, V2 e V3. Para o conjunto completo, troque `evaluation` por `full`.
 
-### 4. Comparar as versões e avaliar o léxico
+### 5. Comparar as versões e avaliar o léxico
 
 ```powershell
 python src/compare_versions.py
@@ -227,7 +277,7 @@ python src/evaluate_lexicon.py
 
 O primeiro comando atualiza `outputs/evaluation/comparison.csv` com a coluna da V3. O segundo cria `lexicon_recall.csv` e `lexicon_pr_curve.csv`, com o recall contra os termos que a V2 acrescentou e a curva de precisão por limiar de score.
 
-### 5. Repetir os experimentos do classificador
+### 6. Repetir os experimentos do classificador
 
 ```powershell
 python src/experimentos.py
@@ -235,7 +285,7 @@ python src/experimentos.py
 
 O comando roda cada variação 10 vezes e grava média e desvio em `outputs/evaluation/experimentos.csv`.
 
-### 6. Revisar os termos aprendidos
+### 7. Revisar os termos aprendidos
 
 ```powershell
 python src/revisao_top100.py gerar
@@ -247,7 +297,7 @@ O comando cria `outputs/evaluation/revisao_top100.csv`, com os 100 melhores term
 python src/revisao_top100.py resumir
 ```
 
-### 7. Melhorar as relações com PMI e ML
+### 8. Melhorar as relações com PMI e ML
 
 ```powershell
 python src/relacoes_pmi.py candidatos
@@ -261,13 +311,13 @@ python src/relacoes_pmi.py avaliar
 
 O comando grava `outputs/evaluation/relacoes_comparacao.csv`, `outputs/evaluation/relacoes_predicoes.csv` (score de cada método para cada par) e `resources/v3/triggers_aprendidos.csv`.
 
-### 8. Executar os testes
+### 9. Executar os testes
 
 ```powershell
 python -m unittest discover -s tests -v
 ```
 
-Atualmente, a suíte possui 19 testes.
+Atualmente, a suíte possui 26 testes.
 
 ---
 
