@@ -218,23 +218,17 @@ STOP = {
     "individual",
 }
 
-# Unigramas genéricos ou fragmentos de termos compostos que aparecem no topo da lista
-# (ex: "breath" de "shortness of breath"). Ajustado olhando só os casos de desenvolvimento.
-UNIGRAM_BLOCK = {
-    "dry",
-    "breath",
-    "packed",
-    "smooth",
-    "axial",
-    "bacterial",
-    "gaze",
-    "chemistry",
-    "membranes",
-    "pain",
-}
+""" Unigrama novo (fora da V1) só vira candidato com sinal morfológico clínico, em vez de
+uma lista de bloqueio: o PMI não existe para uma palavra solta, então sem este 
+critério qualquer palavra genérica (size, weight, active) entra no léxico.
+"""
+CLINICAL_SUFFIXES = (
+    "itis", "emia", "aemia", "penia", "oma", "pathy", "osis", "algia", "uria",
+    "scopy", "ectomy", "ostomy", "otomy", "plasty", "graphy", "gram",
+    "rrhagia", "rrhea", "megaly", "asthma",
+)
 MIN_FREQ_UNIGRAM = 3  # unigramas fora da V1 precisam aparecer ao menos 3 vezes
-
-# Preposições/conjunções permitidas APENAS no meio de termos médicos (ex: shortness of breath)
+# Preposições/conjunções permitidas no meio de termos médicos
 ALLOWED_INNER_STOP = {"of", "in", "on", "to", "with", "and", "or"}
 
 # Termos narrativos/gerais para construir o conjunto de negativos confiáveis (NONE)
@@ -439,7 +433,7 @@ cands = [
     or len(t.split()) > 1
     or (
         freq[t] >= MIN_FREQ_UNIGRAM
-        and t not in UNIGRAM_BLOCK
+        and t.endswith(CLINICAL_SUFFIXES)
         and t not in NON_CLINICAL_WORDS
     )
 ]

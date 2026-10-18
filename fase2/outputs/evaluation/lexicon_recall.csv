@@ -3,7 +3,7 @@ gold_terms,145
 gold_in_mining_corpus,38
 learned_terms,250
 gold_recovered,1
-gold_recovered_correct_type,0
+gold_recovered_correct_type,1
 recall_vs_gold,0.0069
 recall_vs_reachable,0.0263
 precision_vs_gold_lower_bound,0.004
@@ -13,9 +13,9 @@ top50_recall_vs_gold,0.0
 top100_gold_hits,0
 top100_correct_type,0
 top100_recall_vs_gold,0.0
-top200_gold_hits,1
+top200_gold_hits,0
 top200_correct_type,0
-top200_recall_vs_gold,0.0069
-top400_gold_hits,1
-top400_correct_type,0
-top400_recall_vs_gold,0.0069
+top200_recall_vs_gold,0.0
+top400_gold_hits,2
+top400_correct_type,2
+top400_recall_vs_gold,0.0138
