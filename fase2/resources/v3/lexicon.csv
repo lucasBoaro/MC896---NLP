@@ -230,256 +230,253 @@ laparoscopic Sugarbaker repair,Treatment,Sugarbaker repair,case_text
 parastomal hernia repair,Treatment,parastomal hernia repair,case_text
 red cell transfusion,Treatment,blood transfusion,case_text
 P antigen-negative red cell transfusion,Treatment,P antigen-negative red cell transfusion,case_text
-menorrhagia,Symptom,menorrhagia,learned_v3
+dry,Symptom,dry,learned_v3
+esophagogastroduodenoscopy egd,Exam,esophagogastroduodenoscopy egd,learned_v3
+breath,Symptom,breath,learned_v3
+asthma,Condition,asthma,learned_v3
+aspiration,Condition,aspiration,learned_v3
 glucose intolerance,Condition,glucose intolerance,learned_v3
-lymphadenopathy,Symptom,lymphadenopathy,learned_v3
+pain,Symptom,pain,learned_v3
+synaptophysin,Symptom,synaptophysin,learned_v3
+alcohol,Condition,alcohol,learned_v3
+packed,Treatment,packed,learned_v3
+consciousness,Symptom,consciousness,learned_v3
+chemistry,Condition,chemistry,learned_v3
+reconstruction,Treatment,reconstruction,learned_v3
+sevoflurane,Treatment,sevoflurane,learned_v3
+ishihara,Condition,ishihara,learned_v3
+interest,Treatment,interest,learned_v3
+pta,Exam,pta,learned_v3
+smooth,Symptom,smooth,learned_v3
+calcification,Condition,calcification,learned_v3
+mep,Treatment,mep,learned_v3
+axial,Symptom,axial,learned_v3
+ida,Condition,ida,learned_v3
+fasting,Condition,fasting,learned_v3
+bacterial,Symptom,bacterial,learned_v3
+individual,Treatment,individual,learned_v3
+menorrhagia,Symptom,menorrhagia,learned_v3
+av-b,Condition,av-b,learned_v3
 alcohol consumption,Condition,alcohol consumption,learned_v3
-laparotomy,Treatment,laparotomy,learned_v3
-angiography,Exam,angiography,learned_v3
-outlet obstruction,Condition,outlet obstruction,learned_v3
-craniotomy,Treatment,craniotomy,learned_v3
-necrosis,Condition,necrosis,learned_v3
-laparoscopy,Exam,laparoscopy,learned_v3
-vitamin k antagonists,Condition,vitamin k antagonists,learned_v3
-tracheal intubation,Treatment,tracheal intubation,learned_v3
+scan,Exam,scan,learned_v3
+urinalysis,Symptom,urinalysis,learned_v3
+vtos,Condition,vtos,learned_v3
+membranes,Condition,membranes,learned_v3
+appetite,Symptom,appetite,learned_v3
+nontender,Symptom,nontender,learned_v3
+ki,Exam,ki,learned_v3
+transfused,Treatment,transfused,learned_v3
+tenderness,Symptom,tenderness,learned_v3
+gaze,Condition,gaze,learned_v3
+herniation,Symptom,herniation,learned_v3
+eosinophilia,Symptom,eosinophilia,learned_v3
+axonal,Symptom,axonal,learned_v3
+persistent,Symptom,persistent,learned_v3
+imaging,Exam,imaging,learned_v3
+microcytic,Symptom,microcytic,learned_v3
+repaired,Symptom,repaired,learned_v3
+transvaginal,Treatment,transvaginal,learned_v3
+methicillin-resistant,Treatment,methicillin-resistant,learned_v3
+capsules,Treatment,capsules,learned_v3
+correction,Exam,correction,learned_v3
+vice,Condition,vice,learned_v3
+massive,Treatment,massive,learned_v3
+artificial,Treatment,artificial,learned_v3
+nystagmus,Treatment,nystagmus,learned_v3
+puncture,Exam,puncture,learned_v3
+weight,Symptom,weight,learned_v3
+biochemistry,Symptom,biochemistry,learned_v3
+heparin,Symptom,heparin,learned_v3
+noticeable,Symptom,noticeable,learned_v3
+percutaneous,Symptom,percutaneous,learned_v3
+topcon,Symptom,topcon,learned_v3
+gentle,Treatment,gentle,learned_v3
+contact,Condition,contact,learned_v3
+tongji,Condition,tongji,learned_v3
+chief,Symptom,chief,learned_v3
+septic,Condition,septic,learned_v3
+gamma-gt,Symptom,gamma-gt,learned_v3
+alanine,Symptom,alanine,learned_v3
+dental,Treatment,dental,learned_v3
+schwann,Symptom,schwann,learned_v3
+published,Symptom,published,learned_v3
+cytoplasm,Symptom,cytoplasm,learned_v3
+cmh,Treatment,cmh,learned_v3
+how,Symptom,how,learned_v3
+mitosis,Symptom,mitosis,learned_v3
+arteriosus,Symptom,arteriosus,learned_v3
+circulation,Symptom,circulation,learned_v3
+lad,Condition,lad,learned_v3
+conservative,Symptom,conservative,learned_v3
+short,Symptom,short,learned_v3
+antagonists,Symptom,antagonists,learned_v3
+practices,Condition,practices,learned_v3
+nonspecific,Symptom,nonspecific,learned_v3
+plates,Symptom,plates,learned_v3
+proton,Treatment,proton,learned_v3
+pregnant,Symptom,pregnant,learned_v3
+molecular,Symptom,molecular,learned_v3
+reinterventions,Condition,reinterventions,learned_v3
+hypertrophy,Treatment,hypertrophy,learned_v3
+yellowish,Treatment,yellowish,learned_v3
+macroscopic,Symptom,macroscopic,learned_v3
+gfap,Condition,gfap,learned_v3
+fusion,Treatment,fusion,learned_v3
+pushing,Treatment,pushing,learned_v3
 surgical correction,Treatment,surgical correction,learned_v3
-spontaneous circulation,Condition,spontaneous circulation,learned_v3
-iron deficiency,Condition,iron deficiency,learned_v3
-resonance imaging,Exam,resonance imaging,learned_v3
-sugarbaker repair,Treatment,sugarbaker repair,learned_v3
-oral iron,Treatment,oral iron,learned_v3
-packed red,Treatment,packed red,learned_v3
+tokyo,Condition,tokyo,learned_v3
+effusions,Symptom,effusions,learned_v3
+incarceration,Condition,incarceration,learned_v3
+outlet obstruction,Condition,outlet obstruction,learned_v3
+overt,Symptom,overt,learned_v3
+profound,Condition,profound,learned_v3
+thorax,Treatment,thorax,learned_v3
+distress,Symptom,distress,learned_v3
+enfaport,Condition,enfaport,learned_v3
+metastatic,Condition,metastatic,learned_v3
+accident,Symptom,accident,learned_v3
+transverse,Treatment,transverse,learned_v3
+endometrial,Condition,endometrial,learned_v3
+written,Symptom,written,learned_v3
+specific,Symptom,specific,learned_v3
+systems,Exam,systems,learned_v3
+tac,Condition,tac,learned_v3
+cow,Treatment,cow,learned_v3
+antiviral,Symptom,antiviral,learned_v3
+tightness,Symptom,tightness,learned_v3
+medications,Symptom,medications,learned_v3
+coworkers,Symptom,coworkers,learned_v3
+treatments,Symptom,treatments,learned_v3
+solution,Treatment,solution,learned_v3
+class,Condition,class,learned_v3
+polycystic,Symptom,polycystic,learned_v3
+cream,Treatment,cream,learned_v3
+linear,Treatment,linear,learned_v3
+deficiency,Symptom,deficiency,learned_v3
+indirect,Symptom,indirect,learned_v3
+epidural,Symptom,epidural,learned_v3
+solcarb,Symptom,solcarb,learned_v3
+downward,Symptom,downward,learned_v3
+improve,Symptom,improve,learned_v3
+cold,Symptom,cold,learned_v3
+relaxation,Treatment,relaxation,learned_v3
+millimeters,Treatment,millimeters,learned_v3
+dialysis,Treatment,dialysis,learned_v3
+nasogastric,Treatment,nasogastric,learned_v3
+frequently,Symptom,frequently,learned_v3
+vegetations,Symptom,vegetations,learned_v3
+implant,Symptom,implant,learned_v3
+greatest,Symptom,greatest,learned_v3
+mucinous,Symptom,mucinous,learned_v3
+maintaining,Treatment,maintaining,learned_v3
+misoprostol,Symptom,misoprostol,learned_v3
+epigastric,Symptom,epigastric,learned_v3
 gram gtt,Exam,gram gtt,learned_v3
-tomography,Exam,tomography,learned_v3
-profound weight loss,Condition,profound weight loss,learned_v3
-grade iii,Condition,grade iii,learned_v3
-cold agglutinin,Condition,cold agglutinin,learned_v3
-fasting one-hour two-hour,Condition,fasting one-hour two-hour,learned_v3
-gamma-gp tbil,Symptom,gamma-gp tbil,learned_v3
+lie,Symptom,lie,learned_v3
+rapid,Treatment,rapid,learned_v3
+nutrition,Treatment,nutrition,learned_v3
+intake,Symptom,intake,learned_v3
+mandible,Symptom,mandible,learned_v3
+normally,Symptom,normally,learned_v3
+progressive,Condition,progressive,learned_v3
+anticoagulant,Treatment,anticoagulant,learned_v3
+sugarbaker repair,Treatment,sugarbaker repair,learned_v3
+redo,Symptom,redo,learned_v3
+mediastinal,Symptom,mediastinal,learned_v3
+face,Symptom,face,learned_v3
+zero,Condition,zero,learned_v3
+similac,Symptom,similac,learned_v3
+transabdominal,Symptom,transabdominal,learned_v3
+airway,Treatment,airway,learned_v3
+bileaflet,Symptom,bileaflet,learned_v3
+lymphadenopathy,Symptom,lymphadenopathy,learned_v3
+vitamin,Treatment,vitamin,learned_v3
+target,Treatment,target,learned_v3
+antrum,Symptom,antrum,learned_v3
+vagina,Treatment,vagina,learned_v3
+vitamin k antagonists,Condition,vitamin k antagonists,learned_v3
+ma,Exam,ma,learned_v3
+splenic,Treatment,splenic,learned_v3
+heterogeneous,Symptom,heterogeneous,learned_v3
+excused,Symptom,excused,learned_v3
+little,Symptom,little,learned_v3
+employees,Symptom,employees,learned_v3
+intubated,Symptom,intubated,learned_v3
+serious,Treatment,serious,learned_v3
+vancomycin,Treatment,vancomycin,learned_v3
+character,Symptom,character,learned_v3
+transesophageal,Exam,transesophageal,learned_v3
+two-hour,Symptom,two-hour,learned_v3
+ch-mi,Condition,ch-mi,learned_v3
+diffusely,Symptom,diffusely,learned_v3
+obvious,Symptom,obvious,learned_v3
+selected,Symptom,selected,learned_v3
+cardiovascular,Symptom,cardiovascular,learned_v3
+puedvt,Treatment,puedvt,learned_v3
+veno-venous,Treatment,veno-venous,learned_v3
+diffusive,Treatment,diffusive,learned_v3
+fresh,Treatment,fresh,learned_v3
+velocity,Symptom,velocity,learned_v3
+elective,Treatment,elective,learned_v3
+fluids,Treatment,fluids,learned_v3
+dissections,Exam,dissections,learned_v3
+adenocarcinoma,Condition,adenocarcinoma,learned_v3
+excessive,Condition,excessive,learned_v3
+frequent,Symptom,frequent,learned_v3
+capsule,Treatment,capsule,learned_v3
+rib,Symptom,rib,learned_v3
+led,Symptom,led,learned_v3
+gastrostomy,Exam,gastrostomy,learned_v3
+guided,Treatment,guided,learned_v3
+macula,Symptom,macula,learned_v3
+herpes,Condition,herpes,learned_v3
+hemorrhage,Symptom,hemorrhage,learned_v3
+died,Symptom,died,learned_v3
+actions,Symptom,actions,learned_v3
+ventriculoperitoneal,Symptom,ventriculoperitoneal,learned_v3
+size,Symptom,size,learned_v3
+resonance imaging,Exam,resonance imaging,learned_v3
+hair,Symptom,hair,learned_v3
+station,Symptom,station,learned_v3
+complex,Condition,complex,learned_v3
+rectum,Symptom,rectum,learned_v3
+bronchoscopy,Treatment,bronchoscopy,learned_v3
+acid,Treatment,acid,learned_v3
+besides,Symptom,besides,learned_v3
+ejection,Treatment,ejection,learned_v3
+lymphocyte,Symptom,lymphocyte,learned_v3
+occasionally,Symptom,occasionally,learned_v3
+lost,Symptom,lost,learned_v3
+mmol,Symptom,mmol,learned_v3
+intrauterine,Condition,intrauterine,learned_v3
+tracheal intubation,Treatment,tracheal intubation,learned_v3
+duodenal,Condition,duodenal,learned_v3
+eeg,Exam,eeg,learned_v3
+consecutive,Condition,consecutive,learned_v3
+represented,Symptom,represented,learned_v3
+felt,Symptom,felt,learned_v3
+intestinal,Symptom,intestinal,learned_v3
+lax,Symptom,lax,learned_v3
+spontaneous circulation,Condition,spontaneous circulation,learned_v3
+auscultation,Exam,auscultation,learned_v3
+billion-dollar,Treatment,billion-dollar,learned_v3
+flexion,Symptom,flexion,learned_v3
+ck,Exam,ck,learned_v3
 recurrent stoma prolapse,Condition,recurrent stoma prolapse,learned_v3
-c oh,Symptom,c oh,learned_v3
-function tests,Exam,function tests,learned_v3
-video capsule,Exam,video capsule,learned_v3
-alp gamma-gp tbil,Condition,alp gamma-gp tbil,learned_v3
-lewis-sumner syndrome,Condition,lewis-sumner syndrome,learned_v3
-delayed gastric,Condition,delayed gastric,learned_v3
-upper abdominal pain,Symptom,upper abdominal pain,learned_v3
-capsule endoscopy,Exam,capsule endoscopy,learned_v3
-quitting smoking,Condition,quitting smoking,learned_v3
-physical therapy,Treatment,physical therapy,learned_v3
-gentle downward,Condition,gentle downward,learned_v3
-misoprostol followed,Condition,misoprostol followed,learned_v3
-pitocin augmentation,Symptom,pitocin augmentation,learned_v3
-para zero,Condition,para zero,learned_v3
-transabdominal ultrasonography,Exam,transabdominal ultrasonography,learned_v3
-ng l,Symptom,ng l,learned_v3
-gas analysis,Exam,gas analysis,learned_v3
-cell suspension,Condition,cell suspension,learned_v3
-central cystic,Condition,central cystic,learned_v3
-glial cells,Condition,glial cells,learned_v3
-gentle downward traction,Condition,gentle downward traction,learned_v3
+went,Symptom,went,learned_v3
+st-segment,Symptom,st-segment,learned_v3
+device,Treatment,device,learned_v3
+grade iii,Condition,grade iii,learned_v3
+turned,Symptom,turned,learned_v3
+ugi,Exam,ugi,learned_v3
 tod and pta,Exam,tod and pta,learned_v3
-suprapubic pressure,Condition,suprapubic pressure,learned_v3
-proximal pa,Condition,proximal pa,learned_v3
-hemoglobin level,Exam,hemoglobin level,learned_v3
-renal dialysis,Treatment,renal dialysis,learned_v3
-guided bone,Condition,guided bone,learned_v3
-ductus arteriosus,Condition,ductus arteriosus,learned_v3
-device closure,Exam,device closure,learned_v3
-gastric decompression,Symptom,gastric decompression,learned_v3
-node dissections,Exam,node dissections,learned_v3
-oral prednisone,Treatment,oral prednisone,learned_v3
-splenic abscess,Condition,splenic abscess,learned_v3
-cell suspension prepared,Condition,cell suspension prepared,learned_v3
-methicillin-resistant staphylococcus,Treatment,methicillin-resistant staphylococcus,learned_v3
-conduction velocity,Exam,conduction velocity,learned_v3
-schwann cells,Condition,schwann cells,learned_v3
-donor human,Treatment,donor human,learned_v3
-hemodynamically stable,Treatment,hemodynamically stable,learned_v3
-leiomyoma,Treatment,leiomyoma,learned_v3
-tricuspid regurgitation,Symptom,tricuspid regurgitation,learned_v3
-new skin,Condition,new skin,learned_v3
-more common,Condition,more common,learned_v3
-eosinophilic cytoplasm,Condition,eosinophilic cytoplasm,learned_v3
-systolic murmur,Condition,systolic murmur,learned_v3
-informed consent,Condition,informed consent,learned_v3
-lymphocyte count,Exam,lymphocyte count,learned_v3
-healthy person,Condition,healthy person,learned_v3
-donor red,Condition,donor red,learned_v3
-proximal pa stenosis,Condition,proximal pa stenosis,learned_v3
-complete dilation,Symptom,complete dilation,learned_v3
-barium swallow,Exam,barium swallow,learned_v3
-alanine transaminase,Treatment,alanine transaminase,learned_v3
-pleural effusions,Symptom,pleural effusions,learned_v3
-intrauterine fetal demise,Condition,intrauterine fetal demise,learned_v3
-lymph node dissections,Exam,lymph node dissections,learned_v3
-valvular vegetations,Condition,valvular vegetations,learned_v3
-pneumonia improved,Condition,pneumonia improved,learned_v3
-suddenly dropped,Condition,suddenly dropped,learned_v3
-veno-venous extracorporeal,Exam,veno-venous extracorporeal,learned_v3
-good clinical,Exam,good clinical,learned_v3
-gastrointestinal tract,Symptom,gastrointestinal tract,learned_v3
-thyroid function,Exam,thyroid function,learned_v3
-guided bone regeneration,Condition,guided bone regeneration,learned_v3
-peripheral intravenous,Treatment,peripheral intravenous,learned_v3
-maintaining spontaneous,Condition,maintaining spontaneous,learned_v3
-antiplatelet therapy,Treatment,antiplatelet therapy,learned_v3
-laboratory investigations,Exam,laboratory investigations,learned_v3
-blood cells,Symptom,blood cells,learned_v3
-ki staining,Exam,ki staining,learned_v3
-pancreatic tail,Condition,pancreatic tail,learned_v3
-indirect immunofluorescence,Condition,indirect immunofluorescence,learned_v3
-proton pump,Treatment,proton pump,learned_v3
-d printed titanium,Condition,d printed titanium,learned_v3
-poorly defined,Condition,poorly defined,learned_v3
-shortly thereafter,Exam,shortly thereafter,learned_v3
-natick ma,Treatment,natick ma,learned_v3
-veno-venous extracorporeal membrane,Condition,veno-venous extracorporeal membrane,learned_v3
-c separated patient's,Condition,c separated patient's,learned_v3
-autoimmune encephalitis,Condition,autoimmune encephalitis,learned_v3
-cow milk,Condition,cow milk,learned_v3
-gram,Symptom,gram,learned_v3
-neurological examination,Exam,neurological examination,learned_v3
-cre balloon,Condition,cre balloon,learned_v3
-colonic resections,Symptom,colonic resections,learned_v3
-valve regurgitation,Symptom,valve regurgitation,learned_v3
-wood's screw maneuver,Condition,wood's screw maneuver,learned_v3
-donor human milk,Treatment,donor human milk,learned_v3
-dehydrogenase ldh,Exam,dehydrogenase ldh,learned_v3
-tube placement,Symptom,tube placement,learned_v3
-bronchial compression,Condition,bronchial compression,learned_v3
-c separated,Condition,c separated,learned_v3
-keratocystic odontogenic,Condition,keratocystic odontogenic,learned_v3
-metastatic lesions,Condition,metastatic lesions,learned_v3
-immunoglobulin g,Treatment,immunoglobulin g,learned_v3
-blood transfusions,Treatment,blood transfusions,learned_v3
-gastric tube,Treatment,gastric tube,learned_v3
-veno-venous extracorporeal membrane oxygenator,Condition,veno-venous extracorporeal membrane oxygenator,learned_v3
-significantly improved,Symptom,significantly improved,learned_v3
-indirect immunofluorescence assay,Condition,indirect immunofluorescence assay,learned_v3
-leucocytosis,Symptom,leucocytosis,learned_v3
-oral medicines,Symptom,oral medicines,learned_v3
-transfused units,Treatment,transfused units,learned_v3
-blood gas,Exam,blood gas,learned_v3
-balloon dilatation,Treatment,balloon dilatation,learned_v3
-scientific natick,Treatment,scientific natick,learned_v3
-covid in wuhan,Condition,covid in wuhan,learned_v3
-final ends,Condition,final ends,learned_v3
-c separated patient's serum,Condition,c separated patient's serum,learned_v3
-residual shunt,Symptom,residual shunt,learned_v3
-blood gas analysis,Exam,blood gas analysis,learned_v3
-serebrovascular accident,Condition,serebrovascular accident,learned_v3
-postprandial blood,Treatment,postprandial blood,learned_v3
-human milk,Treatment,human milk,learned_v3
-boston scientific natick ma,Condition,boston scientific natick ma,learned_v3
-active bleeding,Symptom,active bleeding,learned_v3
-replacement therapy,Treatment,replacement therapy,learned_v3
-intrapartum course,Treatment,intrapartum course,learned_v3
-spo suddenly dropped,Condition,spo suddenly dropped,learned_v3
-d printed,Condition,d printed,learned_v3
-gastrocolic ligament,Condition,gastrocolic ligament,learned_v3
-labor with serial,Condition,labor with serial,learned_v3
-screw maneuvers,Exam,screw maneuvers,learned_v3
-surgical exploration,Exam,surgical exploration,learned_v3
-microscopic examination,Exam,microscopic examination,learned_v3
-ian gibbons,Treatment,ian gibbons,learned_v3
-gastroesophageal reflux,Condition,gastroesophageal reflux,learned_v3
-first-line therapy,Treatment,first-line therapy,learned_v3
-high-frequency jet,Condition,high-frequency jet,learned_v3
-median sternotomy,Exam,median sternotomy,learned_v3
-ctv mrv,Condition,ctv mrv,learned_v3
-packed red blood,Treatment,packed red blood,learned_v3
-preoperative computed,Treatment,preoperative computed,learned_v3
-patchy ground-glass,Symptom,patchy ground-glass,learned_v3
-pressure support,Condition,pressure support,learned_v3
-laparoscopic sugarbaker,Treatment,laparoscopic sugarbaker,learned_v3
-platelet count,Condition,platelet count,learned_v3
-total bilirubin,Treatment,total bilirubin,learned_v3
-transferrin saturation,Condition,transferrin saturation,learned_v3
-thumb pad,Condition,thumb pad,learned_v3
-carbohydrate antigen,Exam,carbohydrate antigen,learned_v3
-clinical improvement,Symptom,clinical improvement,learned_v3
-imaging ctv,Exam,imaging ctv,learned_v3
-imaging mri,Exam,imaging mri,learned_v3
-ca,Treatment,carbohydrate antigen,learned_v3_acronym
-blood loss,Symptom,blood loss,learned_v3
-hpf figure,Exam,hpf figure,learned_v3
-cd t,Condition,cd t,learned_v3
-pulmonary hypertension,Condition,pulmonary hypertension,learned_v3
-body mass,Treatment,body mass,learned_v3
-keratocystic odontogenic tumor,Condition,keratocystic odontogenic tumor,learned_v3
-liquid protein,Exam,liquid protein,learned_v3
-donor red cell,Condition,donor red cell,learned_v3
-associated with nausea,Symptom,associated with nausea,learned_v3
-reflux disease,Condition,reflux disease,learned_v3
-urine drug,Exam,urine drug,learned_v3
-alk rearrangement,Condition,alk rearrangement,learned_v3
-lactate dehydrogenase,Condition,lactate dehydrogenase,learned_v3
-ldh,Condition,lactate dehydrogenase,learned_v3_acronym
-ball mechanical,Condition,ball mechanical,learned_v3
-tumor markers,Symptom,tumor markers,learned_v3
-chest ct,Exam,chest ct,learned_v3
-cyp b,Exam,cyp b,learned_v3
-diabetes based,Condition,diabetes based,learned_v3
-aspartate transaminase,Treatment,aspartate transaminase,learned_v3
-pressure mmhg,Symptom,pressure mmhg,learned_v3
-stent placement,Treatment,stent placement,learned_v3
-fundus camera,Exam,fundus camera,learned_v3
-alkaline phosphatase,Condition,alkaline phosphatase,learned_v3
-protein fortifier,Treatment,protein fortifier,learned_v3
-estimated gestational,Condition,estimated gestational,learned_v3
-anastomosis,Exam,anastomosis,learned_v3
-high-frequency jet ventilation,Condition,high-frequency jet ventilation,learned_v3
-nasopharyngeal swabs,Exam,nasopharyngeal swabs,learned_v3
-dehydroepiandrosterone,Treatment,dehydroepiandrosterone,learned_v3
-dhea,Treatment,dehydroepiandrosterone,learned_v3_acronym
-diagnostic imaging,Exam,diagnostic imaging,learned_v3
-positive result,Exam,positive result,learned_v3
-expand access,Exam,expand access,learned_v3
-ventricular ejection,Exam,ventricular ejection,learned_v3
-mechanical prosthesis,Treatment,mechanical prosthesis,learned_v3
-similarly unsuccessful,Condition,similarly unsuccessful,learned_v3
-palpable mass,Condition,palpable mass,learned_v3
-sacral region,Treatment,sacral region,learned_v3
-similac liquid,Treatment,similac liquid,learned_v3
-red blood cells,Symptom,red blood cells,learned_v3
-lower extremity,Condition,lower extremity,learned_v3
-markedly improved,Condition,markedly improved,learned_v3
-ruled out,Condition,ruled out,learned_v3
-glucose tolerance,Exam,glucose tolerance,learned_v3
-elizabeth holmes,Condition,elizabeth holmes,learned_v3
-gastroesophageal reflux disease,Condition,gastroesophageal reflux disease,learned_v3
-laboratory findings,Exam,laboratory findings,learned_v3
-symptoms n,Symptom,symptoms n,learned_v3
-intermittent fever,Condition,intermittent fever,learned_v3
-delivery unit,Treatment,delivery unit,learned_v3
-celiac lymph,Treatment,celiac lymph,learned_v3
-mmhg heart,Exam,mmhg heart,learned_v3
-mass index,Exam,mass index,learned_v3
-syncopal attack,Condition,syncopal attack,learned_v3
-chose respiratory,Condition,chose respiratory,learned_v3
-abdominis muscle,Exam,abdominis muscle,learned_v3
-cmh o,Condition,cmh o,learned_v3
-despite good,Condition,despite good,learned_v3
-mass measuring,Condition,mass measuring,learned_v3
-upper abdomen,Symptom,upper abdomen,learned_v3
-extremity edema,Condition,extremity edema,learned_v3
-methicillin-resistant staphylococcus aureus,Condition,methicillin-resistant staphylococcus aureus,learned_v3
-sequencing ngs,Exam,sequencing ngs,learned_v3
-imaging ctv mrv,Condition,imaging ctv mrv,learned_v3
-hsd b,Exam,hsd b,learned_v3
-il united,Exam,il united,learned_v3
-progressive worsening,Condition,progressive worsening,learned_v3
-thrombosis n,Exam,thrombosis n,learned_v3
-bilateral lower,Treatment,bilateral lower,learned_v3
-troponin i,Exam,troponin i,learned_v3
-gradually increasing,Condition,gradually increasing,learned_v3
-soft tissue,Condition,soft tissue,learned_v3
-vitamin k,Treatment,vitamin k,learned_v3
-required prolonged,Treatment,required prolonged,learned_v3
-abdominal distention,Treatment,abdominal distention,learned_v3
-patent ductus arteriosus,Condition,patent ductus arteriosus,learned_v3
-grade i,Condition,grade i,learned_v3
-ganglion cells,Exam,ganglion cells,learned_v3
-antigen cea,Exam,antigen cea,learned_v3
-coagulation function,Exam,coagulation function,learned_v3
+thymosin,Treatment,thymosin,learned_v3
+heavy,Symptom,heavy,learned_v3
+pallor,Symptom,pallor,learned_v3
+whether,Treatment,whether,learned_v3
+stools,Symptom,stools,learned_v3
+electrolytes,Symptom,electrolytes,learned_v3
+natick,Treatment,natick,learned_v3
+altered,Symptom,altered,learned_v3
+oral iron,Treatment,oral iron,learned_v3
+strongly,Treatment,strongly,learned_v3
