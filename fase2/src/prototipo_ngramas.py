@@ -25,6 +25,7 @@ from scipy.sparse import hstack
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import StratifiedKFold
 
 ROOT = (
@@ -207,9 +208,28 @@ STOP = {
     "severe",
     "mild",
     "moderate",
+    # Dose e via de administração (ajustadas olhando só os 45 casos de desenvolvimento)
+    "dose",
+    "doses",
+    "dosage",
+    "tablet",
+    "tablets",
+    "orally",
+    "interest",
+    "individual",
 }
 
-# Preposições/conjunções permitidas APENAS no meio de termos médicos (ex: shortness of breath)
+""" Unigrama novo (fora da V1) só vira candidato com sinal morfológico clínico, em vez de
+uma lista de bloqueio: o PMI não existe para uma palavra solta, então sem este 
+critério qualquer palavra genérica (size, weight, active) entra no léxico.
+"""
+CLINICAL_SUFFIXES = (
+    "itis", "emia", "aemia", "penia", "oma", "pathy", "osis", "algia", "uria",
+    "scopy", "ectomy", "ostomy", "otomy", "plasty", "graphy", "gram",
+    "rrhagia", "rrhea", "megaly", "asthma",
+)
+MIN_FREQ_UNIGRAM = 3  # unigramas fora da V1 precisam aparecer ao menos 3 vezes
+# Preposições/conjunções permitidas no meio de termos médicos
 ALLOWED_INNER_STOP = {"of", "in", "on", "to", "with", "and", "or"}
 
 # Termos narrativos/gerais para construir o conjunto de negativos confiáveis (NONE)
@@ -335,12 +355,14 @@ gold = {
 # 3) Extração de N-gramas (1..4) por frase, bloqueando stopwords nas bordas e verbos no interior
 freq, ctx, docs = Counter(), defaultdict(Counter), defaultdict(set)
 uni = Counter()
+ACRONYMS = set()  # siglas (2 a 6 letras maiúsculas) vistas no corpus de mineração
 
 for case in cases:
   for sent in sentences(case["case_text"]):
     toks = TOKEN.findall(sent)
     low = [t.lower() for t in toks]
     uni.update(low)
+    ACRONYMS.update(t.lower() for t in toks if t.isupper() and 2 <= len(t) <= 6)
     for n in range(1, 5):
       for i in range(len(low) - n + 1):
         g = low[i : i + n]
@@ -404,6 +426,18 @@ cands = [
     or t in v1
     or (len(t.split()) == 1 and "ACRONYM" in ctx[t] and freq[t] >= 2)
 ]
+# Unigramas fora da V1: frequência mínima maior e sem palavras genéricas
+cands = [
+    t
+    for t in cands
+    if t in v1
+    or len(t.split()) > 1
+    or (
+        freq[t] >= MIN_FREQ_UNIGRAM
+        and t.endswith(CLINICAL_SUFFIXES)
+        and t not in NON_CLINICAL_WORDS
+    )
+]
 cands = [
     t
     for t in cands
@@ -413,6 +447,29 @@ print(
     f"{len(freq)} n-gramas distintos -> {len(cands)} candidatos após filtro de"
     " frequência + PMI/NPMI"
 )
+
+# Comparação PMI x NPMI (Seção 2.3): quanto cada medida separa termos clínicos conhecidos (V1, multipalavra) de n-gramas narrativos (contêm palavra não clínica).
+# Os negativos vêm de palavras, e não das medidas, para a comparação não ser circular.
+multi = [t for t in freq if len(t.split()) > 1 and freq[t] >= 2]
+auc_pos = [t for t in multi if t in v1]
+auc_neg = [t for t in multi if t not in v1 and set(t.split()) & NON_CLINICAL_WORDS]
+auc_rows = []
+if auc_pos and auc_neg:
+  y_auc = [1] * len(auc_pos) + [0] * len(auc_neg)
+  for name, fn in (("pmi", pmi), ("npmi", npmi)):
+    values = [fn(t) for t in auc_pos + auc_neg]
+    auc_rows.append((name, round(roc_auc_score(y_auc, values), 4)))
+  print(
+      f"AUC (V1 multipalavra={len(auc_pos)} x narrativos={len(auc_neg)}): "
+      + ", ".join(f"{n}={a:.3f}" for n, a in auc_rows)
+  )
+  if __name__ == "__main__":
+    auc_out = ROOT / "outputs" / "evaluation" / "association_auc.csv"
+    with open(auc_out, "w", newline="", encoding="utf-8") as f:
+      aw = csv.writer(f, lineterminator="\n")
+      aw.writerow(["measure", "auc", "positives_v1_multiword", "negatives_narrative"])
+      for name, a in auc_rows:
+        aw.writerow([name, a, len(auc_pos), len(auc_neg)])
 
 # 5) Features: n-gramas de caracteres + contexto + estatísticas
 chars = TfidfVectorizer(
@@ -493,6 +550,12 @@ def split_acronym(term):
     initials = "".join(w[0] for w in ws[:-1])
     if ws[-1] == initials:
       return " ".join(ws[:-1]), ws[-1]
+  # Sigla escrita em maiúsculas no texto, com as letras na ordem do termo. Exige 3+ letras para não separar 'chest ct'
+  if len(ws) >= 2 and ws[-1] in ACRONYMS and len(ws[-1]) >= 3:
+    base = " ".join(ws[:-1])
+    letters = iter(base.replace(" ", ""))
+    if base[0] == ws[-1][0] and all(c in letters for c in ws[-1]):
+      return base, ws[-1]
   return term, None
 
 
@@ -550,70 +613,72 @@ print(
     f" reconhecidos, tipo correto {acc:.2f}"
 )
 
-# 9) Salva candidatos intermediários para inspeção manual
-out = OUT_DIR / "candidatos_v3.csv"
-out.parent.mkdir(parents=True, exist_ok=True)
-with open(out, "w", newline="", encoding="utf-8") as f:
-  w = csv.writer(f)
-  w.writerow(
-      ["term", "pred_type", "score", "freq", "pmi", "npmi", "in_v2_gold"]
+# Os passos 9 e 10 gravam arquivos; ficam sob o guard para que experimentos.py possa importar este módulo.
+if __name__ == "__main__":
+  # 9) Salva candidatos intermediários para inspeção manual
+  out = OUT_DIR / "candidatos_v3.csv"
+  out.parent.mkdir(parents=True, exist_ok=True)
+  with open(out, "w", newline="", encoding="utf-8") as f:
+    w = csv.writer(f)
+    w.writerow(
+        ["term", "pred_type", "score", "freq", "pmi", "npmi", "in_v2_gold"]
+    )
+    for i in ranked:  # todos os candidatos novos, para a curva precisão x recall
+      base_t, _ = split_acronym(cands[i])
+      in_gold = (cands[i] in gold) or (base_t in gold)
+      w.writerow([
+          cands[i],
+          pred[i],
+          f"{score[i]:.3f}",
+          freq[cands[i]],
+          f"{pmi(cands[i]):.2f}",
+          f"{npmi(cands[i]):.2f}",
+          in_gold,
+      ])
+  print(f"Candidatos intermediários salvos em {out}")
+
+  # 10) Exporta o léxico final V3 (resources/v3/lexicon.csv) compatível com src/build_graph.py
+  v3_dir = ROOT / "resources" / "v3"
+  v3_dir.mkdir(parents=True, exist_ok=True)
+  v3_lex_path = v3_dir / "lexicon.csv"
+
+  fieldnames = list(v1_rows[0].keys()) if v1_rows else ["term", "type", "canonical"]
+  v3_rows = list(v1_rows)
+  seen_terms = {r["term"].lower() for r in v1_rows}
+
+  TOP_K_V3 = 250  # Quantidade máxima de novos conceitos aprendidos para compor a V3
+  MIN_SCORE_V3 = 0.65  # Limiar mínimo de confiança do classificador
+
+  added_count = 0
+  for i in ranked:
+    if added_count >= TOP_K_V3 or score[i] < MIN_SCORE_V3:
+      break
+    raw_term = cands[i]
+    base_term, acr = split_acronym(raw_term)
+    ptype = pred[i]
+
+    if base_term not in seen_terms:
+      row = {"term": base_term, "type": ptype, "canonical": base_term}
+      if "source" in fieldnames:
+        row["source"] = "learned_v3"
+      v3_rows.append(row)
+      seen_terms.add(base_term)
+      added_count += 1
+
+    if acr and acr not in seen_terms:
+      row_acr = {"term": acr, "type": ptype, "canonical": base_term}
+      if "source" in fieldnames:
+        row_acr["source"] = "learned_v3_acronym"
+      v3_rows.append(row_acr)
+      seen_terms.add(acr)
+
+  with open(v3_lex_path, "w", newline="", encoding="utf-8") as f:
+    writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
+    writer.writeheader()
+    writer.writerows(v3_rows)
+
+  print(
+      f"Léxico V3 salvo em {v3_lex_path} ({len(v1_rows)} termos V1 +"
+      f" {len(v3_rows) - len(v1_rows)} novos = {len(v3_rows)} total)"
   )
-  for i in ranked[:400]:
-    base_t, _ = split_acronym(cands[i])
-    in_gold = (cands[i] in gold) or (base_t in gold)
-    w.writerow([
-        cands[i],
-        pred[i],
-        f"{score[i]:.3f}",
-        freq[cands[i]],
-        f"{pmi(cands[i]):.2f}",
-        f"{npmi(cands[i]):.2f}",
-        in_gold,
-    ])
-print(f"Candidatos intermediários salvos em {out}")
-
-# 10) Exporta o léxico final V3 (resources/v3/lexicon.csv) compatível com src/build_graph.py
-v3_dir = ROOT / "resources" / "v3"
-v3_dir.mkdir(parents=True, exist_ok=True)
-v3_lex_path = v3_dir / "lexicon.csv"
-
-fieldnames = list(v1_rows[0].keys()) if v1_rows else ["term", "type", "canonical"]
-v3_rows = list(v1_rows)
-seen_terms = {r["term"].lower() for r in v1_rows}
-
-TOP_K_V3 = 250  # Quantidade máxima de novos conceitos aprendidos para compor a V3
-MIN_SCORE_V3 = 0.65  # Limiar mínimo de confiança do classificador
-
-added_count = 0
-for i in ranked:
-  if added_count >= TOP_K_V3 or score[i] < MIN_SCORE_V3:
-    break
-  raw_term = cands[i]
-  base_term, acr = split_acronym(raw_term)
-  ptype = pred[i]
-
-  if base_term not in seen_terms:
-    row = {"term": base_term, "type": ptype, "canonical": base_term}
-    if "source" in fieldnames:
-      row["source"] = "learned_v3"
-    v3_rows.append(row)
-    seen_terms.add(base_term)
-    added_count += 1
-
-  if acr and acr not in seen_terms:
-    row_acr = {"term": acr, "type": ptype, "canonical": base_term}
-    if "source" in fieldnames:
-      row_acr["source"] = "learned_v3_acronym"
-    v3_rows.append(row_acr)
-    seen_terms.add(acr)
-
-with open(v3_lex_path, "w", newline="", encoding="utf-8") as f:
-  writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
-  writer.writeheader()
-  writer.writerows(v3_rows)
-
-print(
-    f"Léxico V3 salvo em {v3_lex_path} ({len(v1_rows)} termos V1 +"
-    f" {len(v3_rows) - len(v1_rows)} novos = {len(v3_rows)} total)"
-)
-print("Top 40 novos:", [f"{cands[i]}:{pred[i][:4]}" for i in ranked[:40]])
+  print("Top 40 novos:", [f"{cands[i]}:{pred[i][:4]}" for i in ranked[:40]])
