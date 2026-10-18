@@ -1,3 +1,5 @@
+> **Documento histórico.** Este é o plano inicial da etapa 2, escrito antes das correções de avaliação. Os números (56 casos de mineração, 25 acertos do gabarito no top-400) valem para o protótipo antigo, que minerava também os 11 casos de avaliação. O pipeline atual minera só os 45 casos de desenvolvimento, e os resultados estão no [README](../README.md) e em [comparacao-configuracoes.md](comparacao-configuracoes.md).
+
 # Etapa 2: plano recomendado
 
 ## Ideia em uma frase
@@ -59,8 +61,6 @@ Divisão sugerida para 5 pessoas: (1) passos 1–2, (2) passo 3 + análise de er
 ## Alternativas (se quiserem trocar)
 
 - **Classificador de relações** (Possibilidade 2: par de entidades → TREATS / INDICATES / NONE com contexto em n-gramas). É a ideia mais "clássica" do guia, mas a V2 só produziu 19 relações entre entidades, então quase não há exemplos positivos para treinar. Não recomendo com o prazo curto.
-- **NER sequencial com CRF** (BIO gerado pelo léxico V2, `sklearn-crfsuite`). Mais elegante e mais próximo da literatura, mas exige reescrever a extração para usar o modelo e é mais trabalhoso de avaliar. Bom como "trabalho futuro" no slide final.
-
 ## Detalhes úteis
 
 - O enunciado pede a pasta `project2/` no formato do template (`data/`, `pipelines/`, `src/`, `assets/slides`, README com seções fixas). Hoje a raiz do repositório segue o modelo do projeto 1.

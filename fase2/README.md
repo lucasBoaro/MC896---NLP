@@ -1,4 +1,230 @@
-# MC896-NLP
+# Projeto: o texto clínico pode ensinar o extrator?
+
+Este projeto parte do extrator do Projeto 1, que identifica entidades e relações em relatos de caso clínico a partir de um léxico e de gatilhos escritos à mão. A pergunta é se o próprio texto clínico consegue ensinar ao extrator o que ele não conhecia, usando n-gramas e aprendizado de máquina clássico, sem LLM, Transformers ou embeddings.
+
+## Slides
+
+
+## Demonstração Executável
+
+- [Página inicial com os grafos](index.html): V1, V2 e V3.
+- [Comparação das três versões nos 11 casos de avaliação](outputs/evaluation/comparar.html) e [nos 56 casos](outputs/full/comparar.html): um seletor troca a versão do léxico. Os termos aprendidos aparecem com borda tracejada e, no painel de detalhes, com o score do classificador.
+
+## Metodologia
+
+O extrator (`src/build_graph.py`) não foi alterado. Só o léxico muda: a V1 foi escrita à mão, a V2 foi ampliada à mão depois de analisar os casos de avaliação, e a V3 é a V1 acrescida de termos aprendidos dos casos de desenvolvimento.
+
+```text
+casos de desenvolvimento (45)
+   │  n-gramas de 1 a 4 palavras por frase
+   ▼
+candidatos, filtrados por frequência, stopwords, PMI e NPMI
+   │  rótulo fraco: termo da V1 recebe o seu tipo; termo claramente não clínico recebe NONE
+   ▼
+regressão logística (caracteres do termo, palavras vizinhas e estatísticas)
+   │  score = 1 - P(NONE); tipo = classe de maior probabilidade
+   ▼
+termos novos ranqueados, sem sub-n-gramas, siglas soltas e fragmentos de exame
+   ▼
+resources/v3/lexicon.csv  →  extrator do Projeto 1  →  grafo V3
+```
+
+As etapas são:
+
+1. Candidatos: `src/prototipo_ngramas.py` gera n-gramas por frase, descarta os que começam ou terminam em stopword e exige frequência mínima e colocação (PMI maior ou igual a 3 e NPMI maior ou igual a 0,30 para termos com várias palavras). Como o PMI não existe para uma palavra isolada, unigramas novos só entram com sufixo clínico, como `-itis`, `-oma` ou `-scopy`.
+2. Supervisão fraca: termos já presentes no léxico V1 recebem o tipo do léxico (`Symptom`, `Exam`, `Condition` ou `Treatment`). Candidatos com palavras claramente narrativas, como `patient`, `history` e `admitted`, ou com associação fraca recebem `NONE`. Os demais são tratados como desconhecidos: o modelo apenas os pontua e não decide sozinho.
+3. Classificador: regressão logística com n-gramas de caracteres do termo (TF-IDF), palavras vizinhas e estatísticas (frequência, PMI, NPMI e número de casos). Os termos conhecidos são pontuados por validação cruzada em 5 partes, e os desconhecidos por um modelo treinado em todos os conhecidos.
+4. Limpeza: antes de gerar o léxico, são removidos sub-n-gramas contidos em um termo melhor ranqueado, siglas ligadas ao termo (`acute coronary syndrome acs`) e fragmentos de valores de exame.
+
+Trecho que calcula o score de um candidato:
+
+```python
+score = 1.0 - proba[:, none_col]
+```
+
+Os 11 casos de avaliação nunca entram na mineração nem no treino do classificador. O repositório contém apenas 56 casos, de 50 artigos, e por isso sobram 45 para mineração e treino.
+
+### Confronto com Trabalho Anterior
+
+| Versão | Como foi construída | Termos no léxico |
+|---|---|---:|
+| V1 | escrita à mão com os casos de desenvolvimento | 231 |
+| V2 | V1 ampliada à mão após analisar os 11 casos de avaliação | 376 |
+| V3 | V1 mais termos aprendidos dos 45 casos, sem ver a avaliação | 483 |
+
+Resultado nos 11 casos de avaliação, registrado em `outputs/evaluation/comparison.csv`:
+
+| Resultado | V1 | V2 | V3 |
+|---|---:|---:|---:|
+| Entidades extraídas | 95 | 247 | 111 |
+| Sintomas | 21 | 36 | 22 |
+| Exames | 46 | 75 | 52 |
+| Condições | 12 | 69 | 20 |
+| Tratamentos | 16 | 67 | 17 |
+| Arestas | 99 | 266 | 116 |
+| Relações entre entidades | 4 | 19 | 5 |
+
+Tomando as entidades da V2 como referência, em nível de entidade e aceitando sobreposição de trechos:
+
+| Sistema | Previstas | Precisão | Revocação | F1 |
+|---|---:|---:|---:|---:|
+| V1 (léxico) | 95 | 0,99 | 0,38 | 0,55 |
+| V3 (léxico) | 111 | 0,85 | 0,38 | 0,53 |
+
+A V2 é uma referência aproximada: foi montada por pessoas depois de ler esses mesmos 11 casos. A V3 tem a mesma revocação da V1 e menos precisão, ou seja, os termos aprendidos acrescentaram entidades, mas quase nenhuma que a V2 reconhece.
+
+## Trabalhos Estudados
+
+
+## Modelo Lógico
+
+O grafo é o mesmo do Projeto 1:
+
+- Nós: `Case` e as entidades `Symptom`, `Exam`, `Condition` e `Treatment`, com o texto da menção, a posição no relato, a frase de origem e atributos como asserção, tempo e dose. O atributo `source` indica se o termo veio do léxico manual ou foi aprendido (`learned_v3`).
+- Arestas com o caso: `HAS_SYMPTOM`, `UNDERWENT_EXAM`, `DIAGNOSED_WITH` e `RECEIVED_TREATMENT`.
+- Arestas entre entidades: `TREATS`, `INDICATES` e `BEFORE`.
+
+## Análises que podem ser realizadas
+
+- Quais termos o texto sugere que o léxico manual não tinha, e de que tipo.
+- Quanto do trabalho manual da V2 o método reencontra sem ver os casos de avaliação.
+- Onde o léxico aprendido erra: palavras genéricas, siglas e fragmentos de valores de exame.
+
+## Ferramentas
+
+O pipeline de aprendizado usa Python 3.12 com `numpy`, `scipy` e `scikit-learn` (ver `requirements.txt`). O extrator, a visualização e os testes usam somente a biblioteca padrão. A visualização é uma página HTML com JavaScript, sem dependências externas.
+
+## Resultados
+
+### Termos aprendidos
+
+O método produziu 252 termos novos. Entre os primeiros do ranking há termos clínicos plausíveis que a V2 não tem, como `menorrhagia`, `lymphadenopathy`, `laparotomy`, `angiography`, `craniotomy`, `necrosis` e `laparoscopy`, junto com fragmentos e termos genéricos. A precisão real depende de revisão manual, feita na planilha `outputs/evaluation/revisao_top100.csv`.
+
+### Recall contra o gabarito da V2
+
+Dos 145 termos que a V2 acrescentou, apenas 38 aparecem no texto usado na mineração, e a V3 recupera 1 deles (0,7% do total e 2,6% dos 38). Os números estão em `outputs/evaluation/lexicon_recall.csv`. O corpus pequeno limita o resultado: um termo que nunca aparece no texto não tem como ser aprendido.
+
+### PMI e NPMI
+
+Para separar 39 termos da V1 com várias palavras de 42 n-gramas narrativos, o AUC é 0,55 para o PMI e 0,67 para o NPMI (`outputs/evaluation/association_auc.csv`). A normalização ajuda, mas com poucos exemplos a diferença é frágil.
+
+### Componentes do classificador
+
+Cada variação foi repetida 10 vezes com divisões aleatórias diferentes (`outputs/evaluation/experimentos.csv`; média e desvio padrão):
+
+| Variação | AUC termo da V1 contra NONE | Tipo correto |
+|---|---:|---:|
+| Base (caracteres, contexto e estatísticas) | 0,935 ± 0,010 | 0,72 |
+| Só caracteres | 0,922 ± 0,018 | 0,71 |
+| Sem contexto | 0,953 ± 0,008 | 0,64 |
+| Sem caracteres | 0,916 ± 0,010 | 0,65 |
+| Só estatísticas | 0,914 ± 0,003 | 0,33 |
+| Naive Bayes | 0,867 ± 0,014 | 0,70 |
+| MLP pequeno | 0,927 ± 0,022 | 0,80 |
+| Candidatos de até 2 palavras | 0,927 ± 0,010 | 0,69 |
+| Candidatos de até 3 palavras | 0,925 ± 0,010 | 0,71 |
+
+Os n-gramas de caracteres e o contexto são o que ensina o tipo da entidade: só com estatísticas, o tipo correto cai para 0,33. A ordem máxima dos n-gramas quase não importa neste corpus. O AUC é em parte circular, pois os rótulos `NONE` vêm de palavras e do NPMI, que também é uma característica do modelo, e por isso o tipo correto é a métrica mais confiável. A variação com apenas unigramas não pôde ser avaliada, porque os unigramas narrativos já são removidos antes e não sobra nenhum exemplo da classe `NONE`.
+
+### Conclusão
+
+Com 45 casos de mineração, o método aprende a forma dos termos clínicos, mas acrescenta pouca cobertura real: a V3 tem a mesma revocação da V1 (0,38) e perde precisão (0,99 para 0,85). O gargalo está no corpus, e não no classificador. O próximo experimento é minerar em mais texto, mantendo os casos de avaliação separados.
+
+## Como Modelos de Linguagem foram Usados
+
+
+## Referências Bibliográficas
+
+- Church, K. W.; Hanks, P. (1990). Word association norms, mutual information, and lexicography. Computational Linguistics, 16(1).
+- Bouma, G. (2009). Normalized (pointwise) mutual information in collocation extraction. GSCL.
+- Jurafsky, D.; Martin, J. H. Speech and Language Processing (capítulos sobre n-gramas e classificação).
+- Dados: MultiCaRe, amostra de 50 artigos fornecida pela disciplina.
+
+## Como executar a etapa 2
+
+Os comandos abaixo devem ser executados no PowerShell, a partir da pasta `fase2`. Na primeira vez, instale as dependências com `pip install -r requirements.txt`.
+
+### 1. Aprender o léxico V3
+
+```powershell
+python src/prototipo_ngramas.py
+```
+
+O comando cria:
+
+- `resources/v3/lexicon.csv`: a V1 acrescida dos termos aprendidos (coluna `source` igual a `learned_v3`);
+- `data/interim/ngram_candidates/candidatos_v3.csv`: todos os candidatos novos, com tipo previsto, score, frequência, PMI e NPMI;
+- `outputs/evaluation/association_auc.csv`: comparação entre PMI e NPMI.
+
+### 2. Extrair os nós e as arestas com a V3
+
+A V3 usa o léxico aprendido e os gatilhos da V1:
+
+```powershell
+python -m src.build_graph --input data/processed/evaluation.csv --lexicon resources/v3/lexicon.csv --triggers resources/v1/triggers.csv --nodes outputs/evaluation/v3/nodes.csv --edges outputs/evaluation/v3/edges.csv
+```
+
+```powershell
+python -m src.build_graph --input data/processed/all_cases.csv --lexicon resources/v3/lexicon.csv --triggers resources/v1/triggers.csv --nodes outputs/full/v3/nodes.csv --edges outputs/full/v3/edges.csv
+```
+
+O primeiro comando processa os 11 casos de avaliação e o segundo, os 56 casos.
+
+### 3. Gerar o HTML da V3 e a página de comparação
+
+```powershell
+python -m src.visualize_graph --nodes outputs/evaluation/v3/nodes.csv --edges outputs/evaluation/v3/edges.csv --scores data/interim/ngram_candidates/candidatos_v3.csv --output outputs/evaluation/v3/graph.html
+```
+
+```powershell
+python -m src.visualize_graph --versions-dir outputs/evaluation --scores data/interim/ngram_candidates/candidatos_v3.csv --output outputs/evaluation/comparar.html
+```
+
+O primeiro comando gera o grafo da V3. O segundo gera a página que alterna entre V1, V2 e V3. Para o conjunto completo, troque `evaluation` por `full`.
+
+### 4. Comparar as versões e avaliar o léxico
+
+```powershell
+python src/compare_versions.py
+```
+
+```powershell
+python src/evaluate_lexicon.py
+```
+
+O primeiro comando atualiza `outputs/evaluation/comparison.csv` com a coluna da V3. O segundo cria `lexicon_recall.csv` e `lexicon_pr_curve.csv`, com o recall contra os termos que a V2 acrescentou e a curva de precisão por limiar de score.
+
+### 5. Repetir os experimentos do classificador
+
+```powershell
+python src/experimentos.py
+```
+
+O comando roda cada variação 10 vezes e grava média e desvio em `outputs/evaluation/experimentos.csv`.
+
+### 6. Revisar os termos aprendidos
+
+```powershell
+python src/revisao_top100.py gerar
+```
+
+O comando cria `outputs/evaluation/revisao_top100.csv`, com os 100 melhores termos novos. Preencha a coluna `avaliacao` com `certo`, `errado` ou `tipo_errado` e, depois, calcule a precisão:
+
+```powershell
+python src/revisao_top100.py resumir
+```
+
+### 7. Executar os testes
+
+```powershell
+python -m unittest discover -s tests -v
+```
+
+Atualmente, a suíte possui 19 testes.
+
+---
+
+# Anexo A — Projeto 1: extração por léxicos e gatilhos
 
 Este projeto extrai entidades e relações de relatos clínicos e transforma os resultados em grafos de conhecimento interativos. A implementação utiliza léxicos, gatilhos, expressões regulares e regras linguísticas; não é necessário treinar um modelo.
 
@@ -130,16 +356,23 @@ Atualmente, a suíte possui 19 testes.
 
 ```text
 outputs/
-├── evaluation/        # comparação da V1 e da V2 nos 11 casos reservados
+├── evaluation/        # comparação da V1, da V2 e da V3 nos 11 casos reservados
 │   ├── comparison.csv
+│   ├── comparar.html  # alterna entre V1, V2 e V3
 │   ├── v1/
-│   └── v2/
+│   ├── v2/
+│   └── v3/
 └── full/              # grafos completos com os 56 casos
+    ├── comparar.html
     ├── v1/
     │   ├── nodes.csv
     │   ├── edges.csv
     │   └── graph.html
-    └── v2/
+    ├── v2/
+    │   ├── nodes.csv
+    │   ├── edges.csv
+    │   └── graph.html
+    └── v3/
         ├── nodes.csv
         ├── edges.csv
         └── graph.html

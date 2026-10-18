@@ -251,8 +251,10 @@
 
     .v1 { --accent: var(--blue); }
     .v2 { --accent: var(--purple); }
+    .v3 { --accent: var(--green); }
     .full-v1 { --accent: var(--green); }
     .full-v2 { --accent: var(--coral); }
+    .full-v3 { --accent: var(--purple); }
 
     .card-top {
       position: relative;
@@ -480,10 +482,10 @@
       <div class="section-heading">
         <div>
           <p class="section-kicker">Comparação principal</p>
-          <h2 id="evaluation-title">Os mesmos 11 casos, duas versões</h2>
+          <h2 id="evaluation-title">Os mesmos 11 casos, três versões</h2>
         </div>
         <p class="section-description">
-          Compare diretamente a abordagem inicial com a versão ampliada após a análise dos casos de avaliação.
+          Compare a abordagem inicial (V1), a versão ampliada à mão (V2) e a versão com termos aprendidos dos próprios textos (V3). A página de comparação alterna entre as três.
         </p>
       </div>
 
@@ -514,6 +516,29 @@
             <div class="metric"><strong>266</strong><span>arestas</span></div>
             <div class="metric"><strong>19</strong><span>relações entre entidades</span></div>
           </div>
+        </a>
+
+        <a class="graph-card v3" href="outputs/evaluation/v3/graph.html" aria-label="Abrir o grafo de avaliação da versão 3">
+          <div class="card-top">
+            <span class="version">V3</span>
+            <span class="arrow" aria-hidden="true">↗</span>
+          </div>
+          <h3>Léxico aprendido</h3>
+          <p>V1 mais termos descobertos por n-gramas, PMI e regressão logística, sem usar os casos de avaliação.</p>
+          <div class="metrics">
+            <div class="metric"><strong>111</strong><span>entidades</span></div>
+            <div class="metric"><strong>116</strong><span>arestas</span></div>
+            <div class="metric"><strong>5</strong><span>relações entre entidades</span></div>
+          </div>
+        </a>
+
+        <a class="graph-card v1" href="outputs/evaluation/comparar.html" aria-label="Abrir a comparação das três versões">
+          <div class="card-top">
+            <span class="version">V1 · V2 · V3</span>
+            <span class="arrow" aria-hidden="true">↗</span>
+          </div>
+          <h3>Comparar as versões</h3>
+          <p>Uma única página com seletor de versão. Os termos aprendidos aparecem tracejados, com o score do classificador.</p>
         </a>
       </div>
 
@@ -564,6 +589,29 @@
             <div class="metric"><strong>884</strong><span>nós</span></div>
             <div class="metric"><strong>879</strong><span>arestas</span></div>
           </div>
+        </a>
+
+        <a class="graph-card full-v3" href="outputs/full/v3/graph.html" aria-label="Abrir o grafo completo da versão 3">
+          <div class="card-top">
+            <span class="version">V3</span>
+            <span class="arrow" aria-hidden="true">↗</span>
+          </div>
+          <h3>Grafo completo · V3</h3>
+          <p>Resultado do léxico aprendido aplicado ao conjunto integral.</p>
+          <div class="metrics">
+            <div class="metric"><strong>56</strong><span>casos</span></div>
+            <div class="metric"><strong>1013</strong><span>nós</span></div>
+            <div class="metric"><strong>1000</strong><span>arestas</span></div>
+          </div>
+        </a>
+
+        <a class="graph-card full-v1" href="outputs/full/comparar.html" aria-label="Abrir a comparação completa das três versões">
+          <div class="card-top">
+            <span class="version">V1 · V2 · V3</span>
+            <span class="arrow" aria-hidden="true">↗</span>
+          </div>
+          <h3>Comparar as versões · completo</h3>
+          <p>Alterne entre as três versões nos 56 casos.</p>
         </a>
       </div>
     </section>

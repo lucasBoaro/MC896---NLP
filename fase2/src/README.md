@@ -4,7 +4,7 @@ Esta pasta contém o código-fonte responsável pelo pipeline de extração de e
 
 ---
 
-## 📋 Visão Geral dos Scripts
+## Visão Geral dos Scripts
 
 | Arquivo | Função Principal | Entradas Principais | Saídas Principais |
 |---|---|---|---|
@@ -14,7 +14,7 @@ Esta pasta contém o código-fonte responsável pelo pipeline de extração de e
 
 ---
 
-## ⚙️ Pré-requisitos e Instalação
+## Pré-requisitos e Instalação
 
 ### Requisitos de Ambiente
 - **Python 3.10** ou superior.
@@ -33,7 +33,7 @@ python -m venv .venv
 
 ---
 
-## 🚀 Instruções de Execução
+## Instruções de Execução
 
 Recomenda-se executar os comandos a partir da **raiz do projeto**:
 
@@ -122,7 +122,7 @@ O arquivo HTML gerado é autocontido e pode ser aberto de duas formas:
 
 ---
 
-## 🧪 Validação e Testes Unitários
+## Validação e Testes Unitários
 
 Para garantir que todas as regras de extração, negação, ancoragem temporal e particionamento estejam operando conforme o esperado, execute a suíte de testes:
 
