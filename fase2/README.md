@@ -126,9 +126,42 @@ Cada variação foi repetida 10 vezes com divisões aleatórias diferentes (`out
 
 Os n-gramas de caracteres e o contexto são o que ensina o tipo da entidade: só com estatísticas, o tipo correto cai para 0,33. A ordem máxima dos n-gramas quase não importa neste corpus. O AUC é em parte circular, pois os rótulos `NONE` vêm de palavras e do NPMI, que também é uma característica do modelo, e por isso o tipo correto é a métrica mais confiável. A variação com apenas unigramas não pôde ser avaliada, porque os unigramas narrativos já são removidos antes e não sobra nenhum exemplo da classe `NONE`.
 
+### Relações TREATS e INDICATES
+
+O extrator só cria `TREATS` (tratamento → condição) e `INDICATES` (exame → condição) quando encontra um gatilho escrito à mão na frase. O script `src/relacoes_pmi.py` trata cada par tratamento–condição ou exame–condição de uma mesma frase como candidato e decide se a relação existe. Com o léxico V2 nos 56 casos há 97 pares: 43 de `TREATS` e 54 de `INDICATES`. Os 97 foram rotulados à mão (`data/interim/relations/rotulagem.csv`), e 71 são relações verdadeiras. Os métodos comparados são:
+
+- regras: o `build_graph.py` atual;
+- regras + gatilhos PMI: as regras mais palavras aprendidas como gatilho, escolhidas pelo PMI entre cada palavra próxima ao par e o rótulo positivo;
+- NPMI: limiar sobre o NPMI da coocorrência do par nos casos;
+- Naive Bayes e regressão logística: palavras entre as entidades e antes delas; a regressão também usa distância, ordem e NPMI do par;
+- sempre sim: referência mínima que responde "existe" para todo par.
+
+Validação cruzada em 5 partes agrupadas por caso (`outputs/evaluation/relacoes_comparacao.csv`):
+
+| Relação | Método | Acurácia | Precisão | Revocação | F1 |
+|---|---|---:|---:|---:|---:|
+| INDICATES | sempre sim | 0,78 | 0,78 | 1,00 | 0,88 |
+| INDICATES | regras | 0,67 | 1,00 | 0,57 | 0,73 |
+| INDICATES | regras + gatilhos PMI | 0,72 | 0,94 | 0,69 | 0,80 |
+| INDICATES | NPMI | 0,78 | 0,78 | 1,00 | 0,88 |
+| INDICATES | Naive Bayes | 0,74 | 0,77 | 0,95 | 0,85 |
+| INDICATES | regressão logística | 0,74 | 0,78 | 0,93 | 0,85 |
+| TREATS | sempre sim | 0,67 | 0,67 | 1,00 | 0,81 |
+| TREATS | regras | 0,70 | 0,94 | 0,59 | 0,72 |
+| TREATS | regras + gatilhos PMI | 0,70 | 0,94 | 0,59 | 0,72 |
+| TREATS | NPMI | 0,67 | 0,67 | 1,00 | 0,81 |
+| TREATS | Naive Bayes | 0,77 | 0,81 | 0,86 | 0,83 |
+| TREATS | regressão logística | 0,53 | 0,63 | 0,76 | 0,69 |
+
+As regras são precisas, mas perdem cerca de 40% das relações. Em `TREATS`, o Naive Bayes é o único método que supera as regras e a referência "sempre sim". Em `INDICATES`, nenhum método supera a referência em acurácia, mas os gatilhos aprendidos sobem a revocação das regras de 0,57 para 0,69 mantendo a precisão em 0,94. O limiar de NPMI escolheu o menor valor possível e virou "sempre sim": a coocorrência do par no corpus não separa relações verdadeiras de falsas dentro de uma mesma frase.
+
+Dois cuidados com o PMI aparecem aqui. Primeiro, como 71 dos 97 pares são positivos, o F1 da referência "sempre sim" já é alto, e por isso a acurácia e a comparação com essa referência são necessárias. Segundo, o PMI entre uma palavra e o rótulo positivo tem teto: PMI(t, +) = log2 P(+|t)/P(+) ≤ −log2 P(+), que dá 0,36 com 78% de positivos. Um limiar fixo de PMI não selecionaria nenhum gatilho; o script divide o PMI por esse teto, o que deixa a escala entre 0 e 1, como no NPMI.
+
+Os gatilhos aprendidos ficam em `resources/v3/triggers_aprendidos.csv`. Há termos plausíveis (`consistent`, `suggestive`, `evidence`, `findings`, `presence`) e ruído (`chronic`, `vascular`, `appendix`, e `no`/`but`, que vêm do padrão "showed no X but Y"), por isso a lista precisa de revisão antes de entrar em um `triggers.csv`. Com 97 pares, diferenças de poucos centésimos entre métodos não são confiáveis.
+
 ### Conclusão
 
-Com 45 casos de mineração, o método aprende a forma dos termos clínicos, mas acrescenta pouca cobertura real: a V3 tem a mesma revocação da V1 (0,38) e perde precisão (0,99 para 0,85). O gargalo está no corpus, e não no classificador. O próximo experimento é minerar em mais texto, mantendo os casos de avaliação separados.
+Com 45 casos de mineração, o método aprende a forma dos termos clínicos, mas acrescenta pouca cobertura real: a V3 tem a mesma revocação da V1 (0,38) e perde precisão (0,99 para 0,85). O gargalo está no corpus, e não no classificador. O próximo experimento é minerar em mais texto, mantendo os casos de avaliação separados. Nas relações, um classificador simples sobre as palavras entre as entidades recupera relações que os gatilhos manuais perdem, com alguma perda de precisão.
 
 ## Como Modelos de Linguagem foram Usados
 
@@ -214,7 +247,21 @@ O comando cria `outputs/evaluation/revisao_top100.csv`, com os 100 melhores term
 python src/revisao_top100.py resumir
 ```
 
-### 7. Executar os testes
+### 7. Melhorar as relações com PMI e ML
+
+```powershell
+python src/relacoes_pmi.py candidatos
+```
+
+O comando gera `data/interim/relations/pares_candidatos.csv`, com os atributos de cada par, e `data/interim/relations/rotulagem.csv`, com uma pergunta por par e a frase com as duas entidades marcadas. Preencha a coluna `gold` com `1` quando a frase afirma a relação e `0` quando não afirma; linhas em branco são ignoradas e os rótulos são preservados se o comando for executado de novo. Depois compare os métodos:
+
+```powershell
+python src/relacoes_pmi.py avaliar
+```
+
+O comando grava `outputs/evaluation/relacoes_comparacao.csv`, `outputs/evaluation/relacoes_predicoes.csv` (score de cada método para cada par) e `resources/v3/triggers_aprendidos.csv`.
+
+### 8. Executar os testes
 
 ```powershell
 python -m unittest discover -s tests -v

@@ -1,0 +1,13 @@
+﻿relacao,metodo,rotulo,pares,positivos,previstos,acertos,acuracia,precisao,revocacao,f1
+INDICATES,sempre_sim,gold,54,42,54,42,0.778,0.778,1.000,0.875
+INDICATES,regras,gold,54,42,24,24,0.667,1.000,0.571,0.727
+INDICATES,regras+gatilhos,gold,54,42,31,29,0.722,0.935,0.690,0.795
+INDICATES,npmi,gold,54,42,54,42,0.778,0.778,1.000,0.875
+INDICATES,naive_bayes,gold,54,42,52,40,0.741,0.769,0.952,0.851
+INDICATES,reg_logistica,gold,54,42,50,39,0.741,0.780,0.929,0.848
+TREATS,sempre_sim,gold,43,29,43,29,0.674,0.674,1.000,0.806
+TREATS,regras,gold,43,29,18,17,0.698,0.944,0.586,0.723
+TREATS,regras+gatilhos,gold,43,29,18,17,0.698,0.944,0.586,0.723
+TREATS,npmi,gold,43,29,43,29,0.674,0.674,1.000,0.806
+TREATS,naive_bayes,gold,43,29,31,25,0.767,0.806,0.862,0.833
+TREATS,reg_logistica,gold,43,29,35,22,0.535,0.629,0.759,0.688
