@@ -25,6 +25,7 @@ from scipy.sparse import hstack
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import StratifiedKFold
 
 ROOT = (
@@ -447,6 +448,28 @@ print(
     " frequência + PMI/NPMI"
 )
 
+# Comparação PMI x NPMI (Seção 2.3): quanto cada medida separa termos clínicos conhecidos (V1, multipalavra) de n-gramas narrativos (contêm palavra não clínica).
+# Os negativos vêm de palavras, e não das medidas, para a comparação não ser circular.
+multi = [t for t in freq if len(t.split()) > 1 and freq[t] >= 2]
+auc_pos = [t for t in multi if t in v1]
+auc_neg = [t for t in multi if t not in v1 and set(t.split()) & NON_CLINICAL_WORDS]
+auc_rows = []
+if auc_pos and auc_neg:
+  y_auc = [1] * len(auc_pos) + [0] * len(auc_neg)
+  for name, fn in (("pmi", pmi), ("npmi", npmi)):
+    values = [fn(t) for t in auc_pos + auc_neg]
+    auc_rows.append((name, round(roc_auc_score(y_auc, values), 4)))
+  print(
+      f"AUC (V1 multipalavra={len(auc_pos)} x narrativos={len(auc_neg)}): "
+      + ", ".join(f"{n}={a:.3f}" for n, a in auc_rows)
+  )
+  auc_out = ROOT / "outputs" / "evaluation" / "association_auc.csv"
+  with open(auc_out, "w", newline="", encoding="utf-8") as f:
+    aw = csv.writer(f, lineterminator="\n")
+    aw.writerow(["measure", "auc", "positives_v1_multiword", "negatives_narrative"])
+    for name, a in auc_rows:
+      aw.writerow([name, a, len(auc_pos), len(auc_neg)])
+
 # 5) Features: n-gramas de caracteres + contexto + estatísticas
 chars = TfidfVectorizer(
     analyzer="char_wb", ngram_range=(3, 5), min_df=2, sublinear_tf=True
@@ -526,8 +549,7 @@ def split_acronym(term):
     initials = "".join(w[0] for w in ws[:-1])
     if ws[-1] == initials:
       return " ".join(ws[:-1]), ws[-1]
-  # Sigla escrita em maiúsculas no texto, com as letras na ordem do termo
-  # (ex: 'esophagogastroduodenoscopy egd'); exige 3+ letras para não separar 'chest ct'
+  # Sigla escrita em maiúsculas no texto, com as letras na ordem do termo. Exige 3+ letras para não separar 'chest ct'
   if len(ws) >= 2 and ws[-1] in ACRONYMS and len(ws[-1]) >= 3:
     base = " ".join(ws[:-1])
     letters = iter(base.replace(" ", ""))
