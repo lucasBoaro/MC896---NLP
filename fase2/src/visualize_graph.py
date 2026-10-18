@@ -79,6 +79,7 @@ def build_html(nodes, edges, scores=None, versions=None, meta=None, eval_ids=Non
     .button:hover{background:var(--surface-2)}
     .version-note{margin:14px 2px 0;padding:11px 14px;border-left:4px solid var(--primary);border-radius:8px;background:var(--surface);color:var(--muted);font-size:13px;line-height:1.5}.version-note strong{color:var(--text)}
     .compare-wrap{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px}.compare-wrap h3{margin:22px 0 4px;font-size:16px}.compare-wrap h3:first-child{margin-top:0}.compare-wrap .stage-caption{margin-bottom:12px}.sum-table{width:100%;border-collapse:collapse;font-size:13px}.sum-table th,.sum-table td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:right}.sum-table th:first-child,.sum-table td:first-child{text-align:left}.sum-table th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em}.sum-table tr.current td{background:var(--primary-soft);font-weight:700}.pair-pick{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;margin:6px 0 14px}.pair-pick .field{min-width:200px}.diff-cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.diff-col{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--surface-2);min-width:0}.diff-col h4{margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}.diff-col ul{margin:0;padding:0;list-style:none;font-size:12.5px;line-height:1.7}.diff-col li{overflow-wrap:anywhere}.diff-col .tp{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;background:var(--dot)}.diff-col .rel{color:var(--muted)}@media(max-width:950px){.diff-cols{grid-template-columns:1fr}}
+    .graph-note{padding:10px 16px;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--warning) 9%,var(--surface));color:var(--muted);font-size:12.5px;line-height:1.45}.graph-note strong{color:var(--text)}
     .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
     .stat{background:var(--surface);border:1px solid var(--line);border-radius:15px;padding:15px 17px}
     .stat-label{color:var(--muted);font-size:12px;margin-bottom:4px}
@@ -159,6 +160,7 @@ def build_html(nodes, edges, scores=None, versions=None, meta=None, eval_ids=Non
         <div class="graph-stage">
           <div class="stage-head"><div><div class="stage-title" id="graph-title">Grafo do caso</div><div class="stage-caption">Arraste para mover, use a roda para ampliar e clique nos nós.</div><div class="stage-caption" id="graph-summary"></div></div><div class="field graph-filter"><label for="graph-relation-filter">Relações exibidas</label><select id="graph-relation-filter"><option value="entity">Entre entidades</option><option value="clinical">Clínicas</option><option value="temporal">Temporais</option><option value="structural">Com o caso</option><option value="all">Todas</option></select></div></div>
           <div class="legend-bar"><div class="legend" id="legend"></div><div class="legend" aria-label="Tipos de relação"><span class="legend-item"><span class="line-key" style="--key-color:var(--relation-treats)"></span>TREATS</span><span class="legend-item"><span class="line-key" style="--key-color:var(--relation-indicates)"></span>INDICATES</span><span class="legend-item"><span class="line-key before" style="--key-color:var(--relation-before)"></span>BEFORE</span><span class="legend-item"><span class="line-key structural" style="--key-color:var(--relation-structural)"></span>Com o caso</span></div></div>
+          <div class="graph-note" id="graph-note" hidden></div>
           <div class="canvas-wrap"><svg id="graph-svg" viewBox="0 0 1200 700" role="img" aria-label="Grafo clínico interativo"></svg></div>
         </div>
         <aside class="detail" id="detail"><div class="empty"><div><div class="empty-mark">◎</div><strong>Selecione um nó</strong><p>Os atributos, a dose, o tempo e a frase de origem aparecerão aqui.</p></div></div></aside>
@@ -223,7 +225,7 @@ function setVersion(version){
   state.version=version;
   const data=VERSIONS[version];RAW_NODES=data.nodes;RAW_EDGES=data.edges;
   byId=new Map(RAW_NODES.map(n=>[n.node_id,n]));
-  refreshCases();
+  refreshCases();pickMode();
   const relations=[...new Set(RAW_EDGES.map(e=>e.relation))].sort();
   el('relation-filter').innerHTML='<option value="">Todas</option>'+relations.map(r=>`<option value="${r}">${r}</option>`).join('');
   const note=el('version-note'),m=META[version];
@@ -231,6 +233,22 @@ function setVersion(version){
   state.selected=null;resetView();renderAll();
 }
 const keyOf=n=>`${n.type}|${n.label}`;
+// Sem TREATS, INDICATES ou BEFORE no caso, o grafo abre ligado ao caso e explica o motivo.
+function hasEntityRelations(){const {edges}=caseData();return edges.some(e=>byId.get(e.source_id)?.type!=='Case')}
+function noRelationReason(){
+  const nodes=caseData().nodes.filter(n=>n.type!=='Case');
+  if(!nodes.length)return 'Nenhuma entidade foi extraída deste caso: o léxico desta versão não reconhece nenhum termo do relato.';
+  if(!nodes.some(n=>n.type==='Condition'))return 'Nenhuma condição foi reconhecida neste caso. TREATS e INDICATES ligam um tratamento ou exame a uma condição, então não há par para ligar.';
+  const bySentence=new Map();nodes.forEach(n=>{if(!bySentence.has(n.sentence_id))bySentence.set(n.sentence_id,new Set());bySentence.get(n.sentence_id).add(n.type)});
+  const pair=[...bySentence.values()].some(t=>t.has('Condition')&&(t.has('Exam')||t.has('Treatment')));
+  if(!pair)return 'Há condições neste caso, mas nenhuma aparece na mesma frase que um exame ou tratamento. As relações só ligam entidades da mesma frase.';
+  return 'Há pares de exame ou tratamento com condição na mesma frase, mas nem as regras nem o Naive Bayes os consideraram relacionados.';
+}
+function pickMode(){
+  state.autoFallback=!hasEntityRelations();
+  state.relationMode=state.autoFallback?'structural':'entity';
+  el('graph-relation-filter').value=state.relationMode;
+}
 function versionCase(v,caseId){
   const d=VERSIONS[v],nodes=d.nodes.filter(n=>n.case_id===caseId&&n.type!=='Case'),ids=new Map(d.nodes.map(n=>[n.node_id,n]));
   const rels=new Set();
@@ -268,7 +286,7 @@ function init(){
     const names=Object.keys(VERSIONS),opts=names.map(v=>`<option value="${v}">${escapeHtml(versionLabel(v))}</option>`).join('');
     el('version-field').hidden=false;el('version-select').innerHTML=opts;
     const params=new URLSearchParams(location.search),asked=params.get('v');
-    const def=names.includes(asked)?asked:names.includes('v3')?'v3':names[names.length-1];
+    const def=names.includes(asked)?asked:names.includes('v3_mais_dados')?'v3_mais_dados':names[names.length-1];
     if(params.get('set')==='all')state.set='all';
     el('version-select').value=def;
     el('version-select').addEventListener('change',e=>setVersion(e.target.value));
@@ -280,14 +298,14 @@ function init(){
       el('set-field').hidden=false;
       el('set-select').innerHTML=`<option value="eval">${EVAL_IDS.size} casos de avaliação</option><option value="all">Todos os casos</option>`;
       el('set-select').value=state.set;
-      el('set-select').addEventListener('change',e=>{state.set=e.target.value;refreshCases();state.selected=null;resetView();renderAll()});
+      el('set-select').addEventListener('change',e=>{state.set=e.target.value;refreshCases();pickMode();state.selected=null;resetView();renderAll()});
     }
     setVersion(def);
   }
-  el('case-select').addEventListener('change',e=>{state.caseId=e.target.value;state.selected=null;resetView();renderAll()});
+  el('case-select').addEventListener('change',e=>{state.caseId=e.target.value;state.selected=null;pickMode();resetView();renderAll()});
   el('search-input').addEventListener('input',e=>{state.query=e.target.value.trim().toLowerCase();renderGraph()});
   el('graph-relation-filter').addEventListener('change',e=>{state.relationMode=e.target.value;state.selected=null;resetView();renderGraph();renderCaseDetail()});
-  el('reset-button').addEventListener('click',()=>{state.query='';state.relationMode='entity';el('search-input').value='';el('graph-relation-filter').value='entity';state.selected=null;resetView();renderAll()});
+  el('reset-button').addEventListener('click',()=>{state.query='';el('search-input').value='';pickMode();state.selected=null;resetView();renderAll()});
   el('show-untimed').addEventListener('change',renderTimeline);
   el('relation-filter').addEventListener('change',renderRelations);
   el('theme-button').addEventListener('click',()=>{const root=document.documentElement;root.dataset.theme=root.dataset.theme==='dark'?'':'dark'});
@@ -367,7 +385,11 @@ function renderGraph(){
   const viewport=svgEl('g',{id:'viewport',transform:`translate(${state.tx} ${state.ty}) scale(${state.scale})`});svg.append(viewport);
   const edgeLayer=svgEl('g'),nodeLayer=svgEl('g');viewport.append(edgeLayer,nodeLayer);
   data.edges.forEach(edge=>{const a=positions.get(edge.source),b=positions.get(edge.target);if(!a||!b)return;const style=relationStyle(edge.relation),line=svgEl('path',{d:edgePath(a,b),class:`edge ${style}`,'marker-end':`url(#arrow-${style})`});line.addEventListener('click',()=>showEdge(edge,data));edgeLayer.append(line);if(SPECIAL.has(edge.relation)){const text=svgEl('text',{x:(a.x+b.x)/2,y:(a.y+b.y)/2-7,class:`edge-label ${style}`,'text-anchor':'middle'});text.textContent=edge.relation+(edge.count>1?` ×${edge.count}`:'');text.addEventListener('click',()=>showEdge(edge,data));edgeLayer.append(text)}});
-  if(!data.edges.length){const message=svgEl('text',{x:600,y:350,class:'edge-label','text-anchor':'middle'});message.textContent='Nenhuma relação deste grupo neste caso';viewport.append(message)}
+  if(!data.edges.length){const message=svgEl('text',{x:600,y:350,class:'edge-label','text-anchor':'middle'});message.textContent=caseData().nodes.some(n=>n.type!=='Case')?'Nenhuma relação deste grupo neste caso':'Nenhuma entidade extraída deste caso';viewport.append(message)}
+  const note=el('graph-note'),entityMode=['entity','clinical','temporal'].includes(state.relationMode);
+  const showNote=(state.relationMode==='structural'&&state.autoFallback)||(entityMode&&!data.edges.length);
+  note.hidden=!showNote;
+  if(showNote)note.innerHTML=`<strong>${state.relationMode==='structural'?'Este caso não tem relações entre entidades; o grafo mostra as entidades ligadas ao caso.':'Nenhuma relação deste grupo neste caso.'}</strong> ${escapeHtml(noRelationReason())}`;
   data.nodes.forEach(node=>{const p=positions.get(node.id);if(!p)return;const g=svgEl('g',{class:`node ${state.selected===node.id?'selected':''} ${node.occurrences.some(isLearned)?'learned':''}`,style:`--node-color:${COLORS[node.type]}`});g.dataset.id=node.id;const shape=node.type==='Case'?svgEl('circle',{cx:p.x,cy:p.y,r:58}):svgEl('rect',{x:p.x-p.w/2,y:p.y-p.h/2,width:p.w,height:p.h,rx:11});g.append(shape);const label=svgEl('text',{x:p.x,y:p.y+(node.type==='Case'?0:1),class:'label','text-anchor':'middle','dominant-baseline':'middle'});const queryMatch=state.query&&`${node.label} ${node.mention_text}`.toLowerCase().includes(state.query);label.textContent=truncate(node.type==='Case'?'CASO':node.label,node.type==='Case'?12:19);if(state.query&&!queryMatch&&node.type!=='Case')g.style.opacity='.18';g.append(label);if(node.occurrences.some(isLearned)){const badge=svgEl('text',{x:p.x+p.w/2-6,y:p.y-p.h/2+10,class:'badge','text-anchor':'end'});badge.textContent='aprendido';g.append(badge)}if(node.count>1){const meta=svgEl('text',{x:p.x,y:p.y+(node.type==='Case'?23:25),class:'meta','text-anchor':'middle'});meta.textContent=`${node.count} menções`;g.append(meta)}g.addEventListener('click',()=>{state.selected=node.id;renderGraph();showNode(node)});nodeLayer.append(g)});
   applyTransform();
 }

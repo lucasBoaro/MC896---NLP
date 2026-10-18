@@ -247,7 +247,7 @@ O primeiro comando processa os 11 casos de avaliação e o segundo, os 56 casos.
 python -m src.visualize_graph --versions-dir outputs/full --eval-cases data/processed/evaluation.csv --scores data/interim/ngram_candidates/candidatos_v3.csv --output outputs/explorador.html
 ```
 
-Gera uma única página com V1, V2, V3 e V3+ (as versões ausentes em `outputs/full/` são ignoradas). Os 11 casos de avaliação são filtrados da mesma base dos 56. Para ver só uma versão, use `outputs/explorador.html?v=v1` (ou `v2`, `v3`, `v3_mais_dados`); `&set=all` abre com os 56 casos e `&tab=compare` abre a aba de comparação.
+Gera uma única página com V1, V2, V3 e V3+ (as versões ausentes em `outputs/full/` são ignoradas). Os 11 casos de avaliação são filtrados da mesma base dos 56. O explorador abre na V3+. Quando o caso não tem TREATS, INDICATES nem BEFORE, o grafo mostra as entidades ligadas ao caso e explica o motivo: nenhuma entidade extraída, nenhuma condição reconhecida, ou nenhuma condição na mesma frase que um exame ou tratamento. Para abrir outra versão, use `outputs/explorador.html?v=v1` (ou `v2`, `v3`, `v3_mais_dados`); `&set=all` abre com os 56 casos e `&tab=compare` abre a aba de comparação.
 
 ### 4. Abrir o explorador no navegador
 
