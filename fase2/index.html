@@ -478,142 +478,88 @@
   </header>
 
   <main class="container">
-    <section class="section" aria-labelledby="evaluation-title">
+    <section class="section" aria-labelledby="explorer-title">
       <div class="section-heading">
         <div>
-          <p class="section-kicker">Comparação principal</p>
-          <h2 id="evaluation-title">Os mesmos 11 casos, três versões</h2>
+          <p class="section-kicker">Explorador único</p>
+          <h2 id="explorer-title">Um só lugar para todos os grafos</h2>
         </div>
         <p class="section-description">
-          Compare a abordagem inicial (V1), a versão ampliada à mão (V2) e a versão com termos aprendidos dos próprios textos (V3). A página de comparação alterna entre as três.
+          O explorador reúne as quatro versões e os dois conjuntos de casos (11 de avaliação ou todos os 56). Troque a versão, o conjunto e o caso nos seletores; a aba <em>Comparar versões</em> mostra os totais e o que cada versão extrai a mais ou a menos. Números abaixo: os 11 casos de avaliação.
         </p>
       </div>
 
       <div class="card-grid">
-        <a class="graph-card v1" href="outputs/evaluation/v1/graph.html" aria-label="Abrir o grafo de avaliação da versão 1">
+        <a class="graph-card v1" href="outputs/explorador.html?v=v1" aria-label="Abrir Escrita à mão no explorador">
           <div class="card-top">
             <span class="version">V1</span>
             <span class="arrow" aria-hidden="true">↗</span>
           </div>
-          <h3>Abordagem inicial</h3>
-          <p>Léxicos e padrões desenvolvidos somente a partir dos 80% dos casos.</p>
+          <h3>Escrita à mão</h3>
+          <p>Léxico e padrões desenvolvidos somente a partir dos casos de desenvolvimento.</p>
           <div class="metrics">
             <div class="metric"><strong>95</strong><span>entidades</span></div>
             <div class="metric"><strong>99</strong><span>arestas</span></div>
             <div class="metric"><strong>4</strong><span>relações entre entidades</span></div>
           </div>
         </a>
-
-        <a class="graph-card v2" href="outputs/evaluation/v2/graph.html" aria-label="Abrir o grafo de avaliação da versão 2">
+        <a class="graph-card v2" href="outputs/explorador.html?v=v2" aria-label="Abrir Ampliada à mão no explorador">
           <div class="card-top">
             <span class="version">V2</span>
             <span class="arrow" aria-hidden="true">↗</span>
           </div>
-          <h3>Abordagem ampliada</h3>
-          <p>Léxicos e padrões expandidos com os termos observados nos 20% de avaliação.</p>
+          <h3>Ampliada à mão</h3>
+          <p>V1 expandida com os termos observados nos casos de avaliação (referência aproximada).</p>
           <div class="metrics">
             <div class="metric"><strong>247</strong><span>entidades</span></div>
             <div class="metric"><strong>266</strong><span>arestas</span></div>
             <div class="metric"><strong>19</strong><span>relações entre entidades</span></div>
           </div>
         </a>
-
-        <a class="graph-card v3" href="outputs/evaluation/v3/graph.html" aria-label="Abrir o grafo de avaliação da versão 3">
+        <a class="graph-card v3" href="outputs/explorador.html?v=v3" aria-label="Abrir Aprendida · 45 casos no explorador">
           <div class="card-top">
             <span class="version">V3</span>
             <span class="arrow" aria-hidden="true">↗</span>
           </div>
-          <h3>Léxico aprendido</h3>
-          <p>V1 mais termos descobertos por n-gramas, PMI e regressão logística, sem usar os casos de avaliação.</p>
+          <h3>Aprendida · 45 casos</h3>
+          <p>V1 mais termos descobertos por n-gramas, PMI e regressão logística nos 45 casos de desenvolvimento.</p>
           <div class="metrics">
             <div class="metric"><strong>111</strong><span>entidades</span></div>
             <div class="metric"><strong>116</strong><span>arestas</span></div>
             <div class="metric"><strong>5</strong><span>relações entre entidades</span></div>
           </div>
         </a>
-
-        <a class="graph-card v1" href="outputs/evaluation/comparar.html" aria-label="Abrir a comparação das três versões">
+        <a class="graph-card full-v1" href="outputs/explorador.html?v=v3_mais_dados" aria-label="Abrir Aprendida · +1000 casos no explorador">
           <div class="card-top">
-            <span class="version">V1 · V2 · V3</span>
+            <span class="version">V3+</span>
             <span class="arrow" aria-hidden="true">↗</span>
           </div>
-          <h3>Comparar as versões</h3>
-          <p>Uma única página com seletor de versão. Os termos aprendidos aparecem tracejados, com o score do classificador.</p>
+          <h3>Aprendida · +1000 casos</h3>
+          <p>Mesmo método da V3, com léxico e gatilhos aprendidos de 1000 casos adicionais do MultiCaRe (1045 no total).</p>
+          <div class="metrics">
+            <div class="metric"><strong>125</strong><span>entidades</span></div>
+            <div class="metric"><strong>130</strong><span>arestas</span></div>
+            <div class="metric"><strong>5</strong><span>relações entre entidades</span></div>
+          </div>
+        </a>
+
+        <a class="graph-card v3" href="outputs/explorador.html?v=v3&amp;tab=compare" aria-label="Abrir a comparação entre versões">
+          <div class="card-top">
+            <span class="version">V3 × V3+</span>
+            <span class="arrow" aria-hidden="true">↗</span>
+          </div>
+          <h3>Comparar com mais dados</h3>
+          <p>Totais por versão e a diferença de entidades e relações, caso a caso, entre o modelo atual e o treinado com mais dados.</p>
         </a>
       </div>
 
       <aside class="note" aria-label="Nota metodológica">
         <span class="note-icon" aria-hidden="true">i</span>
         <div>
-          <strong>Por que manter as duas versões?</strong>
-          <p>A comparação evidencia como a cobertura do léxico e dos padrões afeta a extração sem esconder a evolução do método.</p>
+          <strong>Por que a V3+ não ganha relações?</strong>
+          <p>Mais dados ampliam o léxico (de 483 para 764 termos) e as entidades. Os gatilhos aprendidos por autotreinamento (<em>suggestive</em>, <em>confirmed</em>, <em>treated</em>) não aparecem nos 11 casos de avaliação, então TREATS e INDICATES não crescem ali. Nos 56 casos, TREATS vai de 12 para 14.</p>
         </div>
       </aside>
-    </section>
-
-    <section class="section" aria-labelledby="full-title">
-      <div class="section-heading">
-        <div>
-          <p class="section-kicker">Resultado consolidado</p>
-          <h2 id="full-title">Grafos completos com os 56 casos</h2>
-        </div>
-        <p class="section-description">
-          Explore o resultado agregado de cada versão em toda a coleção de relatos clínicos.
-        </p>
-      </div>
-
-      <div class="card-grid">
-        <a class="graph-card full-v1" href="outputs/full/v1/graph.html" aria-label="Abrir o grafo completo da versão 1">
-          <div class="card-top">
-            <span class="version">V1</span>
-            <span class="arrow" aria-hidden="true">↗</span>
-          </div>
-          <h3>Grafo completo · V1</h3>
-          <p>Resultado da estratégia original aplicado ao conjunto integral.</p>
-          <div class="metrics">
-            <div class="metric"><strong>56</strong><span>casos</span></div>
-            <div class="metric"><strong>668</strong><span>nós</span></div>
-            <div class="metric"><strong>642</strong><span>arestas</span></div>
-          </div>
-        </a>
-
-        <a class="graph-card full-v2" href="outputs/full/v2/graph.html" aria-label="Abrir o grafo completo da versão 2">
-          <div class="card-top">
-            <span class="version">V2</span>
-            <span class="arrow" aria-hidden="true">↗</span>
-          </div>
-          <h3>Grafo completo · V2</h3>
-          <p>Resultado da estratégia ampliada aplicado ao conjunto integral.</p>
-          <div class="metrics">
-            <div class="metric"><strong>56</strong><span>casos</span></div>
-            <div class="metric"><strong>884</strong><span>nós</span></div>
-            <div class="metric"><strong>879</strong><span>arestas</span></div>
-          </div>
-        </a>
-
-        <a class="graph-card full-v3" href="outputs/full/v3/graph.html" aria-label="Abrir o grafo completo da versão 3">
-          <div class="card-top">
-            <span class="version">V3</span>
-            <span class="arrow" aria-hidden="true">↗</span>
-          </div>
-          <h3>Grafo completo · V3</h3>
-          <p>Resultado do léxico aprendido aplicado ao conjunto integral.</p>
-          <div class="metrics">
-            <div class="metric"><strong>56</strong><span>casos</span></div>
-            <div class="metric"><strong>1013</strong><span>nós</span></div>
-            <div class="metric"><strong>1000</strong><span>arestas</span></div>
-          </div>
-        </a>
-
-        <a class="graph-card full-v1" href="outputs/full/comparar.html" aria-label="Abrir a comparação completa das três versões">
-          <div class="card-top">
-            <span class="version">V1 · V2 · V3</span>
-            <span class="arrow" aria-hidden="true">↗</span>
-          </div>
-          <h3>Comparar as versões · completo</h3>
-          <p>Alterne entre as três versões nos 56 casos.</p>
-        </a>
-      </div>
     </section>
   </main>
 

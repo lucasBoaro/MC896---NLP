@@ -7,8 +7,8 @@ Este projeto parte do extrator do Projeto 1, que identifica entidades e relaçõ
 
 ## Demonstração Executável
 
-- [Página inicial com os grafos](index.html): V1, V2 e V3.
-- [Comparação das três versões nos 11 casos de avaliação](outputs/evaluation/comparar.html) e [nos 56 casos](outputs/full/comparar.html): um seletor troca a versão do léxico. Os termos aprendidos aparecem com borda tracejada e, no painel de detalhes, com o score do classificador.
+- [Página inicial](index.html) e [explorador único](outputs/explorador.html): V1, V2, V3 e V3+ (mais dados) em uma só página, com seletores de versão, de conjunto (11 casos de avaliação ou todos os 56) e de caso. A aba *Comparar versões* traz os totais por versão e a diferença de entidades e relações entre duas versões no caso escolhido. Os termos aprendidos aparecem com borda tracejada e, no painel de detalhes, com o score do classificador.
+- Regerar: `python -m src.visualize_graph --versions-dir outputs/full --eval-cases data/processed/evaluation.csv --scores data/interim/ngram_candidates/candidatos_v3.csv --output outputs/explorador.html`
 
 ## Metodologia
 
@@ -95,6 +95,32 @@ O grafo é o mesmo do Projeto 1:
 O pipeline de aprendizado usa Python 3.12 com `numpy`, `scipy` e `scikit-learn` (ver `requirements.txt`). O extrator, a visualização e os testes usam somente a biblioteca padrão. A visualização é uma página HTML com JavaScript, sem dependências externas.
 
 ## Resultados
+
+### V3+: o mesmo método com mais dados
+
+A V3+ repete a V3 com 1000 casos adicionais do MultiCaRe (`data/external/cases_extra.csv`, 1045 casos na mineração). Os casos vêm de `src/sample_multicare.py`: um caso por artigo, só relatos humanos, sem nenhum artigo que já esteja em `cases.csv`, o que mantém os 11 casos de avaliação fora da mineração. O extrator é o mesmo; mudam o léxico (`resources/v3_mais_dados/lexicon.csv`, com até 500 termos novos) e os gatilhos (`resources/v3_mais_dados/triggers.csv`, V1 mais quatro aprendidos por `src/gatilhos_mais_dados.py`).
+
+```bash
+python src/sample_multicare.py CAMINHO/cases.parquet --n 1000
+NGRAM_EXTRA_CASES=data/external/cases_extra.csv NGRAM_TAG=v3_mais_dados NGRAM_TOP_K=500 python src/prototipo_ngramas.py
+python src/gatilhos_mais_dados.py
+python -m src.build_graph --input data/processed/all_cases.csv --lexicon resources/v3_mais_dados/lexicon.csv --triggers resources/v3_mais_dados/triggers.csv --nodes outputs/full/v3_mais_dados/nodes.csv --edges outputs/full/v3_mais_dados/edges.csv
+```
+
+Nos 11 casos de avaliação (`outputs/evaluation/comparison.csv`):
+
+| Resultado | V3 | V3+ |
+|---|---:|---:|
+| Termos no léxico | 483 | 764 |
+| Entidades extraídas | 111 | 125 |
+| Sintomas | 22 | 29 |
+| Tratamentos | 17 | 23 |
+| Arestas | 116 | 130 |
+| Relações entre entidades | 5 | 5 |
+
+Os gatilhos são aprendidos por autotreinamento: um Naive Bayes treinado nos 49 pares rotulados à mão dos casos de desenvolvimento dá pseudo-rótulos aos 508 pares tratamento–condição e exame–condição dos 1045 casos, e o PMI entre as palavras do trecho entre as entidades e o rótulo positivo escolhe os gatilhos. Só entram verbos, particípios e adjetivos de ligação (`suggestive`, `confirmed`, `suggesting`, `treated`). Sem esse filtro de forma, o PMI escolhe substantivos como `mass` e `mild`, que só acompanham os nomes das condições.
+
+Resultado: mais dados ampliam as entidades, mas as relações dos 11 casos não crescem, porque os quatro gatilhos aprendidos não aparecem neles. Nos 56 casos, `TREATS` sobe de 12 para 14 e `INDICATES` cai de 19 para 15, já que o léxico novo muda quais pares existem. Os pseudo-rótulos vêm de um modelo treinado em 49 pares, então o autotreinamento reforça o que as regras da V1 já encontram. O léxico maior também traz ruído, como nomes de fabricantes (`bd biosciences san jose`), que o filtro atual não remove.
 
 ### Termos aprendidos
 
@@ -203,193 +229,23 @@ python -m src.build_graph --input data/processed/all_cases.csv --lexicon resourc
 
 O primeiro comando processa os 11 casos de avaliação e o segundo, os 56 casos.
 
-### 3. Gerar o HTML da V3 e a página de comparação
+### 3. Gerar o explorador
 
 ```powershell
-python -m src.visualize_graph --nodes outputs/evaluation/v3/nodes.csv --edges outputs/evaluation/v3/edges.csv --scores data/interim/ngram_candidates/candidatos_v3.csv --output outputs/evaluation/v3/graph.html
+python -m src.visualize_graph --versions-dir outputs/full --eval-cases data/processed/evaluation.csv --scores data/interim/ngram_candidates/candidatos_v3.csv --output outputs/explorador.html
 ```
+
+Gera uma única página com V1, V2, V3 e V3+ (as versões ausentes em `outputs/full/` são ignoradas). Os 11 casos de avaliação são filtrados da mesma base dos 56. Para ver só uma versão, use `outputs/explorador.html?v=v1` (ou `v2`, `v3`, `v3_mais_dados`); `&set=all` abre com os 56 casos e `&tab=compare` abre a aba de comparação.
+
+### 4. Abrir o explorador no navegador
+
+O arquivo pode ser aberto diretamente. Para servi-lo por um endereço local:
 
 ```powershell
-python -m src.visualize_graph --versions-dir outputs/evaluation --scores data/interim/ngram_candidates/candidatos_v3.csv --output outputs/evaluation/comparar.html
+python -m http.server 8765
 ```
 
-O primeiro comando gera o grafo da V3. O segundo gera a página que alterna entre V1, V2 e V3. Para o conjunto completo, troque `evaluation` por `full`.
-
-### 4. Comparar as versões e avaliar o léxico
-
-```powershell
-python src/compare_versions.py
-```
-
-```powershell
-python src/evaluate_lexicon.py
-```
-
-O primeiro comando atualiza `outputs/evaluation/comparison.csv` com a coluna da V3. O segundo cria `lexicon_recall.csv` e `lexicon_pr_curve.csv`, com o recall contra os termos que a V2 acrescentou e a curva de precisão por limiar de score.
-
-### 5. Repetir os experimentos do classificador
-
-```powershell
-python src/experimentos.py
-```
-
-O comando roda cada variação 10 vezes e grava média e desvio em `outputs/evaluation/experimentos.csv`.
-
-### 6. Revisar os termos aprendidos
-
-```powershell
-python src/revisao_top100.py gerar
-```
-
-O comando cria `outputs/evaluation/revisao_top100.csv`, com os 100 melhores termos novos. Preencha a coluna `avaliacao` com `certo`, `errado` ou `tipo_errado` e, depois, calcule a precisão:
-
-```powershell
-python src/revisao_top100.py resumir
-```
-
-### 7. Melhorar as relações com PMI e ML
-
-```powershell
-python src/relacoes_pmi.py candidatos
-```
-
-O comando gera `data/interim/relations/pares_candidatos.csv`, com os atributos de cada par, e `data/interim/relations/rotulagem.csv`, com uma pergunta por par e a frase com as duas entidades marcadas. Preencha a coluna `gold` com `1` quando a frase afirma a relação e `0` quando não afirma; linhas em branco são ignoradas e os rótulos são preservados se o comando for executado de novo. Depois compare os métodos:
-
-```powershell
-python src/relacoes_pmi.py avaliar
-```
-
-O comando grava `outputs/evaluation/relacoes_comparacao.csv`, `outputs/evaluation/relacoes_predicoes.csv` (score de cada método para cada par) e `resources/v3/triggers_aprendidos.csv`.
-
-### 8. Executar os testes
-
-```powershell
-python -m unittest discover -s tests -v
-```
-
-Atualmente, a suíte possui 19 testes.
-
----
-
-# Anexo A — Projeto 1: extração por léxicos e gatilhos
-
-Este projeto extrai entidades e relações de relatos clínicos e transforma os resultados em grafos de conhecimento interativos. A implementação utiliza léxicos, gatilhos, expressões regulares e regras linguísticas; não é necessário treinar um modelo.
-
-## Slides
-
-Link para visualização dos slides apresentados: [Slides](assets/apresentacao-projeto1.pptx.pdf)
-
-## Como executar o projeto
-
-Os comandos abaixo devem ser executados no PowerShell, a partir da raiz do repositório. É necessário ter Python 3.10 ou superior. O projeto utiliza somente a biblioteca padrão do Python, portanto não há dependências para instalar.
-
-### 1. Preparar os dados
-
-Execute:
-
-```powershell
-python src/prepare_data.py
-```
-
-Esse comando lê `cases.csv` e `metadata.csv`, associa cada caso ao artigo correspondente e cria:
-
-| Arquivo | Conteúdo |
-|---|---|
-| `data/processed/development.csv` | 45 casos usados para desenvolver a primeira versão |
-| `data/processed/evaluation.csv` | 11 casos inicialmente reservados para avaliação |
-| `data/processed/all_cases.csv` | Todos os 56 casos, com a coluna `split` |
-
-Os comandos seguintes usam `all_cases.csv`, pois o objetivo é gerar o grafo completo com os 56 casos.
-
-### 2. Extrair os nós e as arestas com a V1
-
-A V1 utiliza o léxico e os gatilhos construídos apenas com os casos de desenvolvimento:
-
-```powershell
-python -m src.build_graph --input data/processed/all_cases.csv --lexicon resources/v1/lexicon.csv --triggers resources/v1/triggers.csv --nodes outputs/full/v1/nodes.csv --edges outputs/full/v1/edges.csv
-```
-
-O comando cria:
-
-- `outputs/full/v1/nodes.csv`: nós `Case`, `Symptom`, `Exam`, `Condition` e `Treatment`;
-- `outputs/full/v1/edges.csv`: relações estruturais, clínicas e temporais encontradas pela V1.
-
-Se esses arquivos já existirem, eles serão sobrescritos com uma nova execução completa da V1.
-
-### 3. Extrair os nós e as arestas com a V2
-
-A V2 utiliza o léxico e os gatilhos ampliados após a análise dos resultados da V1:
-
-```powershell
-python -m src.build_graph --input data/processed/all_cases.csv --lexicon resources/v2/lexicon.csv --triggers resources/v2/triggers.csv --nodes outputs/full/v2/nodes.csv --edges outputs/full/v2/edges.csv
-```
-
-O comando cria:
-
-- `outputs/full/v2/nodes.csv`: nós extraídos pela V2;
-- `outputs/full/v2/edges.csv`: relações extraídas pela V2.
-
-Se esses arquivos já existirem, eles serão sobrescritos. Como V2 e o conjunto completo são as configurações padrão, o mesmo resultado pode ser gerado com o comando abreviado:
-
-```powershell
-python -m src.build_graph
-```
-
-### 4. Gerar o HTML da V1
-
-Depois de gerar `nodes.csv` e `edges.csv` da V1, execute:
-
-```powershell
-python -m src.visualize_graph --nodes outputs/full/v1/nodes.csv --edges outputs/full/v1/edges.csv --output outputs/full/v1/graph.html
-```
-
-O arquivo interativo será criado em:
-
-```text
-outputs/full/v1/graph.html
-```
-
-### 5. Gerar o HTML da V2
-
-Execute:
-
-```powershell
-python -m src.visualize_graph --nodes outputs/full/v2/nodes.csv --edges outputs/full/v2/edges.csv --output outputs/full/v2/graph.html
-```
-
-O arquivo será criado em:
-
-```text
-outputs/full/v2/graph.html
-```
-
-Para a V2, também é possível usar o comando abreviado:
-
-```powershell
-python -m src.visualize_graph
-```
-
-### 6. Abrir os grafos no navegador
-
-Os arquivos HTML podem ser abertos diretamente pelo Explorador de Arquivos. Se preferir servi-los por um endereço local, execute um dos comandos abaixo.
-
-Para subir a V1:
-
-```powershell
-python -m http.server 8765 --directory outputs/full/v1
-```
-
-Abra [http://localhost:8765/graph.html](http://localhost:8765/graph.html).
-
-Para subir a V2 em outro terminal:
-
-```powershell
-python -m http.server 8766 --directory outputs/full/v2
-```
-
-Abra [http://localhost:8766/graph.html](http://localhost:8766/graph.html).
-
-O servidor permanece ativo enquanto o terminal estiver aberto. Pressione `Ctrl+C` para encerrá-lo. Subir o HTML não executa novamente a extração; o servidor apenas disponibiliza o arquivo já gerado.
+Abra [http://localhost:8765/](http://localhost:8765/). Subir o servidor não executa novamente a extração.
 
 ### 7. Executar os testes
 
@@ -403,26 +259,12 @@ Atualmente, a suíte possui 19 testes.
 
 ```text
 outputs/
-├── evaluation/        # comparação da V1, da V2 e da V3 nos 11 casos reservados
+├── explorador.html    # página única: V1, V2, V3 e V3+, 11 ou 56 casos
+├── evaluation/        # nodes.csv e edges.csv por versão nos 11 casos reservados
 │   ├── comparison.csv
-│   ├── comparar.html  # alterna entre V1, V2 e V3
-│   ├── v1/
-│   ├── v2/
-│   └── v3/
-└── full/              # grafos completos com os 56 casos
-    ├── comparar.html
-    ├── v1/
-    │   ├── nodes.csv
-    │   ├── edges.csv
-    │   └── graph.html
-    ├── v2/
-    │   ├── nodes.csv
-    │   ├── edges.csv
-    │   └── graph.html
-    └── v3/
-        ├── nodes.csv
-        ├── edges.csv
-        └── graph.html
+│   └── v1/ v2/ v3/ v3_mais_dados/
+└── full/              # nodes.csv e edges.csv por versão nos 56 casos
+    └── v1/ v2/ v3/ v3_mais_dados/
 ```
 
 Os arquivos em `outputs/evaluation` registram o experimento realizado somente nos 11 casos de avaliação. Os arquivos em `outputs/full` são as visualizações consolidadas dos 56 casos e devem ser usados para a demonstração final.
