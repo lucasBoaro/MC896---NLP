@@ -7,8 +7,8 @@ Este projeto parte do extrator do Projeto 1, que identifica entidades e relaçõ
 
 ## Demonstração Executável
 
-- [Página inicial com os grafos](index.html): V1, V2 e V3.
-- [Comparação das três versões nos 11 casos de avaliação](outputs/evaluation/comparar.html) e [nos 56 casos](outputs/full/comparar.html): um seletor troca a versão do léxico. Os termos aprendidos aparecem com borda tracejada e, no painel de detalhes, com o score do classificador.
+- [Página inicial](index.html) e [explorador único](outputs/explorador.html): V1, V2, V3 e V3+ (mais dados) em uma só página, com seletores de versão, de conjunto (11 casos de avaliação ou todos os 56) e de caso. A aba *Comparar versões* traz os totais por versão e a diferença de entidades e relações entre duas versões no caso escolhido. Os termos aprendidos aparecem com borda tracejada e, no painel de detalhes, com o score do classificador.
+- Regerar: `python -m src.visualize_graph --versions-dir outputs/full --eval-cases data/processed/evaluation.csv --scores data/interim/ngram_candidates/candidatos_v3.csv --output outputs/explorador.html`
 
 ## Metodologia
 
@@ -96,6 +96,44 @@ O pipeline de aprendizado usa Python 3.12 com `numpy`, `scipy` e `scikit-learn` 
 
 ## Resultados
 
+### V3+: mais dados e relações decididas pelo Naive Bayes
+
+A V3+ usa 1000 casos adicionais do MultiCaRe (`data/external/cases_extra.csv`, 1045 casos na mineração), sorteados por `src/sample_multicare.py`: um caso por artigo, só relatos humanos, sem nenhum artigo que já esteja em `cases.csv`. Os 11 casos de avaliação ficam fora da mineração e do treino.
+
+Por que o grafo da V3 tinha tão poucas relações:
+
+1. O Naive Bayes e o PMI de `src/relacoes_pmi.py` só eram avaliados e nunca criavam arestas. `TREATS` e `INDICATES` vinham apenas de gatilhos escritos à mão, que acertam muito e encontram pouco (revocação de 0,31 e 0,57 nos pares rotulados dos 11 casos).
+2. Sem condições e tratamentos reconhecidos não há par a ligar. O classificador de tipo errava termos que o sufixo resolve (`tracheostomy` como sintoma, `thrombosis` e `endometriosis` como sintoma, `cardiomyopathy` como tratamento), e unigramas com score baixo, como `appendicitis`, ficavam fora do léxico. Com o léxico da V3, os 11 casos tinham só 7 pares candidatos.
+3. A tentativa anterior de aprender gatilhos por autotreinamento falhou: o Naive Bayes, treinado em 49 pares, rotulava quase todo par como positivo (173 positivos para 7 negativos), e o PMI com o rótulo passava a escolher qualquer palavra, como `mass` e `mild`. Ela foi removida.
+
+Correções:
+
+- `prototipo_ngramas.py` com `NGRAM_SUFFIX_TYPES=1`: o tipo de um termo com sufixo clínico vem do sufixo (`-scopy` exame, `-ectomy` tratamento, `-itis` condição), e unigramas com esse sufixo entram no léxico mesmo com score baixo.
+- `src/relacoes_classificador.py`: roda o extrator com os gatilhos da V1 e, para cada par tratamento–condição ou exame–condição da mesma frase, cria a aresta quando a regra já a criou ou quando o Naive Bayes dá probabilidade acima do limiar. O modelo é treinado só nos pares rotulados dos casos de desenvolvimento, e o limiar de cada relação sai da validação cruzada nesses pares (0,50 para `INDICATES` e 0,60 para `TREATS`). A aresta guarda `method: naive_bayes` e o score.
+
+```bash
+python src/sample_multicare.py CAMINHO/cases.parquet --n 1000
+NGRAM_SUFFIX_TYPES=1 NGRAM_EXTRA_CASES=data/external/cases_extra.csv NGRAM_TAG=v3_mais_dados NGRAM_TOP_K=500 python src/prototipo_ngramas.py
+python src/relacoes_classificador.py --input data/processed/all_cases.csv --lexicon resources/v3_mais_dados/lexicon.csv --nodes outputs/full/v3_mais_dados/nodes.csv --edges outputs/full/v3_mais_dados/edges.csv
+python src/relacoes_classificador.py --input data/processed/evaluation.csv --lexicon resources/v3_mais_dados/lexicon.csv --nodes outputs/evaluation/v3_mais_dados/nodes.csv --edges outputs/evaluation/v3_mais_dados/edges.csv
+```
+
+Nos 11 casos de avaliação (`outputs/evaluation/comparison.csv`):
+
+| Resultado | V3 | V3+ |
+|---|---:|---:|
+| Termos no léxico | 483 | 942 |
+| Entidades extraídas | 111 | 143 |
+| Condições | 20 | 34 |
+| Tratamentos | 17 | 33 |
+| `TREATS` | 0 | 2 |
+| `INDICATES` | 3 | 9 |
+| Relações entre entidades | 5 | 13 |
+
+Nos 56 casos, `TREATS` vai de 12 para 29 e `INDICATES` de 19 para 49.
+
+Nos pares rotulados à mão dos 11 casos (que o modelo não viu), o Naive Bayes treinado só no desenvolvimento tem, nos limiares escolhidos, F1 de 0,75 em `TREATS` e 0,89 em `INDICATES`, contra 0,44 e 0,73 das regras. Ele ganha em revocação e perde em precisão: com tão poucos pares de treino, aproxima-se de ligar todo par da mesma frase. Das 11 relações `TREATS` e `INDICATES` da V3+ nesses casos, 8 estão corretas numa revisão manual; os erros são `biopsy → kidney injury`, em que a lesão é o motivo da biópsia, e `hydroxychloroquine → cardiomyopathy` e `→ systemic lupus erythematosus`, em frases sobre o nível sérico e sobre a cardiomiopatia causada pelo remédio. O léxico maior também traz ruído, como nomes de fabricantes (`bd biosciences san jose`).
+
 ### Termos aprendidos
 
 O método produziu 252 termos novos. Entre os primeiros do ranking há termos clínicos plausíveis que a V2 não tem, como `menorrhagia`, `lymphadenopathy`, `laparotomy`, `angiography`, `craniotomy`, `necrosis` e `laparoscopy`, junto com fragmentos e termos genéricos. A precisão real depende de revisão manual, feita na planilha `outputs/evaluation/revisao_top100.csv`.
@@ -126,9 +164,82 @@ Cada variação foi repetida 10 vezes com divisões aleatórias diferentes (`out
 
 Os n-gramas de caracteres e o contexto são o que ensina o tipo da entidade: só com estatísticas, o tipo correto cai para 0,33. A ordem máxima dos n-gramas quase não importa neste corpus. O AUC é em parte circular, pois os rótulos `NONE` vêm de palavras e do NPMI, que também é uma característica do modelo, e por isso o tipo correto é a métrica mais confiável. A variação com apenas unigramas não pôde ser avaliada, porque os unigramas narrativos já são removidos antes e não sobra nenhum exemplo da classe `NONE`.
 
+### Relações TREATS e INDICATES
+
+O extrator só cria `TREATS` (tratamento → condição) e `INDICATES` (exame → condição) quando encontra um gatilho escrito à mão na frase. O script `src/relacoes_pmi.py` trata cada par tratamento–condição ou exame–condição de uma mesma frase como candidato e decide se a relação existe. Com o léxico V2 nos 56 casos há 97 pares: 43 de `TREATS` e 54 de `INDICATES`. Os 97 foram rotulados à mão (`data/interim/relations/rotulagem.csv`), e 71 são relações verdadeiras. Os métodos comparados são:
+
+- regras: o `build_graph.py` atual;
+- regras + gatilhos PMI: as regras mais palavras aprendidas como gatilho, escolhidas pelo PMI entre cada palavra próxima ao par e o rótulo positivo;
+- NPMI: limiar sobre o NPMI da coocorrência do par nos casos;
+- Naive Bayes e regressão logística: palavras entre as entidades e antes delas; a regressão também usa distância, ordem e NPMI do par;
+- sempre sim: referência mínima que responde "existe" para todo par.
+
+Validação cruzada em 5 partes agrupadas por caso (`outputs/evaluation/relacoes_comparacao.csv`):
+
+| Relação | Método | Acurácia | Precisão | Revocação | F1 |
+|---|---|---:|---:|---:|---:|
+| INDICATES | sempre sim | 0,78 | 0,78 | 1,00 | 0,88 |
+| INDICATES | regras | 0,67 | 1,00 | 0,57 | 0,73 |
+| INDICATES | regras + gatilhos PMI | 0,72 | 0,94 | 0,69 | 0,80 |
+| INDICATES | NPMI | 0,78 | 0,78 | 1,00 | 0,88 |
+| INDICATES | Naive Bayes | 0,74 | 0,77 | 0,95 | 0,85 |
+| INDICATES | regressão logística | 0,74 | 0,78 | 0,93 | 0,85 |
+| TREATS | sempre sim | 0,67 | 0,67 | 1,00 | 0,81 |
+| TREATS | regras | 0,70 | 0,94 | 0,59 | 0,72 |
+| TREATS | regras + gatilhos PMI | 0,70 | 0,94 | 0,59 | 0,72 |
+| TREATS | NPMI | 0,67 | 0,67 | 1,00 | 0,81 |
+| TREATS | Naive Bayes | 0,77 | 0,81 | 0,86 | 0,83 |
+| TREATS | regressão logística | 0,53 | 0,63 | 0,76 | 0,69 |
+
+As regras são precisas, mas perdem cerca de 40% das relações. Em `TREATS`, o Naive Bayes é o único método que supera as regras e a referência "sempre sim". Em `INDICATES`, nenhum método supera a referência em acurácia, mas os gatilhos aprendidos sobem a revocação das regras de 0,57 para 0,69 mantendo a precisão em 0,94. O limiar de NPMI escolheu o menor valor possível e virou "sempre sim": a coocorrência do par no corpus não separa relações verdadeiras de falsas dentro de uma mesma frase.
+
+Dois cuidados com o PMI aparecem aqui. Primeiro, como 71 dos 97 pares são positivos, o F1 da referência "sempre sim" já é alto, e por isso a acurácia e a comparação com essa referência são necessárias. Segundo, o PMI entre uma palavra e o rótulo positivo tem teto: PMI(t, +) = log2 P(+|t)/P(+) ≤ −log2 P(+), que dá 0,36 com 78% de positivos. Um limiar fixo de PMI não selecionaria nenhum gatilho; o script divide o PMI por esse teto, o que deixa a escala entre 0 e 1, como no NPMI.
+
+Os gatilhos aprendidos ficam em `resources/v3/triggers_aprendidos.csv`. Há termos plausíveis (`consistent`, `suggestive`, `evidence`, `findings`, `presence`) e ruído (`chronic`, `vascular`, `appendix`, e `no`/`but`, que vêm do padrão "showed no X but Y"), por isso a lista precisa de revisão antes de entrar em um `triggers.csv`. Com 97 pares, diferenças de poucos centésimos entre métodos não são confiáveis.
+
+### Linha do tempo: fases aprendidas
+
+Na etapa 1, as regras só posicionavam um evento quando havia uma expressão de tempo explícita perto dele: 15% dos eventos da V3 tinham posição, e havia 12 arestas `BEFORE` nos 56 casos. O script `src/fases_temporais.py` aplica a mesma receita da V3 à linha do tempo. Cada evento recebe uma de quatro fases do relato (antecedentes, apresentação, investigação e tratamento, seguimento), no estilo do DocTimeRel do corpus THYME:
+
+1. Funções de rotulagem com expressões seguras (`history of`, `years ago`, `a 3-day history`, `on admission`, `POD 3`, `follow-up`, `discharged`...) rotulam parte dos eventos. A expressão de tempo explícita vence verbos típicos de fase, e entre expressões sobrepostas vale a mais longa.
+2. Essas expressões são mascaradas no texto, para o classificador não decorar as regras.
+3. Uma regressão logística usa as palavras ao redor da entidade e da frase anterior, o tipo e o termo da entidade, a posição da frase no relato e a fase das regras nos eventos vizinhos. Como na V3, os casos de avaliação não entram no treino: os de desenvolvimento são pontuados por validação cruzada agrupada por caso, e os de avaliação por um modelo treinado só com os de desenvolvimento.
+4. Eventos sem regra recebem a fase prevista quando o score é pelo menos 0,5. Na visualização, aparecem com a marca "fase aprendida" e o score.
+
+| Versão | Eventos | Com tempo (etapa 1) | Fase pela regra | Fase pelo modelo | Com fase |
+|---|---|---|---|---|---|
+| V1 | 612 | 18% | 44% | 33% | 77% |
+| V2 | 828 | 15% | 40% | 36% | 76% |
+| V3 | 957 | 15% | 39% | 36% | 75% |
+
+Acurácia contra os rótulos das regras, nos casos de desenvolvimento (V3, 331 eventos):
+
+| Método | Acurácia | F1 macro |
+|---|---|---|
+| Classe majoritária | 0,489 | 0,164 |
+| Copiar a fase do evento vizinho | 0,695 | 0,646 |
+| Regressão logística: só posição | 0,468 | 0,417 |
+| Regressão logística: só contexto | 0,562 | 0,357 |
+| Regressão logística: só vizinhos | 0,640 | 0,618 |
+| Regressão logística: sem vizinhos | 0,607 | 0,442 |
+| Regressão logística: modelo completo | 0,734 | 0,642 |
+
+O modelo completo é o mais acurado, mas tem F1 macro parecido com o de simplesmente copiar a fase do vizinho, e nas V1 e V2 fica abaixo dele (0,54 e 0,51 contra 0,61), porque tende a puxar eventos para a fase mais comum (investigação e tratamento). A fase dos vizinhos é a característica mais forte: o relato costuma andar em ordem de fases. O NPMI entre as palavras do contexto mascarado e cada fase (`outputs/evaluation/fases/v3/gatilhos_aprendidos.csv`) mostra pistas que não estavam nas regras, como *initially*, *had* e *significant* para antecedentes, *mild*, *intermittent* e *tenderness* para apresentação, e *mg*, *twice*, *daily* e *intravenously* para tratamento.
+
+Essas acurácias medem quanto o modelo reproduz as regras sem ver as expressões delas, e não a acurácia real. Para medi-la, a coluna `gold` de `data/interim/fases/v3/rotulagem_fases.csv` foi preenchida para os 111 eventos dos 11 casos de avaliação, lendo o relato inteiro e sem olhar as colunas das regras e do modelo. A anotação foi feita pelo Claude (assistente de IA usado no projeto), e não por uma pessoa, então é uma referência preliminar que o grupo deve revisar. O critério foi: a fase de apresentação é o atendimento descrito na primeira frase do relato; o que veio antes é antecedente; exames e tratamentos desse atendimento são curso (exames laboratoriais e de imagem iniciais incluídos); o que vem depois da alta ou em readmissões posteriores é seguimento. Três menções que não descrevem um evento do paciente (pneumonia em outros pacientes e uma frase genérica sobre o SLE) ficaram em branco. Uma segunda anotação, também feita pelo Claude mas vendo as colunas das regras e do modelo, concordou com esta em 99 de 107 eventos (kappa de Cohen 0,90). Quase todas as diferenças são exames laboratoriais e ECG da chegada, que a segunda anotação pôs em apresentação. O gold mantido é o da anotação cega.
+
+| Contra a anotação (108 eventos) | Cobertura | Acurácia |
+|---|---|---|
+| Regras | 38% | 0,805 |
+| Modelo, só nos eventos sem regra | 36% (39 eventos) | 0,744 |
+| Regras + modelo | 74% | 0,775 |
+| Referência: tudo em "investigação e tratamento" | 100% | 0,426 |
+
+O modelo praticamente dobra a cobertura e acerta 29 dos 39 eventos que as regras deixavam sem fase, com acurácia um pouco abaixo da das regras. A maior parte dos erros do modelo e das regras confunde apresentação com curso ou seguimento: uma readmissão posterior ("presented", "admitted") parece a apresentação inicial, e exames da chegada ficam entre as duas fases. Com 11 casos e um único anotador, as diferenças de poucos pontos não são confiáveis.
+
 ### Conclusão
 
-Com 45 casos de mineração, o método aprende a forma dos termos clínicos, mas acrescenta pouca cobertura real: a V3 tem a mesma revocação da V1 (0,38) e perde precisão (0,99 para 0,85). O gargalo está no corpus, e não no classificador. O próximo experimento é minerar em mais texto, mantendo os casos de avaliação separados.
+Com 45 casos de mineração, o método aprende a forma dos termos clínicos, mas acrescenta pouca cobertura real: a V3 tem a mesma revocação da V1 (0,38) e perde precisão (0,99 para 0,85). O gargalo está no corpus, e não no classificador. O próximo experimento é minerar em mais texto, mantendo os casos de avaliação separados. Nas relações, um classificador simples sobre as palavras entre as entidades recupera relações que os gatilhos manuais perdem, com alguma perda de precisão.
 
 ## Como Modelos de Linguagem foram Usados
 
@@ -170,181 +281,35 @@ python -m src.build_graph --input data/processed/all_cases.csv --lexicon resourc
 
 O primeiro comando processa os 11 casos de avaliação e o segundo, os 56 casos.
 
-### 3. Gerar o HTML da V3 e a página de comparação
+### 3. Classificar a fase dos eventos da linha do tempo
+
+Depois do `build_graph.py` e antes da visualização:
 
 ```powershell
-python -m src.visualize_graph --nodes outputs/evaluation/v3/nodes.csv --edges outputs/evaluation/v3/edges.csv --scores data/interim/ngram_candidates/candidatos_v3.csv --output outputs/evaluation/v3/graph.html
+python src/fases_temporais.py --version v3
 ```
+
+O comando acrescenta `phase`, `phase_source` (`regra` ou `modelo`), `phase_score` e `phase_cue` aos atributos de `outputs/full/v3/nodes.csv` e de `outputs/evaluation/v3/nodes.csv`, grava `outputs/evaluation/fases/v3/metricas.csv` e `gatilhos_aprendidos.csv` e cria a planilha `data/interim/fases/v3/rotulagem_fases.csv`. Troque `v3` por `v1` ou `v2` para as outras versões. Se o `build_graph.py` for executado de novo, rode este comando outra vez.
+
+### 4. Gerar o explorador
 
 ```powershell
-python -m src.visualize_graph --versions-dir outputs/evaluation --scores data/interim/ngram_candidates/candidatos_v3.csv --output outputs/evaluation/comparar.html
+python -m src.visualize_graph --versions-dir outputs/full --eval-cases data/processed/evaluation.csv --scores data/interim/ngram_candidates/candidatos_v3.csv --output outputs/explorador.html
 ```
 
-O primeiro comando gera o grafo da V3. O segundo gera a página que alterna entre V1, V2 e V3. Para o conjunto completo, troque `evaluation` por `full`.
+Gera uma única página com V1, V2, V3 e V3+ (as versões ausentes em `outputs/full/` são ignoradas). Os 11 casos de avaliação são filtrados da mesma base dos 56. O explorador abre na V3+. Quando o caso não tem TREATS, INDICATES nem BEFORE, o grafo mostra as entidades ligadas ao caso e explica o motivo: nenhuma entidade extraída, nenhuma condição reconhecida, ou nenhuma condição na mesma frase que um exame ou tratamento. Para abrir outra versão, use `outputs/explorador.html?v=v1` (ou `v2`, `v3`, `v3_mais_dados`); `&set=all` abre com os 56 casos e `&tab=compare` abre a aba de comparação.
 
-### 4. Comparar as versões e avaliar o léxico
+### 5. Abrir o explorador no navegador
+
+O arquivo pode ser aberto diretamente. Para servi-lo por um endereço local:
 
 ```powershell
-python src/compare_versions.py
+python -m http.server 8765
 ```
 
-```powershell
-python src/evaluate_lexicon.py
-```
+Abra [http://localhost:8765/](http://localhost:8765/). Subir o servidor não executa novamente a extração.
 
-O primeiro comando atualiza `outputs/evaluation/comparison.csv` com a coluna da V3. O segundo cria `lexicon_recall.csv` e `lexicon_pr_curve.csv`, com o recall contra os termos que a V2 acrescentou e a curva de precisão por limiar de score.
-
-### 5. Repetir os experimentos do classificador
-
-```powershell
-python src/experimentos.py
-```
-
-O comando roda cada variação 10 vezes e grava média e desvio em `outputs/evaluation/experimentos.csv`.
-
-### 6. Revisar os termos aprendidos
-
-```powershell
-python src/revisao_top100.py gerar
-```
-
-O comando cria `outputs/evaluation/revisao_top100.csv`, com os 100 melhores termos novos. Preencha a coluna `avaliacao` com `certo`, `errado` ou `tipo_errado` e, depois, calcule a precisão:
-
-```powershell
-python src/revisao_top100.py resumir
-```
-
-### 7. Executar os testes
-
-```powershell
-python -m unittest discover -s tests -v
-```
-
-Atualmente, a suíte possui 19 testes.
-
----
-
-# Anexo A — Projeto 1: extração por léxicos e gatilhos
-
-Este projeto extrai entidades e relações de relatos clínicos e transforma os resultados em grafos de conhecimento interativos. A implementação utiliza léxicos, gatilhos, expressões regulares e regras linguísticas; não é necessário treinar um modelo.
-
-## Slides
-
-Link para visualização dos slides apresentados: [Slides](assets/apresentacao-projeto1.pptx.pdf)
-
-## Como executar o projeto
-
-Os comandos abaixo devem ser executados no PowerShell, a partir da raiz do repositório. É necessário ter Python 3.10 ou superior. O projeto utiliza somente a biblioteca padrão do Python, portanto não há dependências para instalar.
-
-### 1. Preparar os dados
-
-Execute:
-
-```powershell
-python src/prepare_data.py
-```
-
-Esse comando lê `cases.csv` e `metadata.csv`, associa cada caso ao artigo correspondente e cria:
-
-| Arquivo | Conteúdo |
-|---|---|
-| `data/processed/development.csv` | 45 casos usados para desenvolver a primeira versão |
-| `data/processed/evaluation.csv` | 11 casos inicialmente reservados para avaliação |
-| `data/processed/all_cases.csv` | Todos os 56 casos, com a coluna `split` |
-
-Os comandos seguintes usam `all_cases.csv`, pois o objetivo é gerar o grafo completo com os 56 casos.
-
-### 2. Extrair os nós e as arestas com a V1
-
-A V1 utiliza o léxico e os gatilhos construídos apenas com os casos de desenvolvimento:
-
-```powershell
-python -m src.build_graph --input data/processed/all_cases.csv --lexicon resources/v1/lexicon.csv --triggers resources/v1/triggers.csv --nodes outputs/full/v1/nodes.csv --edges outputs/full/v1/edges.csv
-```
-
-O comando cria:
-
-- `outputs/full/v1/nodes.csv`: nós `Case`, `Symptom`, `Exam`, `Condition` e `Treatment`;
-- `outputs/full/v1/edges.csv`: relações estruturais, clínicas e temporais encontradas pela V1.
-
-Se esses arquivos já existirem, eles serão sobrescritos com uma nova execução completa da V1.
-
-### 3. Extrair os nós e as arestas com a V2
-
-A V2 utiliza o léxico e os gatilhos ampliados após a análise dos resultados da V1:
-
-```powershell
-python -m src.build_graph --input data/processed/all_cases.csv --lexicon resources/v2/lexicon.csv --triggers resources/v2/triggers.csv --nodes outputs/full/v2/nodes.csv --edges outputs/full/v2/edges.csv
-```
-
-O comando cria:
-
-- `outputs/full/v2/nodes.csv`: nós extraídos pela V2;
-- `outputs/full/v2/edges.csv`: relações extraídas pela V2.
-
-Se esses arquivos já existirem, eles serão sobrescritos. Como V2 e o conjunto completo são as configurações padrão, o mesmo resultado pode ser gerado com o comando abreviado:
-
-```powershell
-python -m src.build_graph
-```
-
-### 4. Gerar o HTML da V1
-
-Depois de gerar `nodes.csv` e `edges.csv` da V1, execute:
-
-```powershell
-python -m src.visualize_graph --nodes outputs/full/v1/nodes.csv --edges outputs/full/v1/edges.csv --output outputs/full/v1/graph.html
-```
-
-O arquivo interativo será criado em:
-
-```text
-outputs/full/v1/graph.html
-```
-
-### 5. Gerar o HTML da V2
-
-Execute:
-
-```powershell
-python -m src.visualize_graph --nodes outputs/full/v2/nodes.csv --edges outputs/full/v2/edges.csv --output outputs/full/v2/graph.html
-```
-
-O arquivo será criado em:
-
-```text
-outputs/full/v2/graph.html
-```
-
-Para a V2, também é possível usar o comando abreviado:
-
-```powershell
-python -m src.visualize_graph
-```
-
-### 6. Abrir os grafos no navegador
-
-Os arquivos HTML podem ser abertos diretamente pelo Explorador de Arquivos. Se preferir servi-los por um endereço local, execute um dos comandos abaixo.
-
-Para subir a V1:
-
-```powershell
-python -m http.server 8765 --directory outputs/full/v1
-```
-
-Abra [http://localhost:8765/graph.html](http://localhost:8765/graph.html).
-
-Para subir a V2 em outro terminal:
-
-```powershell
-python -m http.server 8766 --directory outputs/full/v2
-```
-
-Abra [http://localhost:8766/graph.html](http://localhost:8766/graph.html).
-
-O servidor permanece ativo enquanto o terminal estiver aberto. Pressione `Ctrl+C` para encerrá-lo. Subir o HTML não executa novamente a extração; o servidor apenas disponibiliza o arquivo já gerado.
-
-### 7. Executar os testes
+### 6. Executar os testes
 
 ```powershell
 python -m unittest discover -s tests -v
@@ -356,26 +321,12 @@ Atualmente, a suíte possui 19 testes.
 
 ```text
 outputs/
-├── evaluation/        # comparação da V1, da V2 e da V3 nos 11 casos reservados
+├── explorador.html    # página única: V1, V2, V3 e V3+, 11 ou 56 casos
+├── evaluation/        # nodes.csv e edges.csv por versão nos 11 casos reservados
 │   ├── comparison.csv
-│   ├── comparar.html  # alterna entre V1, V2 e V3
-│   ├── v1/
-│   ├── v2/
-│   └── v3/
-└── full/              # grafos completos com os 56 casos
-    ├── comparar.html
-    ├── v1/
-    │   ├── nodes.csv
-    │   ├── edges.csv
-    │   └── graph.html
-    ├── v2/
-    │   ├── nodes.csv
-    │   ├── edges.csv
-    │   └── graph.html
-    └── v3/
-        ├── nodes.csv
-        ├── edges.csv
-        └── graph.html
+│   └── v1/ v2/ v3/ v3_mais_dados/
+└── full/              # nodes.csv e edges.csv por versão nos 56 casos
+    └── v1/ v2/ v3/ v3_mais_dados/
 ```
 
 Os arquivos em `outputs/evaluation` registram o experimento realizado somente nos 11 casos de avaliação. Os arquivos em `outputs/full` são as visualizações consolidadas dos 56 casos e devem ser usados para a demonstração final.

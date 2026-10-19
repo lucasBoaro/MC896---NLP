@@ -16,6 +16,7 @@ Saídas:
 from collections import Counter, defaultdict
 import csv
 import math
+import os
 from pathlib import Path
 import re
 import sys
@@ -34,6 +35,16 @@ ROOT = (
     else Path(__file__).resolve().parents[1]
 )
 OUT_DIR = ROOT / "data" / "interim" / "ngram_candidates"
+
+# Variante com mais dados: NGRAM_EXTRA_CASES aponta para um CSV com mais casos
+# (colunas case_id e case_text) minerados junto com os casos originais, e
+# NGRAM_TAG troca o nome das saídas (resources/<tag>/lexicon.csv).
+EXTRA_CASES = os.environ.get("NGRAM_EXTRA_CASES")
+TAG = os.environ.get("NGRAM_TAG", "v3")
+TOP_K_V3 = int(os.environ.get("NGRAM_TOP_K", "250"))
+# Com NGRAM_SUFFIX_TYPES=1 o tipo de termos com sufixo clínico vem do sufixo, e
+# unigramas com sufixo entram mesmo com score baixo (ver SUFFIX_TYPE).
+SUFFIX_TYPES = os.environ.get("NGRAM_SUFFIX_TYPES") == "1"
 
 # 1) Stopwords expandidas (bordas e interior dos n-gramas)
 STOP = {
@@ -228,6 +239,24 @@ CLINICAL_SUFFIXES = (
     "scopy", "ectomy", "ostomy", "otomy", "plasty", "graphy", "gram",
     "rrhagia", "rrhea", "megaly", "asthma",
 )
+# O classificador erra o tipo de termos que o sufixo resolve (tracheostomy como
+# Symptom, cardiomyopathy como Treatment, thrombosis como Symptom).
+SUFFIX_TYPE = [
+    (("scopy", "graphy", "gram"), "Exam"),
+    (("ectomy", "ostomy", "otomy", "plasty"), "Treatment"),
+    (("itis", "osis", "oma", "pathy", "emia", "aemia", "penia", "megaly",
+      "rrhagia", "rrhea", "uria"), "Condition"),
+]
+
+
+def suffix_type(term):
+  last = term.split()[-1]
+  for suffixes, kind in SUFFIX_TYPE:
+    if last.endswith(suffixes) and len(last) > max(map(len, suffixes)) + 2:
+      return kind
+  return None
+
+
 MIN_FREQ_UNIGRAM = 3  # unigramas fora da V1 precisam aparecer ao menos 3 vezes
 # Preposições/conjunções permitidas no meio de termos médicos
 ALLOWED_INNER_STOP = {"of", "in", "on", "to", "with", "and", "or"}
@@ -338,6 +367,14 @@ if ext_cases_path.exists():
   cases = [c for c in raw_cases if c["case_id"] not in eval_ids]
 else:
   cases = read_csv(ROOT / "data/processed/development.csv", encoding="utf-8-sig")
+
+if EXTRA_CASES:
+  seen_ids = {c["case_id"] for c in cases} | eval_ids
+  cases += [
+      c
+      for c in read_csv(Path(EXTRA_CASES), encoding="utf-8-sig")
+      if c["case_id"] not in seen_ids
+  ]
 
 print(
     f"Casos usados na mineração: {len(cases)} (excluídos {len(eval_ids)} casos"
@@ -463,7 +500,7 @@ if auc_pos and auc_neg:
       f"AUC (V1 multipalavra={len(auc_pos)} x narrativos={len(auc_neg)}): "
       + ", ".join(f"{n}={a:.3f}" for n, a in auc_rows)
   )
-  if __name__ == "__main__":
+  if __name__ == "__main__" and not EXTRA_CASES:
     auc_out = ROOT / "outputs" / "evaluation" / "association_auc.csv"
     with open(auc_out, "w", newline="", encoding="utf-8") as f:
       aw = csv.writer(f, lineterminator="\n")
@@ -639,7 +676,7 @@ print(
 # Os passos 9 e 10 gravam arquivos; ficam sob o guard para que experimentos.py possa importar este módulo.
 if __name__ == "__main__":
   # 9) Salva candidatos intermediários para inspeção manual
-  out = OUT_DIR / "candidatos_v3.csv"
+  out = OUT_DIR / f"candidatos_{TAG}.csv"
   out.parent.mkdir(parents=True, exist_ok=True)
   with open(out, "w", newline="", encoding="utf-8") as f:
     w = csv.writer(f)
@@ -661,7 +698,7 @@ if __name__ == "__main__":
   print(f"Candidatos intermediários salvos em {out}")
 
   # 10) Exporta o léxico final V3 (resources/v3/lexicon.csv) compatível com src/build_graph.py
-  v3_dir = ROOT / "resources" / "v3"
+  v3_dir = ROOT / "resources" / TAG
   v3_dir.mkdir(parents=True, exist_ok=True)
   v3_lex_path = v3_dir / "lexicon.csv"
 
@@ -669,16 +706,17 @@ if __name__ == "__main__":
   v3_rows = list(v1_rows)
   seen_terms = {r["term"].lower() for r in v1_rows}
 
-  TOP_K_V3 = 250  # Quantidade máxima de novos conceitos aprendidos para compor a V3
   MIN_SCORE_V3 = 0.65  # Limiar mínimo de confiança do classificador
 
   added_count = 0
   for i in ranked:
-    if added_count >= TOP_K_V3 or score[i] < MIN_SCORE_V3:
-      break
     raw_term = cands[i]
     base_term, acr = split_acronym(raw_term)
-    ptype = pred[i]
+    by_suffix = suffix_type(base_term) if SUFFIX_TYPES else None
+    unigram_by_suffix = by_suffix and len(base_term.split()) == 1
+    if not unigram_by_suffix and (added_count >= TOP_K_V3 or score[i] < MIN_SCORE_V3):
+      continue
+    ptype = by_suffix or pred[i]
 
     if base_term not in seen_terms:
       row = {"term": base_term, "type": ptype, "canonical": base_term}

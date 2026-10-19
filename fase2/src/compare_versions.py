@@ -5,7 +5,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CLINICAL_RELATIONS = {"BEFORE", "INDICATES", "TREATS"}
-TRIGGERS = {"v1": "v1", "v2": "v2", "v3": "v1"}
+TRIGGERS = {"v1": "v1", "v2": "v2", "v3": "v1", "v3_mais_dados": "v1"}
 
 
 def read(path):
@@ -41,7 +41,7 @@ def metrics(version):
 
 
 def main():
-    versions = ["v1", "v2", "v3"]
+    versions = ["v1", "v2", "v3", "v3_mais_dados"]
     results = {v: metrics(v) for v in versions}
     out = ROOT / "outputs/evaluation/comparison.csv"
     with open(out, "w", encoding="utf-8", newline="") as f:

@@ -23,11 +23,19 @@ def read_records(path):
     return records
 
 
+VERSION_META = {
+    "v1": {"label": "V1 · escrita à mão", "desc": "Léxico e gatilhos escritos à mão a partir dos casos de desenvolvimento."},
+    "v2": {"label": "V2 · ampliada à mão", "desc": "V1 ampliada à mão depois de ler os casos de avaliação; serve de referência aproximada."},
+    "v3": {"label": "V3 · aprendida (45 casos)", "desc": "V1 mais termos aprendidos por n-gramas, PMI e regressão logística nos 45 casos de desenvolvimento. Termos aprendidos têm borda tracejada."},
+    "v3_mais_dados": {"label": "V3 · aprendida (+1000 casos)", "desc": "Léxico aprendido com 1000 casos adicionais do MultiCaRe (tipo pelo sufixo clínico quando há um) e TREATS/INDICATES decididos pelo Naive Bayes, além das regras. Nenhum caso de avaliação entra no treino."},
+}
+
+
 def safe_json(value):
     return json.dumps(value, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
 
 
-def build_html(nodes, edges, scores=None, versions=None):
+def build_html(nodes, edges, scores=None, versions=None, meta=None, eval_ids=None):
     template = r'''<!doctype html>
 <html lang="pt-BR">
 <head>
@@ -63,12 +71,15 @@ def build_html(nodes, edges, scores=None, versions=None):
     .subtitle{margin:0;color:rgba(255,255,255,.72);max-width:650px;font-size:15px}
     .icon-button{border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.09);color:#fff;border-radius:12px;padding:10px 13px;cursor:pointer}
     .shell{max-width:1440px;margin:-58px auto 0;padding:0 24px 36px;position:relative;z-index:2}
-    .toolbar{display:grid;grid-template-columns:minmax(260px,1.2fr) minmax(180px,.7fr) auto;gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--shadow)}
+    .toolbar{display:grid;grid-template-columns:repeat(4,minmax(150px,1fr)) auto;gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--shadow)}
     .field label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:700;margin:0 0 7px}
     .field select,.field input{width:100%;height:42px;border:1px solid var(--line);border-radius:11px;background:var(--surface-2);color:var(--text);padding:0 12px}
     .toolbar-actions{display:flex;align-items:flex-end;gap:9px}
     .button{height:42px;border:1px solid var(--line);border-radius:11px;background:var(--surface);color:var(--text);padding:0 15px;font-weight:650;cursor:pointer}
     .button:hover{background:var(--surface-2)}
+    .version-note{margin:14px 2px 0;padding:11px 14px;border-left:4px solid var(--primary);border-radius:8px;background:var(--surface);color:var(--muted);font-size:13px;line-height:1.5}.version-note strong{color:var(--text)}
+    .compare-wrap{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px}.compare-wrap h3{margin:22px 0 4px;font-size:16px}.compare-wrap h3:first-child{margin-top:0}.compare-wrap .stage-caption{margin-bottom:12px}.sum-table{width:100%;border-collapse:collapse;font-size:13px}.sum-table th,.sum-table td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:right}.sum-table th:first-child,.sum-table td:first-child{text-align:left}.sum-table th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em}.sum-table tr.current td{background:var(--primary-soft);font-weight:700}.pair-pick{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;margin:6px 0 14px}.pair-pick .field{min-width:200px}.diff-cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.diff-col{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--surface-2);min-width:0}.diff-col h4{margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}.diff-col ul{margin:0;padding:0;list-style:none;font-size:12.5px;line-height:1.7}.diff-col li{overflow-wrap:anywhere}.diff-col .tp{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;background:var(--dot)}.diff-col .rel{color:var(--muted)}@media(max-width:950px){.diff-cols{grid-template-columns:1fr}}
+    .graph-note{padding:10px 16px;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--warning) 9%,var(--surface));color:var(--muted);font-size:12.5px;line-height:1.45}.graph-note strong{color:var(--text)}
     .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
     .stat{background:var(--surface);border:1px solid var(--line);border-radius:15px;padding:15px 17px}
     .stat-label{color:var(--muted);font-size:12px;margin-bottom:4px}
@@ -104,6 +115,7 @@ def build_html(nodes, edges, scores=None, versions=None):
     .detail{padding:20px;min-height:650px}.detail-kicker{text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-size:11px;font-weight:750}.detail h2{font-size:23px;line-height:1.15;margin:7px 0 8px;letter-spacing:-.025em}.detail-type{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 9px;background:var(--surface-2);font-size:11px;font-weight:750}.detail-section{border-top:1px solid var(--line);padding-top:14px;margin-top:16px}.detail-section h3{font-size:12px;margin:0 0 9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}.detail p{font-size:13px;line-height:1.55;margin:0;word-break:break-word}.kv{display:grid;grid-template-columns:92px 1fr;gap:8px 10px;font-size:12px}.kv dt{color:var(--muted)}.kv dd{margin:0;font-weight:650}.empty{color:var(--muted);display:grid;place-items:center;text-align:center;height:540px;padding:25px}.empty-mark{font-size:38px;margin-bottom:10px}
     .timeline-wrap,.relations-wrap{padding:20px}.timeline-tools,.relation-tools{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}.timeline-title{font-size:18px;font-weight:750}.check{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px}.check input{accent-color:var(--primary)}
     .timeline-disclaimer{margin:0 0 22px;padding:12px 14px;border:1px solid color-mix(in srgb,var(--warning) 28%,var(--line));border-radius:12px;background:color-mix(in srgb,var(--warning) 8%,var(--surface));color:var(--muted);font-size:12px;line-height:1.45}
+    .phase-title{margin:8px 0 12px;font-size:13px;font-weight:800;color:var(--text)}.phase-title span{color:var(--muted);font-weight:600;margin-left:4px}.event.learned-phase:before{background:var(--surface);border:2px dashed var(--event-color);width:8px;height:8px}.phase-pill{margin:0 8px 0 0}
     .timeline-group-title{margin:0 0 14px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
     .untimed-block{margin-top:28px;padding-top:22px;border-top:1px solid var(--line)}.untimed-block[hidden]{display:none}
     .timeline{position:relative;padding-left:26px}.timeline:before{content:"";position:absolute;left:8px;top:7px;bottom:8px;width:2px;background:var(--line)}
@@ -125,11 +137,13 @@ def build_html(nodes, edges, scores=None, versions=None):
   </header>
   <main class="shell">
     <section class="toolbar" aria-label="Controles do grafo">
+      <div class="field" id="set-field" hidden><label for="set-select">Conjunto de casos</label><select id="set-select"></select></div>
+      <div class="field" id="version-field" hidden><label for="version-select">Versão do léxico</label><select id="version-select"></select></div>
       <div class="field"><label for="case-select">Caso clínico</label><select id="case-select"></select></div>
       <div class="field"><label for="search-input">Buscar entidade</label><input id="search-input" type="search" placeholder="Ex.: pneumonia, CT, aspirin"></div>
-      <div class="field" id="version-field" hidden><label for="version-select">Versão do léxico</label><select id="version-select"></select></div>
       <div class="toolbar-actions"><button class="button" id="reset-button" type="button">Redefinir visualização</button></div>
     </section>
+    <p class="version-note" id="version-note" hidden></p>
     <section class="stats" aria-live="polite">
       <div class="stat"><div class="stat-label">Entidades únicas</div><div class="stat-value" id="stat-nodes">0</div></div>
       <div class="stat"><div class="stat-label">Relações</div><div class="stat-value" id="stat-edges">0</div></div>
@@ -138,6 +152,7 @@ def build_html(nodes, edges, scores=None, versions=None):
     </section>
     <nav class="tabs" aria-label="Visualizações">
       <button class="tab active" data-panel="graph-panel" type="button">Grafo</button>
+      <button class="tab" data-panel="compare-panel" type="button" id="compare-tab" hidden>Comparar versões</button>
       <button class="tab" data-panel="timeline-panel" type="button">Sequência de eventos</button>
       <button class="tab" data-panel="relations-panel" type="button">Relações</button>
     </nav>
@@ -146,19 +161,31 @@ def build_html(nodes, edges, scores=None, versions=None):
         <div class="graph-stage">
           <div class="stage-head"><div><div class="stage-title" id="graph-title">Grafo do caso</div><div class="stage-caption">Arraste para mover, use a roda para ampliar e clique nos nós.</div><div class="stage-caption" id="graph-summary"></div></div><div class="field graph-filter"><label for="graph-relation-filter">Relações exibidas</label><select id="graph-relation-filter"><option value="entity">Entre entidades</option><option value="clinical">Clínicas</option><option value="temporal">Temporais</option><option value="structural">Com o caso</option><option value="all">Todas</option></select></div></div>
           <div class="legend-bar"><div class="legend" id="legend"></div><div class="legend" aria-label="Tipos de relação"><span class="legend-item"><span class="line-key" style="--key-color:var(--relation-treats)"></span>TREATS</span><span class="legend-item"><span class="line-key" style="--key-color:var(--relation-indicates)"></span>INDICATES</span><span class="legend-item"><span class="line-key before" style="--key-color:var(--relation-before)"></span>BEFORE</span><span class="legend-item"><span class="line-key structural" style="--key-color:var(--relation-structural)"></span>Com o caso</span></div></div>
+          <div class="graph-note" id="graph-note" hidden></div>
           <div class="canvas-wrap"><svg id="graph-svg" viewBox="0 0 1200 700" role="img" aria-label="Grafo clínico interativo"></svg></div>
         </div>
         <aside class="detail" id="detail"><div class="empty"><div><div class="empty-mark">◎</div><strong>Selecione um nó</strong><p>Os atributos, a dose, o tempo e a frase de origem aparecerão aqui.</p></div></div></aside>
       </div>
     </section>
+    <section class="panel" id="compare-panel">
+      <div class="compare-wrap">
+        <h3>Totais por versão</h3>
+        <div class="stage-caption" id="sum-caption"></div>
+        <div class="table-scroll"><table class="sum-table" id="sum-table"></table></div>
+        <h3>Diferença entre duas versões no caso selecionado</h3>
+        <div class="stage-caption">Entidades e relações presentes em apenas uma das versões, e as que as duas têm em comum.</div>
+        <div class="pair-pick"><div class="field"><label for="cmp-a">Versão A</label><select id="cmp-a"></select></div><div class="field"><label for="cmp-b">Versão B</label><select id="cmp-b"></select></div></div>
+        <div class="diff-cols" id="diff"></div>
+      </div>
+    </section>
     <section class="panel" id="timeline-panel">
       <div class="timeline-wrap">
-        <div class="timeline-tools"><div><div class="timeline-title">Sequência de eventos</div><div class="stage-caption">Ordem temporal parcial baseada somente em expressões de tempo e relações BEFORE.</div></div><label class="check"><input id="show-untimed" type="checkbox"> Também mostrar eventos sem posição temporal</label></div>
+        <div class="timeline-tools"><div><div class="timeline-title">Sequência de eventos</div><div class="stage-caption" id="timeline-caption">Ordem temporal parcial baseada somente em expressões de tempo e relações BEFORE.</div></div><label class="check"><input id="show-untimed" type="checkbox"> Também mostrar eventos sem posição temporal</label></div>
         <p class="timeline-disclaimer"><strong>Importante:</strong> a ordem em que uma informação aparece no texto não implica que ela tenha ocorrido antes ou depois de outra.</p>
-        <h3 class="timeline-group-title">Ordem temporal identificada</h3>
+        <h3 class="timeline-group-title" id="timed-title">Ordem temporal identificada</h3>
         <div class="timeline" id="timeline"></div>
         <section class="untimed-block" id="untimed-block" hidden>
-          <h3 class="timeline-group-title">Eventos sem posição temporal definida</h3>
+          <h3 class="timeline-group-title" id="untimed-title">Eventos sem posição temporal definida</h3>
           <div class="stage-caption">Exibidos abaixo apenas na ordem em que foram mencionados no relato.</div>
           <div class="timeline" id="untimed-timeline"></div>
         </section>
@@ -178,6 +205,9 @@ const SPECIAL=new Set(['TREATS','INDICATES','BEFORE']);
 const state={caseId:'',query:'',relationMode:'entity',scale:1,tx:0,ty:0,selected:null};
 const SCORES=__SCORES_JSON__;
 const VERSIONS=__VERSIONS_JSON__;
+const META=__META_JSON__||{};
+const EVAL_IDS=new Set(__EVAL_JSON__||[]);
+state.set=EVAL_IDS.size?'eval':'all';state.version=null;
 const isLearned=node=>String((node.attributes||{}).source||'').startsWith('learned');
 let byId=new Map(RAW_NODES.map(n=>[n.node_id,n]));
 let caseIds=[...new Set(RAW_NODES.filter(n=>n.type==='Case').map(n=>n.case_id))].sort();
@@ -185,33 +215,98 @@ const el=id=>document.getElementById(id);
 const escapeHtml=value=>String(value??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const truncate=(value,size=24)=>value.length>size?value.slice(0,size-1)+'…':value;
 
-function setVersion(version){
-  const data=VERSIONS[version];RAW_NODES=data.nodes;RAW_EDGES=data.edges;
-  byId=new Map(RAW_NODES.map(n=>[n.node_id,n]));
-  caseIds=[...new Set(RAW_NODES.filter(n=>n.type==='Case').map(n=>n.case_id))].sort();
+const versionLabel=v=>(META[v]&&META[v].label)||v.toUpperCase();
+function inSet(id){return state.set!=='eval'||EVAL_IDS.has(id)}
+function refreshCases(){
+  caseIds=[...new Set(RAW_NODES.filter(n=>n.type==='Case'&&inSet(n.case_id)).map(n=>n.case_id))].sort();
   if(!caseIds.includes(state.caseId))state.caseId=caseIds[0]||'';
   el('case-select').innerHTML=caseIds.map(id=>`<option value="${escapeHtml(id)}"${id===state.caseId?' selected':''}>${escapeHtml(id)}</option>`).join('');
+}
+function setVersion(version){
+  state.version=version;
+  const data=VERSIONS[version];RAW_NODES=data.nodes;RAW_EDGES=data.edges;
+  byId=new Map(RAW_NODES.map(n=>[n.node_id,n]));
+  refreshCases();pickMode();
   const relations=[...new Set(RAW_EDGES.map(e=>e.relation))].sort();
   el('relation-filter').innerHTML='<option value="">Todas</option>'+relations.map(r=>`<option value="${r}">${r}</option>`).join('');
+  const note=el('version-note'),m=META[version];
+  note.hidden=!m;if(m)note.innerHTML=`<strong>${escapeHtml(m.label)}.</strong> ${escapeHtml(m.desc)}`;
   state.selected=null;resetView();renderAll();
+}
+const keyOf=n=>`${n.type}|${n.label}`;
+// Sem TREATS, INDICATES ou BEFORE no caso, o grafo abre ligado ao caso e explica o motivo.
+function hasEntityRelations(){const {edges}=caseData();return edges.some(e=>byId.get(e.source_id)?.type!=='Case')}
+function noRelationReason(){
+  const nodes=caseData().nodes.filter(n=>n.type!=='Case');
+  if(!nodes.length)return 'Nenhuma entidade foi extraída deste caso: o léxico desta versão não reconhece nenhum termo do relato.';
+  if(!nodes.some(n=>n.type==='Condition'))return 'Nenhuma condição foi reconhecida neste caso. TREATS e INDICATES ligam um tratamento ou exame a uma condição, então não há par para ligar.';
+  const bySentence=new Map();nodes.forEach(n=>{if(!bySentence.has(n.sentence_id))bySentence.set(n.sentence_id,new Set());bySentence.get(n.sentence_id).add(n.type)});
+  const pair=[...bySentence.values()].some(t=>t.has('Condition')&&(t.has('Exam')||t.has('Treatment')));
+  if(!pair)return 'Há condições neste caso, mas nenhuma aparece na mesma frase que um exame ou tratamento. As relações só ligam entidades da mesma frase.';
+  return 'Há pares de exame ou tratamento com condição na mesma frase, mas nem as regras nem o Naive Bayes os consideraram relacionados.';
+}
+function pickMode(){
+  state.autoFallback=!hasEntityRelations();
+  state.relationMode=state.autoFallback?'structural':'entity';
+  el('graph-relation-filter').value=state.relationMode;
+}
+function versionCase(v,caseId){
+  const d=VERSIONS[v],nodes=d.nodes.filter(n=>n.case_id===caseId&&n.type!=='Case'),ids=new Map(d.nodes.map(n=>[n.node_id,n]));
+  const rels=new Set();
+  d.edges.filter(e=>e.case_id===caseId&&SPECIAL.has(e.relation)).forEach(e=>{const a=ids.get(e.source_id),b=ids.get(e.target_id);if(a&&b)rels.add(`${a.label} —${e.relation}→ ${b.label}`)});
+  return {entities:new Map(nodes.map(n=>[keyOf(n),n])),rels};
+}
+function renderCompare(){
+  if(!VERSIONS)return;
+  const names=Object.keys(VERSIONS),cases=caseIds;
+  const rows=names.map(v=>{
+    const d=VERSIONS[v],ok=new Set(cases),c={TREATS:0,INDICATES:0,BEFORE:0};let edges=0,ents=0;
+    d.nodes.forEach(n=>{if(ok.has(n.case_id)&&n.type!=='Case')ents++});
+    d.edges.forEach(e=>{if(ok.has(e.case_id)){edges++;if(e.relation in c)c[e.relation]++}});
+    return `<tr class="${v===state.version?'current':''}"><td>${escapeHtml(versionLabel(v))}</td><td>${ents}</td><td>${edges}</td><td>${c.TREATS}</td><td>${c.INDICATES}</td><td>${c.BEFORE}</td></tr>`;
+  });
+  el('sum-caption').textContent=`${cases.length} casos do conjunto selecionado. Entidades = menções extraídas.`;
+  el('sum-table').innerHTML='<tr><th>Versão</th><th>Entidades</th><th>Arestas</th><th>TREATS</th><th>INDICATES</th><th>BEFORE</th></tr>'+rows.join('');
+  const A=el('cmp-a').value,B=el('cmp-b').value;if(!A||!B)return;
+  const a=versionCase(A,state.caseId),b=versionCase(B,state.caseId);
+  const only=(x,y)=>[...x.entities].filter(([k])=>!y.entities.has(k)).map(([,n])=>n);
+  const both=[...a.entities].filter(([k])=>b.entities.has(k)).map(([,n])=>n);
+  const ent=n=>`<li><span class="tp" style="--dot:${COLORS[n.type]}"></span>${escapeHtml(n.label)}</li>`;
+  const rel=r=>`<li class="rel">${escapeHtml(r)}</li>`;
+  const col=(title,ents,rels)=>`<div class="diff-col"><h4>${title} (${ents.length} entidades, ${rels.length} relações)</h4><ul>${ents.sort((x,y)=>x.label.localeCompare(y.label)).map(ent).join('')}${[...rels].sort().map(rel).join('')}</ul>${ents.length+rels.length?'':'<span class="rel">nada</span>'}</div>`;
+  const relOnly=(x,y)=>[...x.rels].filter(r=>!y.rels.has(r)),relBoth=[...a.rels].filter(r=>b.rels.has(r));
+  el('diff').innerHTML=col(`Só em ${escapeHtml(versionLabel(A))}`,only(a,b),relOnly(a,b))+col('Nas duas',both,relBoth)+col(`Só em ${escapeHtml(versionLabel(B))}`,only(b,a),relOnly(b,a));
 }
 function init(){
   el('case-select').innerHTML=caseIds.map(id=>`<option value="${escapeHtml(id)}">${escapeHtml(id)}</option>`).join('');
   state.caseId=caseIds[0]||'';
   const relations=[...new Set(RAW_EDGES.map(e=>e.relation))].sort();
   el('relation-filter').innerHTML+=""+relations.map(r=>`<option value="${r}">${r}</option>`).join('');
-  el('legend').innerHTML=['Symptom','Exam','Condition','Treatment'].map(type=>`<span class="legend-item"><span class="dot" style="--dot:${COLORS[type]}"></span>${TYPE_LABEL[type]}</span>`).join('')+'<span class="legend-item">┅ tracejado: termo aprendido (V3)</span>';
+  el('legend').innerHTML=['Symptom','Exam','Condition','Treatment'].map(type=>`<span class="legend-item"><span class="dot" style="--dot:${COLORS[type]}"></span>${TYPE_LABEL[type]}</span>`).join('')+'<span class="legend-item">┅ tracejado: termo aprendido</span>';
   if(VERSIONS){
-    const names=Object.keys(VERSIONS);
-    el('version-field').hidden=false;
-    el('version-select').innerHTML=names.map(v=>`<option value="${v}">${v.toUpperCase()}</option>`).join('');
-    el('version-select').value=names[names.length-1];
+    const names=Object.keys(VERSIONS),opts=names.map(v=>`<option value="${v}">${escapeHtml(versionLabel(v))}</option>`).join('');
+    el('version-field').hidden=false;el('version-select').innerHTML=opts;
+    const params=new URLSearchParams(location.search),asked=params.get('v');
+    const def=names.includes(asked)?asked:names.includes('v3_mais_dados')?'v3_mais_dados':names[names.length-1];
+    if(params.get('set')==='all')state.set='all';
+    el('version-select').value=def;
     el('version-select').addEventListener('change',e=>setVersion(e.target.value));
+    el('compare-tab').hidden=false;
+    el('cmp-a').innerHTML=opts;el('cmp-b').innerHTML=opts;
+    el('cmp-a').value=names.includes('v3')?'v3':names[0];el('cmp-b').value=names[names.length-1];
+    el('cmp-a').addEventListener('change',renderCompare);el('cmp-b').addEventListener('change',renderCompare);
+    if(EVAL_IDS.size){
+      el('set-field').hidden=false;
+      el('set-select').innerHTML=`<option value="eval">${EVAL_IDS.size} casos de avaliação</option><option value="all">Todos os casos</option>`;
+      el('set-select').value=state.set;
+      el('set-select').addEventListener('change',e=>{state.set=e.target.value;refreshCases();pickMode();state.selected=null;resetView();renderAll()});
+    }
+    setVersion(def);
   }
-  el('case-select').addEventListener('change',e=>{state.caseId=e.target.value;state.selected=null;resetView();renderAll()});
+  el('case-select').addEventListener('change',e=>{state.caseId=e.target.value;state.selected=null;pickMode();resetView();renderAll()});
   el('search-input').addEventListener('input',e=>{state.query=e.target.value.trim().toLowerCase();renderGraph()});
   el('graph-relation-filter').addEventListener('change',e=>{state.relationMode=e.target.value;state.selected=null;resetView();renderGraph();renderCaseDetail()});
-  el('reset-button').addEventListener('click',()=>{state.query='';state.relationMode='entity';el('search-input').value='';el('graph-relation-filter').value='entity';state.selected=null;resetView();renderAll()});
+  el('reset-button').addEventListener('click',()=>{state.query='';el('search-input').value='';pickMode();state.selected=null;resetView();renderAll()});
   el('show-untimed').addEventListener('change',renderTimeline);
   el('relation-filter').addEventListener('change',renderRelations);
   el('theme-button').addEventListener('click',()=>{const root=document.documentElement;root.dataset.theme=root.dataset.theme==='dark'?'':'dark'});
@@ -220,6 +315,7 @@ function init(){
     document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===tab.dataset.panel));
   }));
   setupPanZoom();renderAll();
+  if(VERSIONS&&new URLSearchParams(location.search).get('tab')==='compare')el('compare-tab').click();
 }
 
 function caseData(){
@@ -257,7 +353,7 @@ function layoutNodes(nodes){
   return result;
 }
 
-function renderAll(){renderStats();renderGraph();renderTimeline();renderRelations();if(!state.selected)renderCaseDetail()}
+function renderAll(){renderCompare();renderStats();renderGraph();renderTimeline();renderRelations();if(!state.selected)renderCaseDetail()}
 function renderStats(){
   const {nodes,edges}=caseData(),unique=new Set(nodes.filter(n=>n.type!=='Case').map(n=>`${n.type}|${n.label}`));
   el('stat-nodes').textContent=unique.size;el('stat-edges').textContent=edges.length;el('stat-clinical').textContent=edges.filter(e=>SPECIAL.has(e.relation)&&e.relation!=='BEFORE').length;el('stat-time').textContent=nodes.filter(n=>n.type!=='Case'&&(n.attributes?.time?.length||edges.some(e=>e.relation==='BEFORE'&&(e.source_id===n.node_id||e.target_id===n.node_id)))).length;
@@ -290,7 +386,11 @@ function renderGraph(){
   const viewport=svgEl('g',{id:'viewport',transform:`translate(${state.tx} ${state.ty}) scale(${state.scale})`});svg.append(viewport);
   const edgeLayer=svgEl('g'),nodeLayer=svgEl('g');viewport.append(edgeLayer,nodeLayer);
   data.edges.forEach(edge=>{const a=positions.get(edge.source),b=positions.get(edge.target);if(!a||!b)return;const style=relationStyle(edge.relation),line=svgEl('path',{d:edgePath(a,b),class:`edge ${style}`,'marker-end':`url(#arrow-${style})`});line.addEventListener('click',()=>showEdge(edge,data));edgeLayer.append(line);if(SPECIAL.has(edge.relation)){const text=svgEl('text',{x:(a.x+b.x)/2,y:(a.y+b.y)/2-7,class:`edge-label ${style}`,'text-anchor':'middle'});text.textContent=edge.relation+(edge.count>1?` ×${edge.count}`:'');text.addEventListener('click',()=>showEdge(edge,data));edgeLayer.append(text)}});
-  if(!data.edges.length){const message=svgEl('text',{x:600,y:350,class:'edge-label','text-anchor':'middle'});message.textContent='Nenhuma relação deste grupo neste caso';viewport.append(message)}
+  if(!data.edges.length){const message=svgEl('text',{x:600,y:350,class:'edge-label','text-anchor':'middle'});message.textContent=caseData().nodes.some(n=>n.type!=='Case')?'Nenhuma relação deste grupo neste caso':'Nenhuma entidade extraída deste caso';viewport.append(message)}
+  const note=el('graph-note'),entityMode=['entity','clinical','temporal'].includes(state.relationMode);
+  const showNote=(state.relationMode==='structural'&&state.autoFallback)||(entityMode&&!data.edges.length);
+  note.hidden=!showNote;
+  if(showNote)note.innerHTML=`<strong>${state.relationMode==='structural'?'Este caso não tem relações entre entidades; o grafo mostra as entidades ligadas ao caso.':'Nenhuma relação deste grupo neste caso.'}</strong> ${escapeHtml(noRelationReason())}`;
   data.nodes.forEach(node=>{const p=positions.get(node.id);if(!p)return;const g=svgEl('g',{class:`node ${state.selected===node.id?'selected':''} ${node.occurrences.some(isLearned)?'learned':''}`,style:`--node-color:${COLORS[node.type]}`});g.dataset.id=node.id;const shape=node.type==='Case'?svgEl('circle',{cx:p.x,cy:p.y,r:58}):svgEl('rect',{x:p.x-p.w/2,y:p.y-p.h/2,width:p.w,height:p.h,rx:11});g.append(shape);const label=svgEl('text',{x:p.x,y:p.y+(node.type==='Case'?0:1),class:'label','text-anchor':'middle','dominant-baseline':'middle'});const queryMatch=state.query&&`${node.label} ${node.mention_text}`.toLowerCase().includes(state.query);label.textContent=truncate(node.type==='Case'?'CASO':node.label,node.type==='Case'?12:19);if(state.query&&!queryMatch&&node.type!=='Case')g.style.opacity='.18';g.append(label);if(node.occurrences.some(isLearned)){const badge=svgEl('text',{x:p.x+p.w/2-6,y:p.y-p.h/2+10,class:'badge','text-anchor':'end'});badge.textContent='aprendido';g.append(badge)}if(node.count>1){const meta=svgEl('text',{x:p.x,y:p.y+(node.type==='Case'?23:25),class:'meta','text-anchor':'middle'});meta.textContent=`${node.count} menções`;g.append(meta)}g.addEventListener('click',()=>{state.selected=node.id;renderGraph();showNode(node)});nodeLayer.append(g)});
   applyTransform();
 }
@@ -335,14 +435,35 @@ function eventMarkup(node,label){return `<article class="event" data-node="${esc
 function bindTimelineEvents(container){
   container.querySelectorAll('.event').forEach(item=>item.addEventListener('click',()=>{const node=byId.get(item.dataset.node);document.querySelector('[data-panel="graph-panel"]').click();state.relationMode='all';el('graph-relation-filter').value='all';const data=aggregate(caseData().nodes,caseData().edges),group=data.nodes.find(n=>n.occurrences.some(o=>o.node_id===node.node_id));state.selected=group.id;renderGraph();showNode(group)}));
 }
+const PHASES=[['ANTECEDENTE','Antecedentes'],['APRESENTACAO','Apresentação'],['CURSO','Investigação e tratamento'],['SEGUIMENTO','Seguimento e desfecho']];
+function phaseLabel(node,beforeEdges){
+  const a=node.attributes||{},times=a.time||[];if(times.length||beforeEdges.some(e=>e.source_id===node.node_id||e.target_id===node.node_id))return temporalLabel(node,beforeEdges);
+  return a.phase_source==='regra'?(a.phase_cue||'Fase pela regra'):`Fase prevista (${Math.round(Number(a.phase_score)*100)}%)`;
+}
+function phaseEventMarkup(node,beforeEdges){
+  const markup=eventMarkup(node,phaseLabel(node,beforeEdges));
+  return node.attributes?.phase_source==='modelo'?markup.replace('<div class="event-name">','<div class="event-name"><span class="learned-pill phase-pill">fase aprendida</span>').replace('class="event"','class="event learned-phase"'):markup;
+}
 function renderTimeline(){
   const {nodes,edges}=caseData(),allEvents=nodes.filter(n=>n.type!=='Case'),beforeEdges=edges.filter(edge=>edge.relation==='BEFORE');
+  const showUntimed=el('show-untimed').checked;el('untimed-block').hidden=!showUntimed;
+  if(RAW_NODES.some(n=>n.attributes?.phase)){
+    el('timeline-caption').textContent='Eventos agrupados pela fase do caso. Dentro de cada fase, as expressões de tempo e as relações BEFORE ordenam os eventos; o restante segue a ordem do relato.';
+    el('timed-title').textContent='Fases do caso';el('untimed-title').textContent='Eventos sem fase definida';
+    const groups=PHASES.map(([phase,title])=>{const list=temporalOrder(allEvents.filter(n=>n.attributes?.phase===phase),beforeEdges);return list.length?`<h4 class="phase-title">${title} <span>${list.length}</span></h4>`+list.map(node=>phaseEventMarkup(node,beforeEdges)).join(''):''}).join('');
+    el('timeline').innerHTML=groups||'<div class="no-results"><strong>Nenhum evento recebeu fase neste caso.</strong></div>';
+    const untimedEvents=allEvents.filter(n=>!n.attributes?.phase).sort(eventOrder);
+    el('untimed-timeline').innerHTML=showUntimed?(untimedEvents.length?untimedEvents.map(node=>eventMarkup(node,`Frase ${node.sentence_id+1} · ordem textual`)).join(''):'<div class="no-results">Todos os eventos extraídos receberam uma fase.</div>'):'';
+    bindTimelineEvents(el('timeline'));if(showUntimed)bindTimelineEvents(el('untimed-timeline'));
+    return;
+  }
+  el('timeline-caption').textContent='Ordem temporal parcial baseada somente em expressões de tempo e relações BEFORE.';
+  el('timed-title').textContent='Ordem temporal identificada';el('untimed-title').textContent='Eventos sem posição temporal definida';
   const temporalIds=new Set(beforeEdges.flatMap(edge=>[edge.source_id,edge.target_id]));
   allEvents.forEach(node=>{if(node.attributes?.time?.length)temporalIds.add(node.node_id)});
   const temporalEvents=temporalOrder(allEvents.filter(node=>temporalIds.has(node.node_id)),beforeEdges);
   const untimedEvents=allEvents.filter(node=>!temporalIds.has(node.node_id)).sort(eventOrder);
   el('timeline').innerHTML=temporalEvents.length?temporalEvents.map(node=>eventMarkup(node,temporalLabel(node,beforeEdges))).join(''):`<div class="no-results"><strong>Nenhuma relação temporal foi identificada neste caso.</strong><br>Não há expressão de tempo associada nem relação BEFORE entre as entidades extraídas.</div>`;
-  const showUntimed=el('show-untimed').checked;el('untimed-block').hidden=!showUntimed;
   el('untimed-timeline').innerHTML=showUntimed?(untimedEvents.length?untimedEvents.map(node=>eventMarkup(node,`Frase ${node.sentence_id+1} · ordem textual`)).join(''):`<div class="no-results">Todos os eventos extraídos possuem alguma informação temporal.</div>`):'';
   bindTimelineEvents(el('timeline'));if(showUntimed)bindTimelineEvents(el('untimed-timeline'));
 }
@@ -359,6 +480,8 @@ init();
         .replace("__EDGES_JSON__", safe_json(edges))
         .replace("__SCORES_JSON__", safe_json(scores) if scores else "null")
         .replace("__VERSIONS_JSON__", safe_json(versions) if versions else "null")
+        .replace("__META_JSON__", safe_json(meta) if meta else "null")
+        .replace("__EVAL_JSON__", safe_json(sorted(eval_ids)) if eval_ids else "null")
     )
 
 
@@ -385,7 +508,15 @@ def parse_args(argv=None):
     )
     parser.add_argument(
         "--versions-dir", type=Path, default=None,
-        help="pasta com v1/, v2/ e v3/ (nodes.csv e edges.csv): gera uma página que alterna as versões",
+        help="pasta com uma subpasta por versão (nodes.csv e edges.csv): gera uma página que alterna as versões",
+    )
+    parser.add_argument(
+        "--versions", nargs="+", default=["v1", "v2", "v3", "v3_mais_dados"],
+        help="subpastas de --versions-dir a incluir (as ausentes são ignoradas)",
+    )
+    parser.add_argument(
+        "--eval-cases", type=Path, default=None,
+        help="evaluation.csv: habilita o seletor entre os casos de avaliação e todos os casos",
     )
     return parser.parse_args(argv)
 
@@ -394,20 +525,25 @@ def main(argv=None):
     args = parse_args(argv)
     scores = read_scores(args.scores) if args.scores else None
     versions = None
+    eval_ids = None
     if args.versions_dir:
+        names = [v for v in args.versions if (args.versions_dir / v / "nodes.csv").exists()]
         versions = {
             name: {
                 "nodes": read_records(args.versions_dir / name / "nodes.csv"),
                 "edges": read_records(args.versions_dir / name / "edges.csv"),
             }
-            for name in ("v1", "v2", "v3")
+            for name in names
         }
-        nodes, edges = versions["v3"]["nodes"], versions["v3"]["edges"]
+        nodes, edges = [], []  # os dados vão em VERSIONS; evita duplicar a versão padrão
+        if args.eval_cases:
+            with args.eval_cases.open(encoding="utf-8-sig", newline="") as file:
+                eval_ids = {row["case_id"] for row in csv.DictReader(file)}
     else:
         nodes = read_records(args.nodes)
         edges = read_records(args.edges)
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(build_html(nodes, edges, scores, versions), encoding="utf-8")
+    args.output.write_text(build_html(nodes, edges, scores, versions, VERSION_META, eval_ids), encoding="utf-8")
     print(f"Nós carregados: {len(nodes)}")
     print(f"Arestas carregadas: {len(edges)}")
     print(f"Visualização: {args.output}")

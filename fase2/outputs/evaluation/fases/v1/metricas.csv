@@ -1,0 +1,8 @@
+﻿metodo,n,acuracia,f1_macro,f1_antecedente,f1_apresentacao,f1_curso,f1_seguimento
+classe majoritária,233,0.489,0.164,0.000,0.000,0.657,0.000
+copiar fase do vizinho,233,0.657,0.611,0.581,0.667,0.722,0.475
+regressão logística: modelo completo,233,0.700,0.535,0.513,0.720,0.806,0.103
+regressão logística: sem vizinhos,233,0.627,0.434,0.368,0.614,0.755,0.000
+regressão logística: só contexto,233,0.622,0.372,0.125,0.602,0.760,0.000
+regressão logística: só posição,233,0.429,0.363,0.306,0.272,0.604,0.273
+regressão logística: só vizinhos,233,0.614,0.598,0.595,0.641,0.645,0.513

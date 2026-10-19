@@ -1,0 +1,98 @@
+﻿pair_id,relation,label,source,target,between,sempre_sim,regras,regras+gatilhos,npmi,naive_bayes,reg_logistica
+PMC10106591_01|14|2282|2331,INDICATES,1,ECG,complete AV-B,revealed ST-segment elevation in lead II and,1.000,1.000,1.000,0.000,0.919,0.820
+PMC10106591_01|20|3699|3736,INDICATES,1,ECG,CAS,", and CA findings, a diagnosis of",1.000,0.000,1.000,0.000,0.816,0.765
+PMC10405809_01|17|2010|1933,INDICATES,0,CT scan,anemia,"raised suspicion of malignancy, the long duration of symptoms, benign",1.000,0.000,0.000,0.115,0.856,0.595
+PMC10405809_01|17|2039|1933,INDICATES,0,biopsy,anemia,"raised suspicion of malignancy, the long duration of symptoms, benign CT scan characteristics, and",1.000,0.000,0.000,0.352,0.901,0.656
+PMC10434843_01|29|4507|4386,INDICATES,0,computed tomography,tumor,search with an abdomen and thyroid sonography as well as an urologic consultation and Positron emission tomography-,1.000,0.000,0.000,0.107,0.610,0.498
+PMC10521634_01|17|2305|2350,TREATS,1,5-ASA,thrombocytosis,and LMWH (significant post-splenectomy,1.000,0.000,0.000,0.000,0.855,0.693
+PMC10521634_01|17|2315|2350,TREATS,1,LMWH,thrombocytosis,(significant post-splenectomy,1.000,0.000,0.000,0.000,0.676,0.763
+PMC10521634_01|17|2338|2350,TREATS,0,splenectomy,thrombocytosis,,1.000,0.000,0.000,0.000,0.395,0.878
+PMC10521634_01|17|2397|2350,TREATS,1,infliximab,thrombocytosis,"), but shortly after switched to",1.000,0.000,0.000,0.000,0.395,0.623
+PMC10521634_01|1|274|239,TREATS,1,corticosteroids,UC,and managed conservatively with,1.000,1.000,1.000,0.000,0.662,0.707
+PMC10521634_01|1|307|239,TREATS,1,mesalamine,UC,and managed conservatively with corticosteroids followed by oral,1.000,1.000,1.000,0.000,0.786,0.594
+PMC10521634_01|20|2697|2762,TREATS,0,IFX-B,abdominal abscess,"treatment, the patient developed a septic complication, an",1.000,0.000,0.000,0.000,0.479,0.562
+PMC10521634_01|21|2805|2868,INDICATES,0,CT scan,abscess,and was taken to surgery for drainage of an underlying,1.000,0.000,0.000,0.351,0.932,0.858
+PMC10521634_01|3|566|595,INDICATES,1,colonoscopy,colitis,showed extensive,1.000,1.000,1.000,0.000,0.877,0.835
+PMC10521634_01|6|965|913,TREATS,1,low molecular weight heparin,Venous thrombosis,prophylaxis was also started with,1.000,0.000,0.000,0.000,0.797,0.727
+PMC10521634_01|8|1163|1210,TREATS,0,VDZ,thrombocytosis,"treatment, a routine follow-up showed mild",1.000,0.000,0.000,0.000,0.479,0.599
+PMC11131390_01|1|154|198,INDICATES,1,thyroid function tests,hyperthyroidism,revealing mild overt,1.000,0.000,0.000,0.000,0.721,0.784
+PMC11131390_01|3|410|473,INDICATES,1,Serological investigations,GD,were consistent with a diagnosis of,1.000,0.000,1.000,0.000,0.971,0.848
+PMC11131390_01|4|761|665,TREATS,1,carbimazole,GD,", about the benefits of quitting smoking, and he was offered medical treatment in the form of",1.000,1.000,1.000,0.000,0.258,0.424
+PMC11131390_01|9|1602|1685,TREATS,0,CBZ,hypothyroidism,", the patient presented with 4 kg weight gain (67-71 kg) and severe biochemical",1.000,0.000,0.000,0.000,0.152,0.529
+PMC11259348_02|2|313|403,TREATS,0,P antigen-negative red cell transfusion,hemolysis,is an option for such situations to avoid further,1.000,0.000,0.000,0.000,0.765,0.727
+PMC11368112_01|21|2734|2625,INDICATES,1,pathology,BD,"was diagnosed after a multidisciplinary discussion involving rheumatology, cardiac microvascular surgery,",1.000,0.000,0.000,0.000,0.515,0.329
+PMC11368112_01|21|2734|2837,INDICATES,1,pathology,Behcet's Disease,", dermatology, vascular surgery, and ultrasonography, based on the International Criteria for",1.000,0.000,0.000,0.000,0.680,0.692
+PMC11368112_01|21|2780|2625,INDICATES,1,ultrasonography,BD,"was diagnosed after a multidisciplinary discussion involving rheumatology, cardiac microvascular surgery, pathology, dermatology, vascular surgery, and",1.000,0.000,0.000,0.000,0.702,0.343
+PMC11368112_01|21|2780|2837,INDICATES,1,ultrasonography,Behcet's Disease,", based on the International Criteria for",1.000,0.000,0.000,0.000,0.721,0.751
+PMC11368112_01|5|597|617,INDICATES,1,ultrasound,thrombosis,revealed,1.000,1.000,1.000,0.000,0.945,0.874
+PMC11368112_01|6|743|757,INDICATES,1,ECG,sinus tachycardia,indicated,1.000,1.000,1.000,0.000,0.793,0.831
+PMC11420039_01|21|3084|3050,TREATS,1,acyclovir,viral septicemia,and treated with,1.000,1.000,1.000,0.000,0.857,0.769
+PMC11722600_01|13|1688|1831,INDICATES,1,Histopathology,endometriosis,"of the appendix describes the presence of ectopic endometrial stroma within the muscularis layer of the appendix, a hallmark of",1.000,0.000,0.000,0.725,0.872,0.714
+PMC11722600_02|0|133|39,TREATS,0,laparoscopic exploration,endometriosis,"on hormonal treatment, previous surgeries including two cesarean sections and a",1.000,0.000,0.000,0.878,0.600,0.760
+PMC11722600_02|19|2657|2958,INDICATES,1,Histopathological examination,endometriosis,"showed a cecal appendix with a coprolite inside its lumen and chronic inflammatory process, with endometrial glands lined by cylindrical cells without atypia in the muscular and serosal layers, lined by normal columnar epithelial cells, a classic histological feature of",1.000,1.000,1.000,0.725,0.994,0.839
+PMC11722600_02|5|645|672,INDICATES,1,Laboratory tests,leukocytosis,indicated,1.000,1.000,1.000,0.395,0.841,0.845
+PMC11722600_02|6|855|1009,INDICATES,1,CT,appendiceal phlegmon,"revealed an enlarged cecal appendix measuring 17 mm in diameter with marked inflammatory process around the cecum and terminal ileum, suggestive of an",1.000,1.000,1.000,0.000,0.991,0.873
+PMC11722600_02|6|855|798,INDICATES,0,CT,acute appendicitis,"was made, and an abdominal and pelvic",1.000,0.000,0.000,0.000,0.795,0.607
+PMC11722600_02|7|1115|1060,TREATS,0,antibiotics,appendicitis,", non-operative treatment with intravenous",1.000,1.000,1.000,0.000,0.818,0.787
+PMC11783470_01|13|1555|1617,INDICATES,0,video capsule endoscopy,anemia,to exclude small intestinal causes of,1.000,0.000,0.000,0.725,0.827,0.852
+PMC12215201_01|13|1718|1769,TREATS,1,packed red blood cells,anemia,and platelets for worsening,1.000,1.000,1.000,0.603,0.657,0.498
+PMC12215201_01|13|1718|1780,TREATS,1,packed red blood cells,thrombocytopenia,and platelets for worsening anemia and,1.000,1.000,1.000,0.000,0.657,0.586
+PMC12215201_01|21|2570|2606,TREATS,1,platelet transfusions,thrombocytopenia,for worsening,1.000,1.000,1.000,0.000,0.657,0.572
+PMC12215201_01|22|2652|2765,INDICATES,1,biopsy,angiosarcoma,", which showed small aggregates of anastomosing vascular channels with highly atypical cells suggestive of",1.000,1.000,1.000,0.000,0.899,0.693
+PMC12832199_01|2|392|278,TREATS,0,corticosteroids,Buerger's disease,", which resulted in bilateral below-knee amputations, central adrenal insufficiency managed with",1.000,0.000,0.000,0.000,0.128,0.561
+PMC12832199_01|2|392|357,TREATS,1,corticosteroids,adrenal insufficiency,managed with,1.000,1.000,1.000,0.000,0.899,0.752
+PMC12832199_01|31|4143|4190,INDICATES,1,Endoscopy,gastritis,performed on day 27 revealed chronic,1.000,1.000,1.000,0.000,0.956,0.841
+PMC12832199_01|31|4143|4211,INDICATES,1,Endoscopy,duodenal ulceration,performed on day 27 revealed chronic gastritis and linear,1.000,0.000,1.000,0.000,0.956,0.837
+PMC12832199_01|31|4143|4270,INDICATES,1,Endoscopy,esophagitis,"performed on day 27 revealed chronic gastritis and linear duodenal ulceration, likely ischemic in origin, and severe",1.000,0.000,1.000,0.000,0.956,0.824
+PMC12832199_01|8|1046|1163,INDICATES,1,CT,gastric outlet obstruction,"revealed marked gastric distention secondary to incarceration within the parastomal hernial sac, with evidence of",1.000,1.000,1.000,0.000,0.937,0.788
+PMC2700431_01|11|1304|1330,INDICATES,1,Bronchoscopy,fistula,revealed the,1.000,1.000,1.000,1.000,0.960,0.861
+PMC2700431_01|3|461|367,TREATS,0,chest tubes,quadriplegic,"); fracture 4, 5, 6 ribs on the right side; and bilateral pneumothorax (bilateral",1.000,0.000,0.000,0.000,0.465,0.634
+PMC2700431_01|3|461|437,TREATS,1,chest tubes,pneumothorax,(bilateral,1.000,0.000,0.000,0.000,0.612,0.686
+PMC3437073_01|10|1205|1168,TREATS,1,splenectomy,abscess,"was incised and drained, and",1.000,0.000,0.000,0.603,0.657,0.621
+PMC3437073_01|8|890|932,INDICATES,1,CT scan,abscess,of the abdomen revealed a splenic,1.000,1.000,1.000,0.351,0.919,0.825
+PMC3557982_01|4|797|865,INDICATES,1,gene sequencing,HAdV-14,", as described; the infecting strain was found to be",1.000,0.000,0.000,0.000,0.856,0.787
+PMC3557982_01|8|1493|1404,INDICATES,0,viral cultures,HAdV-14,"had been isolated, we conducted a retrospective study of all adenovirus-positive",1.000,0.000,0.000,0.000,0.899,0.600
+PMC3557982_01|8|1493|1676,INDICATES,0,viral cultures,HAdV-14,"performed at the Provincial Laboratory for Viral Illnesses, Centre hospitalier universitaire Dr-Georges-L.-Dumont (Moncton, New Brunswick, Canada), to search for other",1.000,0.000,0.000,0.000,0.664,0.706
+PMC3557982_01|9|1863|1880,INDICATES,1,gene sequencing,HAdV-14,;,1.000,0.000,0.000,0.000,0.837,0.857
+PMC3897989_01|37|4438|4397,TREATS,1,moxifloxacin,abscess,and was treated effectively with,1.000,0.000,0.000,0.000,0.863,0.728
+PMC3950436_01|0|104|58,TREATS,0,tracheostomy,craniofacial tumor,was scheduled for elective,1.000,0.000,0.000,0.000,0.765,0.832
+PMC4073451_01|4|790|868,INDICATES,1,histological examination,tumor,of the specimen diagnosed a keratocystic odontogenic,1.000,0.000,0.000,0.549,0.856,0.739
+PMC4835621_01|14|1349|1479,INDICATES,0,neurological evaluation,facial nerve palsy,"was within normal limits; however, during the patient's stay in the emergency room, new transient central",1.000,0.000,1.000,0.000,0.844,0.797
+PMC4835621_01|27|2496|2452,TREATS,1,plasmapheresis,TTP,was made and the patient was started on,1.000,0.000,0.000,0.000,0.612,0.617
+PMC4835621_01|32|3203|3163,TREATS,1,low molecular weight heparin,deep vein thrombosis,and treatment with,1.000,1.000,1.000,0.000,0.258,0.495
+PMC4835621_01|33|3281|3403,INDICATES,1,gastroduodenoscopy,gastritis,demonstrated normal esophagus with a few erosions in the antrum of the stomach and was consistent with,1.000,1.000,1.000,0.000,0.981,0.855
+PMC4835621_01|34|3422|3459,INDICATES,1,biopsy,gastritis,found moderate active chronic,1.000,1.000,1.000,0.000,0.947,0.849
+PMC4835621_01|37|3721|3741,TREATS,1,antibiotics,TTP,therapy,1.000,0.000,0.000,0.000,0.657,0.630
+PMC5137649_01|4|620|875,INDICATES,1,FNA,mucinous pancreatic cystic neoplasm,"of the cyst demonstrated no evidence of malignancy but did show the presence of extracellular mucin as well as a carcinoembryonic antigen (CEA) level of 12,476.5ng/ml and a carbohydrate antigen (CA) 19-9 level of 6iu/ml, suggesting the diagnosis of a",1.000,1.000,1.000,0.000,0.732,0.823
+PMC5804616_01|28|4079|4106,INDICATES,1,chest X-ray,pneumothorax,revealed right,1.000,1.000,1.000,0.792,0.945,0.866
+PMC5833205_01|6|797|887,INDICATES,1,Laboratory studies,anemia,obtained in the emergency department were consistent with a microcytic,1.000,1.000,1.000,0.276,0.949,0.841
+PMC5875137_01|0|100|156,INDICATES,1,computed tomography,ascending aortic aneurysm,(CT) scan as having an asymptomatic,1.000,0.000,0.000,0.000,0.118,0.743
+PMC5875137_01|0|100|62,INDICATES,0,computed tomography,breast cancer,", was diagnosed by chest",1.000,0.000,1.000,0.000,0.940,0.661
+PMC5875137_01|5|966|1001,INDICATES,1,echocardiography,pseudomass,was referred to a,1.000,0.000,0.000,0.000,0.767,0.795
+PMC7102447_01|0|265|63,TREATS,0,intubation,hypertension,", asthma, and minimally invasive bioprosthetic mitral valve replacement with a 33 mm mosaic mitral porcine valve one year prior presented with severe respiratory distress requiring emergent",1.000,0.000,0.000,0.502,0.035,0.258
+PMC7102447_01|4|787|756,INDICATES,0,computed tomography angiogram,acute coronary syndrome,(ACS);,1.000,0.000,0.000,0.000,0.837,0.714
+PMC7102447_01|5|947|1015,INDICATES,1,Transesophageal echocardiogram,thrombosis,(TEE) was performed showing an acute,1.000,1.000,1.000,0.000,0.922,0.816
+PMC7102447_01|9|1635|1670,INDICATES,1,pathology,thrombosis,findings consistent with,1.000,1.000,1.000,0.603,0.965,0.872
+PMC7519975_01|0|89|68,TREATS,1,insulin,diabetes mellitus,on,1.000,0.000,0.000,0.000,0.359,0.665
+PMC7718649_01|11|1323|1243,INDICATES,1,rRT-PCR,influenza A,virus by real-time reverse transcription polymerase chain reaction (,1.000,0.000,0.000,0.000,0.721,0.441
+PMC7718649_01|1|136|89,TREATS,1,hydroxychloroquine,SLE,"is prednisone (10 mg p.o., once daily) and",1.000,1.000,1.000,0.902,0.757,0.579
+PMC7718649_01|1|96|89,TREATS,1,prednisone,SLE,is,1.000,1.000,1.000,0.803,0.757,0.727
+PMC7718649_01|28|3343|3467,TREATS,1,Prednisone,SLE,"(25 mg p.o., once daily) and hydroxychloroquine (0.2 g p.o., twice daily) were given to cover the concurrence of",1.000,1.000,1.000,0.803,0.618,0.374
+PMC7718649_01|28|3343|3475,TREATS,1,Prednisone,COVID-19,"(25 mg p.o., once daily) and hydroxychloroquine (0.2 g p.o., twice daily) were given to cover the concurrence of SLE and",1.000,1.000,1.000,0.000,0.618,0.444
+PMC7718649_01|28|3383|3467,TREATS,1,hydroxychloroquine,SLE,"(0.2 g p.o., twice daily) were given to cover the concurrence of",1.000,1.000,1.000,0.902,0.618,0.407
+PMC7718649_01|28|3383|3475,TREATS,1,hydroxychloroquine,COVID-19,"(0.2 g p.o., twice daily) were given to cover the concurrence of SLE and",1.000,1.000,1.000,0.000,0.618,0.484
+PMC7718649_01|30|3588|3663,TREATS,1,Levofloxacin,M. pneumoniae infection,"(0.5 g p.o., once daily) was given to deal with bacterial and",1.000,1.000,1.000,0.000,0.618,0.500
+PMC9387390_01|30|3828|3785,INDICATES,0,UGI study,delayed gastric emptying,prompted a repeat,1.000,0.000,0.000,0.000,0.841,0.649
+PMC9387390_01|30|3851|3785,TREATS,0,stent,delayed gastric emptying,prompted a repeat UGI study which showed,1.000,0.000,0.000,0.000,0.457,0.661
+PMC9529523_01|16|2378|2424,TREATS,0,hydroxychloroquine,SLE,level was 1232.1 ng/ml (in,1.000,0.000,0.000,0.902,0.765,0.775
+PMC9529523_01|16|2446|2424,TREATS,0,hydroxychloroquine,SLE,", the target blood",1.000,0.000,0.000,0.902,0.765,0.854
+PMC9529523_01|19|2755|2830,INDICATES,1,biopsy,hypertension,was conducted and showed vascular changes consistent with malignant,1.000,1.000,1.000,0.237,0.964,0.863
+PMC9529523_01|19|2755|2855,INDICATES,1,biopsy,thrombotic microangiopathy,was conducted and showed vascular changes consistent with malignant hypertension and chronic,1.000,0.000,1.000,0.000,0.992,0.885
+PMC9529523_01|25|3506|3603,TREATS,1,Mycophenolate mofetil,TMA,(MMF) was prescribed for systemic lupus with failure to thrive and chronic,1.000,1.000,1.000,0.000,0.765,0.719
+PMC9529523_01|30|4094|4166,INDICATES,1,HRCT,pericardial effusion,"of the chest showed no interstitial changes but noted a new, large",1.000,1.000,1.000,0.000,0.384,0.717
+PMC9529523_01|35|4814|4988,INDICATES,1,biopsy,hydroxychloroquine-induced cardiomyopathy,showed no features of myocarditis but demonstrated occasional curvilinear bodies with myelin figures and enlarged mitochondria (Figures 1(a) and 1(b)) consistent with,1.000,1.000,1.000,0.000,0.982,0.867
+PMC9529523_01|35|5033|4988,INDICATES,1,electron microscopy,hydroxychloroquine-induced cardiomyopathy,on,1.000,0.000,0.000,0.000,0.767,0.525
+PMC9529523_01|3|645|627,TREATS,1,incision and drainage,abscess,for which,1.000,0.000,0.000,0.000,0.765,0.843
+PMC9529523_01|3|695|627,TREATS,1,amputation,abscess,"for which incision and drainage were performed, followed by",1.000,0.000,0.000,0.000,0.844,0.781
+PMC9969157_01|16|2401|2495,INDICATES,1,x-ray,NEC,(Figure 1) demonstrated pneumatosis intestinalis and he was subsequently diagnosed with,1.000,1.000,1.000,0.000,0.909,0.811
+PMC9969157_01|7|1250|1292,INDICATES,1,acylcarnitine profile,LCHADD,was consistent with,1.000,1.000,1.000,0.000,0.923,0.858
