@@ -115,6 +115,7 @@ def build_html(nodes, edges, scores=None, versions=None, meta=None, eval_ids=Non
     .detail{padding:20px;min-height:650px}.detail-kicker{text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-size:11px;font-weight:750}.detail h2{font-size:23px;line-height:1.15;margin:7px 0 8px;letter-spacing:-.025em}.detail-type{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 9px;background:var(--surface-2);font-size:11px;font-weight:750}.detail-section{border-top:1px solid var(--line);padding-top:14px;margin-top:16px}.detail-section h3{font-size:12px;margin:0 0 9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}.detail p{font-size:13px;line-height:1.55;margin:0;word-break:break-word}.kv{display:grid;grid-template-columns:92px 1fr;gap:8px 10px;font-size:12px}.kv dt{color:var(--muted)}.kv dd{margin:0;font-weight:650}.empty{color:var(--muted);display:grid;place-items:center;text-align:center;height:540px;padding:25px}.empty-mark{font-size:38px;margin-bottom:10px}
     .timeline-wrap,.relations-wrap{padding:20px}.timeline-tools,.relation-tools{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}.timeline-title{font-size:18px;font-weight:750}.check{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px}.check input{accent-color:var(--primary)}
     .timeline-disclaimer{margin:0 0 22px;padding:12px 14px;border:1px solid color-mix(in srgb,var(--warning) 28%,var(--line));border-radius:12px;background:color-mix(in srgb,var(--warning) 8%,var(--surface));color:var(--muted);font-size:12px;line-height:1.45}
+    .phase-title{margin:8px 0 12px;font-size:13px;font-weight:800;color:var(--text)}.phase-title span{color:var(--muted);font-weight:600;margin-left:4px}.event.learned-phase:before{background:var(--surface);border:2px dashed var(--event-color);width:8px;height:8px}.phase-pill{margin:0 8px 0 0}
     .timeline-group-title{margin:0 0 14px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
     .untimed-block{margin-top:28px;padding-top:22px;border-top:1px solid var(--line)}.untimed-block[hidden]{display:none}
     .timeline{position:relative;padding-left:26px}.timeline:before{content:"";position:absolute;left:8px;top:7px;bottom:8px;width:2px;background:var(--line)}
@@ -179,12 +180,12 @@ def build_html(nodes, edges, scores=None, versions=None, meta=None, eval_ids=Non
     </section>
     <section class="panel" id="timeline-panel">
       <div class="timeline-wrap">
-        <div class="timeline-tools"><div><div class="timeline-title">Sequência de eventos</div><div class="stage-caption">Ordem temporal parcial baseada somente em expressões de tempo e relações BEFORE.</div></div><label class="check"><input id="show-untimed" type="checkbox"> Também mostrar eventos sem posição temporal</label></div>
+        <div class="timeline-tools"><div><div class="timeline-title">Sequência de eventos</div><div class="stage-caption" id="timeline-caption">Ordem temporal parcial baseada somente em expressões de tempo e relações BEFORE.</div></div><label class="check"><input id="show-untimed" type="checkbox"> Também mostrar eventos sem posição temporal</label></div>
         <p class="timeline-disclaimer"><strong>Importante:</strong> a ordem em que uma informação aparece no texto não implica que ela tenha ocorrido antes ou depois de outra.</p>
-        <h3 class="timeline-group-title">Ordem temporal identificada</h3>
+        <h3 class="timeline-group-title" id="timed-title">Ordem temporal identificada</h3>
         <div class="timeline" id="timeline"></div>
         <section class="untimed-block" id="untimed-block" hidden>
-          <h3 class="timeline-group-title">Eventos sem posição temporal definida</h3>
+          <h3 class="timeline-group-title" id="untimed-title">Eventos sem posição temporal definida</h3>
           <div class="stage-caption">Exibidos abaixo apenas na ordem em que foram mencionados no relato.</div>
           <div class="timeline" id="untimed-timeline"></div>
         </section>
@@ -434,14 +435,35 @@ function eventMarkup(node,label){return `<article class="event" data-node="${esc
 function bindTimelineEvents(container){
   container.querySelectorAll('.event').forEach(item=>item.addEventListener('click',()=>{const node=byId.get(item.dataset.node);document.querySelector('[data-panel="graph-panel"]').click();state.relationMode='all';el('graph-relation-filter').value='all';const data=aggregate(caseData().nodes,caseData().edges),group=data.nodes.find(n=>n.occurrences.some(o=>o.node_id===node.node_id));state.selected=group.id;renderGraph();showNode(group)}));
 }
+const PHASES=[['ANTECEDENTE','Antecedentes'],['APRESENTACAO','Apresentação'],['CURSO','Investigação e tratamento'],['SEGUIMENTO','Seguimento e desfecho']];
+function phaseLabel(node,beforeEdges){
+  const a=node.attributes||{},times=a.time||[];if(times.length||beforeEdges.some(e=>e.source_id===node.node_id||e.target_id===node.node_id))return temporalLabel(node,beforeEdges);
+  return a.phase_source==='regra'?(a.phase_cue||'Fase pela regra'):`Fase prevista (${Math.round(Number(a.phase_score)*100)}%)`;
+}
+function phaseEventMarkup(node,beforeEdges){
+  const markup=eventMarkup(node,phaseLabel(node,beforeEdges));
+  return node.attributes?.phase_source==='modelo'?markup.replace('<div class="event-name">','<div class="event-name"><span class="learned-pill phase-pill">fase aprendida</span>').replace('class="event"','class="event learned-phase"'):markup;
+}
 function renderTimeline(){
   const {nodes,edges}=caseData(),allEvents=nodes.filter(n=>n.type!=='Case'),beforeEdges=edges.filter(edge=>edge.relation==='BEFORE');
+  const showUntimed=el('show-untimed').checked;el('untimed-block').hidden=!showUntimed;
+  if(RAW_NODES.some(n=>n.attributes?.phase)){
+    el('timeline-caption').textContent='Eventos agrupados pela fase do caso. Dentro de cada fase, as expressões de tempo e as relações BEFORE ordenam os eventos; o restante segue a ordem do relato.';
+    el('timed-title').textContent='Fases do caso';el('untimed-title').textContent='Eventos sem fase definida';
+    const groups=PHASES.map(([phase,title])=>{const list=temporalOrder(allEvents.filter(n=>n.attributes?.phase===phase),beforeEdges);return list.length?`<h4 class="phase-title">${title} <span>${list.length}</span></h4>`+list.map(node=>phaseEventMarkup(node,beforeEdges)).join(''):''}).join('');
+    el('timeline').innerHTML=groups||'<div class="no-results"><strong>Nenhum evento recebeu fase neste caso.</strong></div>';
+    const untimedEvents=allEvents.filter(n=>!n.attributes?.phase).sort(eventOrder);
+    el('untimed-timeline').innerHTML=showUntimed?(untimedEvents.length?untimedEvents.map(node=>eventMarkup(node,`Frase ${node.sentence_id+1} · ordem textual`)).join(''):'<div class="no-results">Todos os eventos extraídos receberam uma fase.</div>'):'';
+    bindTimelineEvents(el('timeline'));if(showUntimed)bindTimelineEvents(el('untimed-timeline'));
+    return;
+  }
+  el('timeline-caption').textContent='Ordem temporal parcial baseada somente em expressões de tempo e relações BEFORE.';
+  el('timed-title').textContent='Ordem temporal identificada';el('untimed-title').textContent='Eventos sem posição temporal definida';
   const temporalIds=new Set(beforeEdges.flatMap(edge=>[edge.source_id,edge.target_id]));
   allEvents.forEach(node=>{if(node.attributes?.time?.length)temporalIds.add(node.node_id)});
   const temporalEvents=temporalOrder(allEvents.filter(node=>temporalIds.has(node.node_id)),beforeEdges);
   const untimedEvents=allEvents.filter(node=>!temporalIds.has(node.node_id)).sort(eventOrder);
   el('timeline').innerHTML=temporalEvents.length?temporalEvents.map(node=>eventMarkup(node,temporalLabel(node,beforeEdges))).join(''):`<div class="no-results"><strong>Nenhuma relação temporal foi identificada neste caso.</strong><br>Não há expressão de tempo associada nem relação BEFORE entre as entidades extraídas.</div>`;
-  const showUntimed=el('show-untimed').checked;el('untimed-block').hidden=!showUntimed;
   el('untimed-timeline').innerHTML=showUntimed?(untimedEvents.length?untimedEvents.map(node=>eventMarkup(node,`Frase ${node.sentence_id+1} · ordem textual`)).join(''):`<div class="no-results">Todos os eventos extraídos possuem alguma informação temporal.</div>`):'';
   bindTimelineEvents(el('timeline'));if(showUntimed)bindTimelineEvents(el('untimed-timeline'));
 }
