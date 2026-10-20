@@ -12,7 +12,7 @@ um candidato e compara formas de decidir se a relação existe:
     naive_bayes       caminho 2: Naive Bayes sobre as palavras entre as entidades
     reg_logistica     caminho 2: regressão logística com palavras e estatísticas
 
-Uso (a partir da pasta fase2/):
+Uso (a partir da pasta project2/):
     python src/relacoes_pmi.py candidatos
         Gera data/interim/relations/pares_candidatos.csv (atributos dos pares) e
         data/interim/relations/rotulagem.csv, a planilha para rotular à mão: cada

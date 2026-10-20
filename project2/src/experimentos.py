@@ -4,7 +4,7 @@ Repete o treino do classificador de tipo com diferentes componentes e modelos e
 reporta média e desvio, para saber se uma diferença é real ou só ruído de uma semente.
 Usa só os 45 casos de desenvolvimento (importa o pipeline de prototipo_ngramas.py).
 
-Uso (a partir de fase2/): python src/experimentos.py
+Uso (a partir de project2/): python src/experimentos.py
 Saída: outputs/evaluation/experimentos.csv
 """
 import contextlib

@@ -1,0 +1,66 @@
+<!doctype html><html><head><meta charset="utf-8"><style>body{margin:0;background:#fff}text{font-family:Arial,Helvetica,sans-serif;fill:#333}</style></head><body>
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0,0L10,5L0,10z" fill="#555"/></marker></defs>
+<g stroke="#555" stroke-width="2.5" fill="none">
+ <!-- case -> entities -->
+ <path d="M640,135 L235,380" marker-end="url(#a)"/>
+ <path d="M680,150 L560,378" marker-end="url(#a)"/>
+ <path d="M720,150 L840,378" marker-end="url(#a)"/>
+ <path d="M760,135 L1165,380" marker-end="url(#a)"/>
+ <!-- INDICATES exam -> condition -->
+ <path d="M630,420 L770,420" marker-end="url(#a)"/>
+ <!-- TREATS treatment -> condition -->
+ <path d="M1110,420 L970,420" marker-end="url(#a)"/>
+ <!-- BEFORE -->
+ <path d="M200,462 C260,600 1140,600 1200,462" stroke-dasharray="9 7" marker-end="url(#a)"/>
+ <!-- attribute braces -->
+ <path d="M700,85 L700,40 L860,40"/>
+ <path d="M540,462 L540,500"/><path d="M1265,452 L1265,500"/>
+</g>
+<g fill="#fff" stroke="#555" stroke-width="2.5">
+ <ellipse cx="700" cy="120" rx="95" ry="38"/>
+ <ellipse cx="200" cy="420" rx="105" ry="40"/>
+ <ellipse cx="540" cy="420" rx="90" ry="40"/>
+ <ellipse cx="870" cy="420" rx="100" ry="40"/>
+ <ellipse cx="1200" cy="420" rx="105" ry="40"/>
+</g>
+<g font-size="22" text-anchor="middle">
+ <text x="700" y="128">Case</text>
+ <text x="200" y="428">Symptom</text>
+ <text x="540" y="428">Exam</text>
+ <text x="870" y="428">Condition</text>
+ <text x="1200" y="428">Treatment</text>
+</g>
+<g font-size="18" text-anchor="middle">
+ <text x="370" y="245" transform="rotate(-31 370 245)">HAS_SYMPTOM</text>
+ <text x="585" y="270" transform="rotate(-62 585 270)">UNDERWENT_EXAM</text>
+ <text x="815" y="270" transform="rotate(62 815 270)">DIAGNOSED_WITH</text>
+ <text x="1030" y="245" transform="rotate(31 1030 245)">RECEIVED_TREATMENT</text>
+ <text x="700" y="408">INDICATES</text>
+ <text x="1040" y="408">TREATS</text>
+ <text x="700" y="590">BEFORE (entre quaisquer dois eventos)</text>
+</g>
+<g font-size="17">
+ <text x="870" y="34">article_id, age, gender, title: string</text>
+ <text x="555" y="497">measurements: list</text>
+ <text x="1280" y="497">dose: list</text>
+</g>
+<!-- common attributes box -->
+<g>
+ <rect x="60" y="640" width="1280" height="235" rx="10" fill="#f6f6f6" stroke="#999" stroke-width="1.5"/>
+ <text x="85" y="675" font-size="19" font-weight="bold">Atributos comuns de Symptom, Exam, Condition e Treatment</text>
+ <g font-size="17">
+  <text x="85" y="708">label, mention_text, evidence: string</text>
+  <text x="85" y="736">sentence_id, start, end: int</text>
+  <text x="85" y="764">assertion: string  (affirmed ou suspected)</text>
+  <text x="85" y="792">time: list  (expressões de tempo do Projeto 1)</text>
+  <text x="85" y="820">source: string  (léxico manual ou learned_v3)</text>
+  <text x="700" y="708">phase: string  (ANTECEDENTE, APRESENTACAO, CURSO, SEGUIMENTO)</text>
+  <text x="700" y="736">phase_source: string  (regra ou modelo)</text>
+  <text x="700" y="764">phase_score: float,  phase_cue: string</text>
+  <text x="700" y="804" font-weight="bold" font-size="18">Atributos das arestas</text>
+  <text x="700" y="832">method, trigger, assertion: string</text>
+  <text x="700" y="860">score: float  (TREATS e INDICATES do Naive Bayes, V3+)</text>
+ </g>
+</g>
+</svg></body></html>

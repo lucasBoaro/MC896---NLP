@@ -25,7 +25,7 @@ O método repete a receita da V3 (supervisão fraca):
 4. O NPMI entre as palavras do contexto mascarado e cada fase lista os
    gatilhos aprendidos, que não estavam nas regras.
 
-Uso (a partir da pasta fase2/):
+Uso (a partir da pasta project2/):
     python src/fases_temporais.py
     python src/fases_temporais.py --version v2
 
