@@ -1,6 +1,6 @@
 """Planilha de revisão manual do top-100 de termos novos da V3.
 
-Uso (a partir de fase2/):
+Uso (a partir de project2/):
     python src/revisao_top100.py gerar     # cria outputs/evaluation/revisao_top100.csv
     python src/revisao_top100.py resumir   # calcula a precisão da planilha preenchida
 

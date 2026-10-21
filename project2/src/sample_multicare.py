@@ -4,7 +4,7 @@ Lê o cases.parquet do MultiCaRe (Zenodo, doi 10.5281/zenodo.10079370, ~160 MB),
 descarta os artigos que já estão em data/external/cases.csv (inclusive os de
 avaliação, para não haver vazamento) e sorteia N casos com semente fixa.
 
-Uso (a partir da pasta fase2/; requer pandas e pyarrow):
+Uso (a partir da pasta project2/; requer pandas e pyarrow):
     python src/sample_multicare.py CAMINHO/cases.parquet --n 1000
 Saída:
     data/external/cases_extra.csv  (mesmas colunas de cases.csv)

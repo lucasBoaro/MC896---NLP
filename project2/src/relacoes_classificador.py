@@ -10,7 +10,7 @@ O Naive Bayes é treinado só nos pares rotulados à mão dos casos de
 desenvolvimento. O limiar de cada relação é escolhido por validação cruzada
 nesses mesmos pares; os casos de avaliação ficam de fora do treino e do limiar.
 
-Uso (a partir da pasta fase2/):
+Uso (a partir da pasta project2/):
     python src/relacoes_classificador.py --input data/processed/all_cases.csv \\
         --lexicon resources/v3_mais_dados/lexicon.csv \\
         --nodes outputs/full/v3_mais_dados/nodes.csv \\

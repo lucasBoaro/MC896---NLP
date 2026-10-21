@@ -6,7 +6,7 @@ Minera candidatos apenas fora do conjunto de avaliação (sem data leakage),
 normaliza siglas e sub-n-gramas, avalia contra os 145 termos da V2
 (source=evaluation_v2) e exporta resources/v3/lexicon.csv para o build_graph.py.
 
-Uso (a partir da pasta fase2/):
+Uso (a partir da pasta project2/):
     python src/prototipo_ngramas.py
 Saídas:
     - data/interim/ngram_candidates/candidatos_v3.csv
