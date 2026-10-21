@@ -281,6 +281,8 @@ Os rótulos das 97 relações (`data/interim/relations/rotulagem.csv`) e a revis
 - Church, K. W.; Hanks, P. (1990). Word association norms, mutual information, and lexicography. *Computational Linguistics*, 16(1), 22–29.
 - Jurafsky, D.; Martin, J. H. *Speech and Language Processing* (3ª ed., rascunho). Capítulos sobre n-gramas, Naive Bayes e regressão logística. https://web.stanford.edu/~jurafsky/slp3/
 - Nievas Offidani, M.; Roffet, F.; González Galtier, M. C.; Massiris, M.; Delrieux, C. (2025). An Open-Source Clinical Case Dataset for Medical Image Classification and Multimodal AI Applications. *Data*, 10(8), 123. https://doi.org/10.3390/DATA10080123
+- Ratner, A.; Bach, S. H.; Ehrenberg, H.; Fries, J.; Wu, S.; Ré, C. (2017). Snorkel: Rapid Training Data Creation with Weak Supervision. *Proceedings of the VLDB Endowment*, 11(3), 269–282.
+- Styler IV, W. F. et al. (2014). Temporal Annotation in the Clinical Domain. *Transactions of the Association for Computational Linguistics*, 2, 143–154.
 
 ## Como executar
 
