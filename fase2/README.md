@@ -4,11 +4,14 @@ Este projeto parte do extrator do Projeto 1, que identifica entidades e relaçõ
 
 ## Slides
 
+Para visualizar os slides apresentados, consulte o [PDF dos slides](slides/assets/apresentacao-projet2.pptx.pdf)
 
 ## Demonstração Executável
 
 - [Página inicial](index.html) e [explorador único](outputs/explorador.html): V1, V2, V3 e V3+ (mais dados) em uma só página, com seletores de versão, de conjunto (11 casos de avaliação ou todos os 56) e de caso. A aba *Comparar versões* traz os totais por versão e a diferença de entidades e relações entre duas versões no caso escolhido. Os termos aprendidos aparecem com borda tracejada e, no painel de detalhes, com o score do classificador.
 - Regerar: `python -m src.visualize_graph --versions-dir outputs/full --eval-cases data/processed/evaluation.csv --scores data/interim/ngram_candidates/candidatos_v3.csv --output outputs/explorador.html`
+
+Para executar a V3 por completo, consulte a parte da [execução da parte 2](#Como-executar-a-etapa-2)
 
 ## Metodologia
 
@@ -72,9 +75,6 @@ Tomando as entidades da V2 como referência, em nível de entidade e aceitando s
 | V3 (léxico) | 111 | 0,85 | 0,38 | 0,53 |
 
 A V2 é uma referência aproximada: foi montada por pessoas depois de ler esses mesmos 11 casos. A V3 tem a mesma revocação da V1 e menos precisão, ou seja, os termos aprendidos acrescentaram entidades, mas quase nenhuma que a V2 reconhece.
-
-## Trabalhos Estudados
-
 
 ## Modelo Lógico
 
@@ -240,9 +240,6 @@ O modelo praticamente dobra a cobertura e acerta 29 dos 39 eventos que as regras
 ### Conclusão
 
 Com 45 casos de mineração, o método aprende a forma dos termos clínicos, mas acrescenta pouca cobertura real: a V3 tem a mesma revocação da V1 (0,38) e perde precisão (0,99 para 0,85). O gargalo está no corpus, e não no classificador. O próximo experimento é minerar em mais texto, mantendo os casos de avaliação separados. Nas relações, um classificador simples sobre as palavras entre as entidades recupera relações que os gatilhos manuais perdem, com alguma perda de precisão.
-
-## Como Modelos de Linguagem foram Usados
-
 
 ## Referências Bibliográficas
 
